@@ -1,0 +1,26 @@
+{
+  "name": "balintimes-erp-web",
+  "version": "0.0.1",
+  "authors": [
+    "xieyunjie <yunjie.xie@hotmail.com>"
+  ],
+  "description": "balintimes-erp-web",
+  "main": "app.js",
+  "keywords": [
+    "balintimes",
+    "erp",
+    "web"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "~1.4.4",
+    "bootstrap": "~3.3.5"
+  }
+}

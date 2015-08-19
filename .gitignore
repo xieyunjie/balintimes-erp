@@ -73,3 +73,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# custom
+balintimes-erp-web/node_modules
+balintimes-erp-web/static/bower_components
+balintimes-erp-bmms/target
+balintimes-erp-crm/target
+out
