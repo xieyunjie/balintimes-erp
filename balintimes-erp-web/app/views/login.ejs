@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>login view</title>
+</head>
+<h1>login form</h1>
+
+<body>
+<% if(errormsg.length > 0){ %>
+<%= errormsg %>
+<% } %>
+
+<form method="post" action="/login">
+    <label>用户名</label>
+    <input type="text" name="name">
+    <br>
+    <label>密码</label>
+    <input type="text" name="password">
+    <br>
+    <button type="submit" value="登录">登录</button>
+</form>
+</body>
+</html>

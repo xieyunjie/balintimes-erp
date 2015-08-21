@@ -4,28 +4,29 @@
 var express = require('express'),
     router = express.Router(),
     request = require("superagent"),
-    preurl = require("../erpurl").bmms;
+    bmmurl = require("../erpserver").url.bmms;
+var AuthCtrl = require('../authentication/authentication.server.controller');
 
-
-/*router.get("/home/erpname", function (req, res, next) {
- request.get(preurl + "/home/erpname").end(function (err, response) {
- if (err) next(err);
-
- res.send(response.text);
- });
- });*/
-
-router.all("*", function (req, res, next) {
+router.all("*", AuthCtrl.AuthAjax, function (req, res, next) {
 
     if (req.method == "GET") {
-        request.get(preurl + req.path).end(function (err, response) {
-            if (err) next(err);
-            res.send(response.text);
+        request.get(bmmurl + req.path).end(function (err, response) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.send(response.text);
+            }
         });
     } else if (req.method == "POST") {
-        request.post(preurl + req.path).set('Content-Type', 'application/x-www-form-urlencoded').send(req.body).end(function (err, response) {
-            if (err) next(err);
-            res.send(response.text);
+        request.post(bmmurl + req.path).set('Content-Type', 'application/x-www-form-urlencoded').send(req.body).end(function (err, response) {
+            //if (err) next(err);
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.send(response.text);
+            }
         });
     }
 
