@@ -1,35 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Bean头部 -->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
-             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd  
-             http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd              
-             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
-             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd ">
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd ">
 
-	<aop:aspectj-autoproxy proxy-target-class="true" />
-	<mvc:resources location="/js/" mapping="/js/**" />
-	<mvc:default-servlet-handler />
 
-	<!-- 激活@Controller模式 -->
-	<mvc:annotation-driven />
-	<!-- 对包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 需要更改 -->
-	<context:component-scan base-package="controller" />
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:default-servlet-handler/>
 
-	<!-- <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" /> -->
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-		<!--线程安全的访问session -->
-		<property name="synchronizeOnSession" value="true" />
-	</bean>
+    <!-- 激活@Controller模式 -->
+    <!--<mvc:annotation-driven/>-->
+    <!-- 对包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 需要更改 -->
 
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix">
-			<value>/views/</value>
-		</property>
-		<property name="suffix">
-			<value>.jsp</value>
-		</property>
-	</bean>
-</beans>  
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="com.balintimes.erp.util.mvc.MvcHandlerMethodArgumentResolver"/>
+        </mvc:argument-resolvers>
+        <!--<mvc:message-converters>-->
+        <!--<bean class="com.balintimes.erp.util.spring.UTF8StringHttpMessageConverter"/>-->
+        <!--</mvc:message-converters>-->
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <property name="dateFormat">
+                            <bean class="java.text.SimpleDateFormat">
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <!--线程安全的访问session -->
+        <property name="synchronizeOnSession" value="true"/>
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <context:component-scan base-package="com.balintimes.erp.crm.controller"/>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix">
+            <value>/views/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+
+    <bean id="exceptionHandlerExceptionResolver"
+          class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+    </bean>
+
+    <bean class="com.balintimes.erp.util.mvc.MvcPermissionInterceptorAdapter"/>
+</beans>

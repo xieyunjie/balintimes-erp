@@ -11,14 +11,23 @@ var AuthCtrl = require('../authentication/authentication.server.controller');
 router.all("*", AuthCtrl.AuthAjax, function (req, res, next) {
 
     if (req.method == "GET") {
-        request.get(crmurl + req.path).end(function (err, response) {
-            if (err) next(err);
-            res.send(response.text);
+        request.get(crmurl + req.path).set('nodejs-sessionid', req.session.ruid).end(function (err, response) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.send(response.text);
+            }
         });
     } else if (req.method == "POST") {
-        request.post(crmurl + req.path).set('Content-Type', 'application/x-www-form-urlencoded').send(req.body).end(function (err, response) {
-            if (err) next(err);
-            res.send(response.text);
+        request.post(crmurl + req.path).set('nodejs-sessionid', req.session.ruid).set('Content-Type', 'application/x-www-form-urlencoded').send(req.body).end(function (err, response) {
+            if (err) {
+                console.log(err);
+                res.status(err.response.statusCode).send(err.response.text);
+            }
+            else {
+                res.send(response.text);
+            }
         });
     }
 

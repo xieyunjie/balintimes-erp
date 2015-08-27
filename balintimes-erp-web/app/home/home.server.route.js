@@ -15,6 +15,10 @@ router.get('/erpview', AuthCtrl.AuthRedirect, function (req, res, next) {
 
     res.render('erpview', {title: 'Express'});
 });
+router.get('/home2', function (req, res, next) {
+
+    res.render('home2');
+});
 
 
 module.exports = router;

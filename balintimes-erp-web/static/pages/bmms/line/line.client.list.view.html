@@ -1,3 +1,45 @@
-/**
- * Created by AlexXie on 2015/8/21.
- */
+<div>
+    <!--<div class="bg-light lter b-b wrapper-md">-->
+    <!--<h5 class="m-n font-thin h3">{{vm.title}}</h5>-->
+    <!--</div>-->
+
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list"></i> {{vm.title}}
+            </div>
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="panel-body b-b b-light">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> 添加</button>
+                            <button type="button" class="btn btn-success"><i class="fa fa-refresh"></i> 刷新</button>
+                            <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                        <!--<button class="btn btn-primary" ng-click="reloadLine()">刷新</button>-->
+                        <!--<button class="btn btn-primary" ng-click="reloadFirstPage()">第一页</button>-->
+                    </div>
+                    <table ng-table="vm.tableParams" class="table table-hover table-striped">
+                        <tr ng-repeat="row in $data">
+                            <td title="'#'" td-mouseover-toggle="" style="width: 100px">
+                                <div>
+                                    <a href="#" ui-sref="app.bmms_line_edit({uid:row.uid})"><i
+                                            class="fa fa-edit  fa-fw fa-lg"></i> </a>
+                                    <a><i class="fa fa-trash fa-fw fa-lg"></i> </a>
+                                </div>
+                            </td>
+                            <td title="'uid'" filter="{uid: 'text'}" sortable="'uid'">
+                                {{row.uid}}
+                            </td>
+                            <td title="'名称'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
+                            <td title="'创建时间'" filter="{createtime: 'text'}" sortable="'createtime'">
+                                {{row.createtime}}
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,7 +10,7 @@ var AuthCtrl = require('../authentication/authentication.server.controller');
 router.all("*", AuthCtrl.AuthAjax, function (req, res, next) {
 
     if (req.method == "GET") {
-        request.get(bmmurl + req.path).end(function (err, response) {
+        request.get(bmmurl + req.path).set('nodejs-sessionid', req.session.ruid).end(function (err, response) {
             if (err) {
                 res.send(err);
             }
@@ -19,17 +19,16 @@ router.all("*", AuthCtrl.AuthAjax, function (req, res, next) {
             }
         });
     } else if (req.method == "POST") {
-        request.post(bmmurl + req.path).set('Content-Type', 'application/x-www-form-urlencoded').send(req.body).end(function (err, response) {
-            //if (err) next(err);
+        request.post(bmmurl + req.path).set('nodejs-sessionid', req.session.ruid).set('Content-Type', 'application/x-www-form-urlencoded').send(req.body).end(function (err, response) {
             if (err) {
-                res.send(err);
+                console.log(err);
+                res.status(err.response.statusCode).send(err.response.text);
             }
             else {
                 res.send(response.text);
             }
         });
     }
-
 });
 
 module.exports = router;

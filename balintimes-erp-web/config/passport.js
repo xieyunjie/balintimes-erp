@@ -3,44 +3,58 @@
  */
 'use strict';
 var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
+    LocalStrategy = require('passport-local').Strategy,
+    request = require("superagent");
+var config = require("./config");
+
+var redis = require("redis"),
+    redisClient = redis.createClient(config.redis.port, config.redis.host);
 
 module.exports = function () {
     passport.use(new LocalStrategy({
         usernameField: 'name',
-        passwordField: 'password'
-    }, function (username, password, done) {
+        passwordField: 'password',
+        passReqToCallback: true
+    }, function (req, username, password, done) {
 
-        if (username == password) {
+        request.post(config.authurl).set('Content-Type', 'application/x-www-form-urlencoded').send({
+            username: username,
+            password: password,
+        }).end(function (err, response) {
+            if (err) return done(err, null);
+            var resObj = JSON.parse(response.text)
+            if (resObj.success == 'true') {
+                var ruid = resObj.responseMsg;
 
-            var user = {
-                uid: '00000-00000-00000-000000-0000',
-                username: username,
-                dept: 'manage'
-            };
-            return done(null, user);
-        }
-        return done(null, false, {message: '错误用户或者密码!'})
+                req.session.ruid = ruid;
+                return done(null, ruid);
 
+                //redisClient.get(ruid, function (err, data) {
+                //
+                //    if (err) return done(err, null);
+                //    req.session.ruid = ruid;
+                //    return done(null, ruid);
+                //});
+            }
+            else {
+                return done({err: 'error'}, null);
+            }
+        });
 
     }));
 
-    passport.serializeUser(function (user, done) {
-        done(null, user.uid);
+    passport.serializeUser(function (ruid, done) {
+        done(null, ruid);
     });
 
-    passport.deserializeUser(function (uid, done) {
-        //User.findOne({
-        //    _id: id
-        //}, '-password -salt', function(err, user) {
-        //    done(err, user);
-        //});
-        var user = {
-            uid: '00000-00000-00000-000000-0000',
-            username: "username",
-            dept: 'manage'
-        };
-        done(null, user)
+    passport.deserializeUser(function (ruid, done) {
+
+        redisClient.get(config.rkey.webuser + ruid, function (err, data) {
+
+            if (err) return done(err, null);
+
+            return done(null, JSON.parse(data));
+        });
     });
 
 };

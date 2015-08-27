@@ -13,12 +13,19 @@
         <module>balintimes-erp-crm</module>
         <module>balintimes-erp-quote</module>
         <module>balintimes-erp-bmms</module>
+        <module>balintimes-oa-ucenter</module>
+        <module>balintimes-erp-util</module>
     </modules>
 
     <properties>
+
         <junit.version>4.12</junit.version>
         <spring.version>4.1.7.RELEASE</spring.version>
         <aspectj.version>1.8.6</aspectj.version>
+        <spring.data.redis.version>1.5.2.RELEASE</spring.data.redis.version>
+        <jedis.version>2.7.3</jedis.version>
+        <jackson.version>2.5.3</jackson.version>
+
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -63,11 +70,53 @@
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-redis</artifactId>
+                <version>${spring.data.redis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.35</version>
             </dependency>
+
+
+            <!--jsp-->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>taglibs</groupId>
+                <artifactId>standard</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

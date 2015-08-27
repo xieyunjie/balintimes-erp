@@ -1,3 +1,42 @@
-/**
- * Created by AlexXie on 2015/8/21.
- */
+
+
+<div class="wrapper-md" ng-init="initEdit()">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold"><i class="fa fa-pencil-square-o"></i> 线路编辑</div>
+            <div class="panel-body">
+                <form class=" form-horizontal">
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="uid">UID</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="" id="uid" ng-model="vm.line.uid">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="name">名称</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="" id="name" ng-model="vm.line.name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="createtime">时间</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="" id="createtime"
+                                   ng-model="vm.line.createtime">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-1 col-md-6">
+                            <button class="btn btn-primary" ng-click="saveLine()"><i class="fa fa-floppy-o"></i> 保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

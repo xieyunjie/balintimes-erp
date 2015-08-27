@@ -12,6 +12,8 @@ var express = require('express'),
     passport = require('passport'),
     flash = require('connect-flash'),
     uuid = require('node-uuid');
+var RedisStore = require('connect-redis')(session);
+var config = require("./config");
 
 module.exports = function () {
     var app = express();
@@ -32,7 +34,12 @@ module.exports = function () {
         },
         secret: 'balintimes-erp-secret',
         resave: true,
-        saveUninitialized: true
+        saveUninitialized: true,
+        store: new RedisStore({
+            "host": config.redis.host,
+            "port": config.redis.port,
+            "ttl": config.sessionexpire //Session的有效期为30天
+        })
     }));
     app.use(flash());
 
