@@ -28,13 +28,6 @@ module.exports = function () {
 
                 req.session.ruid = ruid;
                 return done(null, ruid);
-
-                //redisClient.get(ruid, function (err, data) {
-                //
-                //    if (err) return done(err, null);
-                //    req.session.ruid = ruid;
-                //    return done(null, ruid);
-                //});
             }
             else {
                 return done({err: 'error'}, null);

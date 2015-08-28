@@ -3,16 +3,15 @@
  */
 'use strict';
 
-angular.module('app').controller('AppController', ['$scope', '$localStorage', '$window',
-    function ($scope, $localStorage, $window) {
-        var vm = $scope.vm = {title: 'aaaaaaa'};
+angular.module('app').controller('AppController', ['$scope', '$q', '$localStorage', '$window', 'AjaxRequest',
+    function ($scope, $q, $localStorage, $window, AjaxRequest) {
         // add 'ie' classes to html
         var isIE = !!navigator.userAgent.match(/MSIE/i);
         isIE && angular.element($window.document.body).addClass('ie');
         isSmartDevice($window) && angular.element($window.document.body).addClass('smart');
 
         // config
-        $scope.app = {
+        var app = $scope.app = {
             name: 'ERP',
             version: '0.0.1',
             // for chart colors
@@ -36,7 +35,9 @@ angular.module('app').controller('AppController', ['$scope', '$localStorage', '$
                 asideFolded: false,
                 asideDock: false,
                 container: false
-            }
+            },
+            webUser: {},
+            menus: {}
         };
 
         // save settings to local storage
@@ -71,6 +72,16 @@ angular.module('app').controller('AppController', ['$scope', '$localStorage', '$
             var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
             // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
             return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
-        }
+        };
+
+        $scope.initAppCtrl = function () {
+            var webuserPromise = AjaxRequest.get("/home/inituser"),
+                menusPromise = AjaxRequest.get("/home/initmenus");
+            $q.all({user: webuserPromise, menus: menusPromise}).then(function (results) {
+                app.webUser = results.user;
+                app.menus = results.menus;
+            });
+
+        };
 
     }]);

@@ -2,7 +2,7 @@ package com.balintimes.erp.crm.controller;
 
 import com.balintimes.erp.util.json.AjaxResponse;
 import com.balintimes.erp.util.json.ResponseMessage;
-import com.balintimes.erp.bmms.model.Line;
+import com.balintimes.erp.crm.model.Line;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

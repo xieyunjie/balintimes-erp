@@ -3,84 +3,80 @@
  */
 'use strict';
 
-angular.module('app').constant("ERPROUTERS", {
-    bmms_line_list: {
-        state: 'bmms_line_list',
-        controllername: 'BMMS_Line_List_Controller',
-        url: 'bmms/line/line.client.list',
+angular.module('app')
+    .config(['$stateProvider', '$urlRouterProvider', 'BMMROUTER', 'CRMROUTER',
+        function ($stateProvider, $urlRouterProvider, BmmsRouter, CrmRouter) {
 
-        script: ["BMM_Line_Service"]
-    },
-    bmms_line_edit: {
-        state: 'bmms_line_edit',
-        params: ["uid"],
-        controllername: 'BMMS_Line_Edit_Controller',
-        url: 'bmms/line/line.client.edit',
+            var RetRouters = function (routers) {
 
-        script: ["BMM_Line_Service"]
-    }
-}).config(['$stateProvider', '$urlRouterProvider', 'ERPROUTERS',
+                var results = [];
+                var abstractState = "";
+                angular.forEach(routers, function (router) {
+                    var u = "";
 
-    function ($stateProvider, $urlRouterProvider, erpRouters) {
-
-
-        $urlRouterProvider.otherwise('/app/index');
-
-        $stateProvider.state("app", {
-            abstract: true,
-            url: '/app',
-            templateUrl: '/pages/app.html'
-        });
-        $stateProvider.state("app.index", {
-            url: '/index',
-            templateUrl: '/pages/index.html'
-        });
-
-        angular.forEach(erpRouters, function (router) {
-            var u = "";
-
-            if (angular.isArray(router.params)) {
-                u = "/" + router.state.replace(/_/g, "/") + "/:" + router.params.join("/:");
-            }
-            else {
-                u = "/" + router.state.replace(/_/g, "/");
-            }
-            var state = {
-                url: u,
-                templateUrl: "/pages/" + router.url + ".view.html",
-                controller: router.controllername
-            };
-            state.resolve = {
-                deps: ['$ocLazyLoad',
-                    function ($ocLazyLoad) {
-                        var sq = angular.isArray(router.script) ? angular.copy(router.script) : [];
-                        sq.push("/pages/" + router.url + ".controller.js");
-                        return $ocLazyLoad.load(sq);
+                    if (angular.isArray(router.params)) {
+                        u = "/" + router.state.replace(/_/g, "/") + "/:" + router.params.join("/:");
                     }
-                ]
-            };
-            //
-            //if (angular.isArray(router.script)) {
-            //    state.resolve = {
-            //        deps: ['$ocLazyLoad',
-            //            function ($ocLazyLoad) {
-            //                return $ocLazyLoad.load(router.script).then(function () {
-            //                    return $ocLazyLoad.load(["/pages/" + router.url + ".controller.js"]);
-            //                })
-            //            }
-            //        ]
-            //    }
-            //}
-            //else {
-            //    state.resolve = {
-            //        deps: ['$ocLazyLoad',
-            //            function ($ocLazyLoad) {
-            //                return $ocLazyLoad.load(["/pages/" + router.url + ".controller.js"]);
-            //            }
-            //        ]
-            //    }
-            //}
-            $stateProvider.state("app." + router.state, state);
-        });
+                    else {
+                        u = "/" + router.state.replace(/_/g, "/");
+                    }
+                    var abstract = false;
+                    if (angular.isDefined(router.abstract)) {
+                        abstract = router.abstract;
+                        if (router.abstract == true) {
+                            abstractState = router.state;
+                        }
+                    }
+                    var state = {
+                        abstract: abstract,
+                        url: u,
+                        templateUrl: "/pages/" + router.url + ".view.html",
+                        controller: router.controllername
+                    };
+                    if (angular.isDefined(router.controllername)) {
+                        state.resolve = {
+                            deps: ['$ocLazyLoad',
+                                function ($ocLazyLoad) {
+                                    var sq = angular.isArray(router.script) ? angular.copy(router.script) : [];
+                                    sq.push("/pages/" + router.url + ".controller.js");
+                                    return $ocLazyLoad.load(sq);
+                                }
+                            ]
+                        }
+                    }
+                    if (abstract == true) {
+                        $stateProvider.state(abstractState, state);
 
-    }]);
+                    }
+                    else {
+                        $stateProvider.state(abstractState + "." + router.state, state);
+                        results.push({
+                            statename: abstractState + "." + router.state,
+                            statevalue: state
+                        })
+                    }
+
+                });
+            };
+
+            $urlRouterProvider.otherwise('/app/index');
+
+            $stateProvider.state("app", {
+                abstract: true,
+                url: '/app',
+                templateUrl: '/pages/app.view.html'
+            });
+            $stateProvider.state("app.index", {
+                url: '/index',
+                templateUrl: '/pages/index.view.html'
+            });
+
+            var rs = RetRouters(BmmsRouter);
+            angular.forEach(rs, function (r) {
+                $stateProvider.state(r.statename, r.statevalue);
+            });
+            rs = RetRouters(CrmRouter);
+            angular.forEach(rs, function (r) {
+                $stateProvider.state(r.statename, r.statevalue);
+            });
+        }]);

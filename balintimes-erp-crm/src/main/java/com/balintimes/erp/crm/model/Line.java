@@ -1,4 +1,4 @@
-package com.balintimes.erp.bmms.model;
+package com.balintimes.erp.crm.model;
 
 import java.io.Serializable;
 import java.util.Date;

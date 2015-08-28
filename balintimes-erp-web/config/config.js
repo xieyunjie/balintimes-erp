@@ -15,5 +15,5 @@ module.exports = {
         permissions: "ucenter-USERPERMISSION-",
         roles: "ucenter-Roles-"
     },
-    authurl: "http://www.balintimes-web.net:9090/oaucenter/ws/authority/userauthentication"
+    authurl: "http://172.16.0.250:8080/oaucenter/ws/authority/userauthentication"
 };

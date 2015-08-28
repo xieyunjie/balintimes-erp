@@ -1,11 +1,22 @@
 var express = require('express'),
     router = express.Router();
-var AuthCtrl = require('../authentication/authentication.server.controller');
+var AuthCtrl = require('../authentication/authentication.server.controller'),
+    HomeCtrl = require('./home.server.controller');
 
-router.get('/', AuthCtrl.AuthRedirect, function (req, res, next) {
 
-    res.render('home', {title: 'Express'});
+router.get("/login",HomeCtrl.login);
+router.post("/login",HomeCtrl.loginSubmit);
+router.get("/logout",HomeCtrl.logout);
+
+router.get('/', AuthCtrl.IsAuth, function (req, res, next) {
+    res.render('home');
 });
+
+router.all('*',AuthCtrl.IsAuth);
+
+router.get('/home/inituser',HomeCtrl.initUser);
+router.get('/home/initmenus',HomeCtrl.initMenus);
+
 router.get('/ocload', function (req, res, next) {
 
     res.render('ocload', {title: 'Express'});

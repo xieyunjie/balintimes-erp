@@ -14,9 +14,22 @@ angular.module('app', [
     'ui.validate',
     'angular-lodash',
     'ngTable'
-]).run(['$rootScope', '$state', '$stateParams',
-    function ($rootScope, $state, $stateParams) {
+]).run(['$rootScope', '$state', '$stateParams', '$timeout', '$window',
+    function ($rootScope, $state, $stateParams, $timeout, $window) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
+
+        $rootScope.$on("$stateChangeSuccess", function () {
+            $timeout(function () {
+                console.info("Local:" + $window.location.pathname + $window.location.hash);
+
+            });
+        });
+
+        $rootScope.$on("$stateChangeStart", function () {
+            $timeout(function () {
+                console.info("To:" + $window.location.pathname + $window.location.hash);
+            });
+        });
     }
 ]);

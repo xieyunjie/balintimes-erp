@@ -7,8 +7,12 @@ var express = require('express'),
     crmurl = require("../erpserver").url.crm;
 var AuthCtrl = require('../authentication/authentication.server.controller');
 
+router.get("/",AuthCtrl.IsAuth,function(req,res,next){
 
-router.all("*", AuthCtrl.AuthAjax, function (req, res, next) {
+    res.render('crm/crm.html');
+
+});
+router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
 
     if (req.method == "GET") {
         request.get(crmurl + req.path).set('nodejs-sessionid', req.session.ruid).end(function (err, response) {

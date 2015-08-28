@@ -58,12 +58,12 @@ module.exports = function () {
 
 
     var homeroute = require('../app/home/home.server.route'),
-        login = require('../app/login/login.server.route'),
+    //login = require('../app/login/login.server.route'),
         bmms = require('../app/bmms/bmms.server.routes'),
         crm = require('../app/crm/crm.server.routes');
 
     app.use('/', homeroute);
-    app.use('/login', login);
+    //app.use('/login', login);
     app.use('/bmms', bmms);
     app.use('/crm', crm);
 

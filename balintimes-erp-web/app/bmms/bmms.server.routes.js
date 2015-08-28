@@ -7,7 +7,13 @@ var express = require('express'),
     bmmurl = require("../erpserver").url.bmms;
 var AuthCtrl = require('../authentication/authentication.server.controller');
 
-router.all("*", AuthCtrl.AuthAjax, function (req, res, next) {
+router.get("/",AuthCtrl.IsAuth,function(req,res,next){
+
+    res.render('bmms/bmms.html');
+
+});
+
+router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
 
     if (req.method == "GET") {
         request.get(bmmurl + req.path).set('nodejs-sessionid', req.session.ruid).end(function (err, response) {

@@ -10,7 +10,18 @@ AuthServerController.IsAuth = function (req, res, next) {
         return next();
     }
 
-    res.redirect('/login');
+    if (req.header("X-Requested-With") == "XMLHttpRequest") {
+        var NotAuth = {
+            success: false,
+            status: 40001,
+            path: req.path
+        };
+
+        res.send(NotAuth);
+    }
+    else {
+        res.redirect('/login');
+    }
 };
 
 AuthServerController.AuthRedirect = function (req, res, next) {

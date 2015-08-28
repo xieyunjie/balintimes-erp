@@ -79,5 +79,6 @@ balintimes-erp-web/node_modules
 balintimes-erp-web/static/bower_components
 balintimes-erp-bmms/target
 balintimes-erp-crm/target
+balintimes-erp-util/target
 out
 output
