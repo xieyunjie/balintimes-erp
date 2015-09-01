@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by AlexXie on 2015/8/24.
  */
-public class MvcRUID implements Serializable {
+public class Ruid implements Serializable {
 
     private String ruid = "";
 

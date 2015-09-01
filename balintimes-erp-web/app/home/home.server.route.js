@@ -1,5 +1,6 @@
 var express = require('express'),
     router = express.Router();
+
 var AuthCtrl = require('../authentication/authentication.server.controller'),
     HomeCtrl = require('./home.server.controller');
 

@@ -14,7 +14,13 @@
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> 添加</button>
                             <button type="button" class="btn btn-success"><i class="fa fa-refresh"></i> 刷新</button>
-                            <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i> 删除</button>
+                            <button type="button" class="btn btn-danger"
+                                    ng-click="deleteLine('424e0549-a07e-4f0b-8974-e75c14c87188')"><i
+                                    class="fa fa-trash"></i> 删除
+                            </button>
+                            <button type="button" class="btn btn-danger" ng-click="showload()"><i
+                                    class="fa fa-trash"></i> loading
+                            </button>
                         </div>
                         <!--<button class="btn btn-primary" ng-click="reloadLine()">刷新</button>-->
                         <!--<button class="btn btn-primary" ng-click="reloadFirstPage()">第一页</button>-->

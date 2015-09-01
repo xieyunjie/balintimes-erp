@@ -13,7 +13,11 @@ angular.module('app', [
     //'ui.jq',
     'ui.validate',
     'angular-lodash',
-    'ngTable'
+    'pascalprecht.translate',
+    'ngSanitize',
+    'ngTable',
+    'blockUI',
+    'gc.toaster'
 ]).run(['$rootScope', '$state', '$stateParams', '$timeout', '$window',
     function ($rootScope, $state, $stateParams, $timeout, $window) {
         $rootScope.$state = $state;

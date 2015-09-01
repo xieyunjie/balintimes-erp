@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by AlexXie on 2015/8/24.
  */
-public class MvcWebUser implements Serializable {
+public class WebUser implements Serializable {
 
     private String uid;
     private String username;
@@ -93,5 +93,13 @@ public class MvcWebUser implements Serializable {
 
     public void setUsertypename(String usertypename) {
         this.usertypename = usertypename;
+    }
+
+    @Override
+    public String toString() {
+        return "WebUser{" +
+                "uid='" + uid + '\'' +
+                ", username='" + username + '\'' +
+                '}';
     }
 }

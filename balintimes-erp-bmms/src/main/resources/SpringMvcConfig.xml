@@ -14,7 +14,7 @@
 
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
-    <mvc:resources location="/js/" mapping="/js/**"/>
+    <!--<mvc:resources location="/js/" mapping="/js/**"/>-->
     <mvc:default-servlet-handler/>
 
     <!-- 激活@Controller模式 -->
@@ -24,7 +24,7 @@
 
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
-            <bean class="com.balintimes.erp.util.mvc.MvcHandlerMethodArgumentResolver"/>
+            <bean class="com.balintimes.erp.util.mvc.CtrlMethodArgumentResolver"/>
         </mvc:argument-resolvers>
         <!--<mvc:message-converters>-->
         <!--<bean class="com.balintimes.erp.util.spring.UTF8StringHttpMessageConverter"/>-->
@@ -43,6 +43,10 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <mvc:interceptors>
+        <bean class="com.balintimes.erp.util.mvc.PermissionInterceptorAdapter"></bean>
+    </mvc:interceptors>
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <!--线程安全的访问session -->
@@ -77,5 +81,5 @@
           class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
 
-    <bean class="com.balintimes.erp.util.mvc.MvcPermissionInterceptorAdapter"/>
+    <bean class="com.balintimes.erp.util.mvc.RequestExceptionHandler"/>
 </beans>

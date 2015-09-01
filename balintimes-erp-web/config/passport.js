@@ -5,10 +5,10 @@
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     request = require("superagent");
-var config = require("./config");
+var settings = require("./settings");
 
 var redis = require("redis"),
-    redisClient = redis.createClient(config.redis.port, config.redis.host);
+    redisClient = redis.createClient(settings.redis.port, settings.redis.host);
 
 module.exports = function () {
     passport.use(new LocalStrategy({
@@ -17,12 +17,12 @@ module.exports = function () {
         passReqToCallback: true
     }, function (req, username, password, done) {
 
-        request.post(config.authurl).set('Content-Type', 'application/x-www-form-urlencoded').send({
+        request.post(settings.authurl).set(settings.requestHeader.contentType.text, settings.requestHeader.contentType.value).send({
             username: username,
-            password: password,
+            password: password
         }).end(function (err, response) {
             if (err) return done(err, null);
-            var resObj = JSON.parse(response.text)
+            var resObj = JSON.parse(response.text);
             if (resObj.success == 'true') {
                 var ruid = resObj.responseMsg;
 
@@ -30,7 +30,8 @@ module.exports = function () {
                 return done(null, ruid);
             }
             else {
-                return done({err: 'error'}, null);
+                //return done({error: resObj.responseMsg}, null);
+                return done(null, false, {message: resObj.responseMsg});
             }
         });
 
@@ -42,7 +43,7 @@ module.exports = function () {
 
     passport.deserializeUser(function (ruid, done) {
 
-        redisClient.get(config.rkey.webuser + ruid, function (err, data) {
+        redisClient.get(settings.redisKey.webuser + ruid, function (err, data) {
 
             if (err) return done(err, null);
 

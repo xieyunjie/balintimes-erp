@@ -4,8 +4,8 @@
 'use strict';
 
 angular.module('BMMS_Line_List_Module', [])
-    .controller('BMMS_Line_List_Controller', ['$scope', 'AjaxRequest', 'NgTableUtil', 'BMMS_Line_Service',
-        function ($scope, AjaxRequest, NgTableUtil, BMMS_Line_Service) {
+    .controller('BMMS_Line_List_Controller', ['$scope', '$timeout', 'NgTableUtil', 'BMMS_Line_Service', 'AlertMsg', 'DlgMsg',
+        function ($scope, $timeout, NgTableUtil, BMMS_Line_Service, AlertMsg, DlgMsg) {
             var vm = $scope.vm = {
                 title: '线路列表',
                 tableParams: NgTableUtil.initNgTableParams(function (exparam, tbparam) {
@@ -28,6 +28,28 @@ angular.module('BMMS_Line_List_Module', [])
                 var par = {query: "lhms"};
 
                 NgTableUtil.reloadNgTable(vm.tableParams, par, 1);
+            };
+            $scope.deleteLine = function (uid) {
+                BMMS_Line_Service.deleteLine({uid: uid}).then(function (res) {
+                    console.log(res);
+                })
+            };
+
+            $scope.showload = function () {
+                DlgMsg.confirm("系统提示", "确认要访问吗？", 'sm').result.then(function (btn) {
+                    if (btn == "ok") {
+                        BMMS_Line_Service.showload().then(function (res) {
+                            AlertMsg.info("保存成功", "系统提示。。。" + btn);
+                            AlertMsg.success("保存成功", "系统提示");
+                            AlertMsg.failtrue("保存成功", "系统提示");
+                            AlertMsg.warn("保存成功", "系统提示");
+
+                        });
+                    }
+
+                });
+
+
             };
 
         }]);

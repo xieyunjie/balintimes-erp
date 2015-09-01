@@ -1,22 +1,75 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <title>login view</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>系统登录</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css"/>
+    <link href="/stylesheets/login.css" rel="stylesheet">
 </head>
-<h1>login form</h1>
 
 <body>
-<% if(errormsg.length > 0){ %>
-<%= errormsg %>
-<% } %>
 
-<form method="post" action="/login">
-    <label>用户名</label>
-    <input type="text" name="name">
-    <br>
-    <label>密码</label>
-    <input type="text" name="password">
-    <br>
-    <button type="submit" value="登录">登录</button>
-</form>
+<div class="container" ng-controller="LoginController">
+    <% if(errormsg.length > 0){ %>
+    <div class="alert alert-danger col-sm-6 col-sm-offset-3 " role="alert"><%= errormsg %></div>
+    <% } %>
+
+    <form class="form-signin" method="post" action="/login">
+        <h2 class="form-signin-heading" translate="LoginForm.Title"></h2>
+        <label for="name" class="sr-only" translate="LoginForm.UserName"></label>
+        <input type="text" id="name" name="name" class="form-control"
+               placeholder="{{ 'LoginForm.UserName' | translate }}"
+               required autofocus>
+        <label for="password" class="sr-only" translate="LoginForm.Password"></label>
+        <input type="password" id="password" name="password" class="form-control"
+               placeholder="{{ 'LoginForm.Password' | translate }}" required>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> {{ 'LoginForm.RememberMe' | translate }}
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'LoginForm.LoginBtn' | translate }}</button>
+    </form>
+
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="/bower_components/ngstorage/ngStorage.min.js"></script>
+    <script src="/bower_components/angular-translate/angular-translate.min.js"></script>
+    <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+    <script src="/bower_components/angular-translate-storage-local/angular-translate-storage-local.min.js"></script>
+    <script>
+        var app = angular.module('LoginApp', ['pascalprecht.translate', 'ngCookies', 'ngStorage', 'ngSanitize'])
+                .config(function ($translateProvider) {
+                    $translateProvider.useLocalStorage();
+                    $translateProvider.useSanitizeValueStrategy(null);
+                    $translateProvider.useStaticFilesLoader({
+                        files: [{
+                            prefix: './i18n/locale-',
+                            suffix: '.json'
+                        }]
+                    });
+                    $translateProvider.registerAvailableLanguageKeys(['en', 'zh'], {
+                        'en_US': 'en',
+                        'en_UK': 'en',
+                        'zh_CN': 'zh'
+                    });
+                    $translateProvider.determinePreferredLanguage();
+                    $translateProvider.fallbackLanguage('zh');
+                })
+                .controller('LoginController', function ($scope, $translate) {
+                });
+        angular.bootstrap(document, ['LoginApp']);
+    </script>
+
+
+</div>
 </body>
 </html>

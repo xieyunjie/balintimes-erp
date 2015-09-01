@@ -1,8 +1,11 @@
 package com.balintimes.erp.crm.controller;
 
+import com.balintimes.erp.crm.model.Line;
 import com.balintimes.erp.util.json.AjaxResponse;
 import com.balintimes.erp.util.json.ResponseMessage;
-import com.balintimes.erp.crm.model.Line;
+import com.balintimes.erp.util.mvc.MvcModel;
+import com.balintimes.erp.util.mvc.HasPermissions;
+import com.balintimes.erp.util.mvc.WebUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +23,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("line")
 public class LineController extends BaseController {
-    
+
     static List<Line> list = null;
 
     public LineController() {
@@ -69,13 +72,25 @@ public class LineController extends BaseController {
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResponse SaveLine(Line line) {
+    public AjaxResponse SaveLine(@MvcModel WebUser currentUser, Line line) {
+
+        System.out.println(currentUser.toString());
         System.out.println(line.toString());
         if (line.getUid().equals("0")) {
 
         } else {
 
         }
+        return ResponseMessage.successful("保存成功");
+    }
+
+    @RequestMapping(value = "delete/{uid}", method = RequestMethod.DELETE)
+    @HasPermissions("crm.line.delete")
+    @ResponseBody
+    public AjaxResponse DeleteLine(@MvcModel WebUser currentUser, @PathVariable String uid) {
+
+        System.out.println(currentUser.toString());
+        System.out.println(uid);
 
         return ResponseMessage.successful("保存成功");
     }

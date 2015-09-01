@@ -1,8 +1,8 @@
 package com.balintimes.erp.bmms.controller;
 
-import com.balintimes.erp.util.mvc.MvcExModel;
-import com.balintimes.erp.util.mvc.MvcRUID;
-import com.balintimes.erp.util.mvc.MvcWebUser;
+import com.balintimes.erp.util.mvc.MvcModel;
+import com.balintimes.erp.util.mvc.Ruid;
+import com.balintimes.erp.util.mvc.WebUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,14 +21,14 @@ public class HomeController {
 //    }
     @RequestMapping("erpname")
     @ResponseBody
-    public String ErpName(@MvcExModel MvcRUID sessionID) {
+    public String ErpName(@MvcModel Ruid sessionID) {
         System.out.println("session id is:" + sessionID.getRuid());
         return "this is Erp Bmms Res";
     }
 
     @RequestMapping("erpmsg")
     @ResponseBody
-    public String ErpMsg(@MvcExModel MvcWebUser webuser, String Msg) {
+    public String ErpMsg(@MvcModel WebUser webuser, String Msg) {
 
         return "response from java server:" + Msg + "#谢云杰#,current user is:" + webuser.getUid();
 

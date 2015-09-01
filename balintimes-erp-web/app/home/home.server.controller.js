@@ -4,15 +4,10 @@
 
 "use strict";
 
-var passport = require('passport');
-var rkey = {
-    ruid: "nodejs-sessionid",
-    webuser: "ucenter-WebUser-",
-    permissions: "ucenter-USERPERMISSION-",
-    roles: "ucenter-Roles-"
-};
+var passport = require("passport"),
+    settings = require("../../config/settings");
 var redis = require("redis"),
-    redisClient = redis.createClient(6379, "172.16.0.250");
+    redisClient = redis.createClient(settings.redis.port, settings.redis.host);
 
 var HomeController = {};
 module.exports = HomeController;
@@ -39,9 +34,10 @@ HomeController.loginSubmit = passport.authenticate('local', {
 
 HomeController.logout = function (req, res) {
     var ruid = req.session.ruid;
-    redisClient.del(rkey.webuser + ruid, redis.print);
-    redisClient.del(rkey.permissions + ruid, redis.print);
-    redisClient.del(rkey.roles + ruid, redis.print);
+
+    redisClient.del(settings.redisKey.webuser + ruid, redis.print);
+    redisClient.del(settings.redisKey.permissions + ruid, redis.print);
+    redisClient.del(settings.redisKey.roles + ruid, redis.print);
     req.logout();
 
     res.redirect("/login");

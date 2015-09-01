@@ -2,6 +2,7 @@
  * Created by AlexXie on 2015/8/10.
  */
 var AuthServerController = {};
+var ajaxHead = require("../../config/settings").requestHeader.ajaxHead;
 module.exports = AuthServerController;
 
 
@@ -10,7 +11,7 @@ AuthServerController.IsAuth = function (req, res, next) {
         return next();
     }
 
-    if (req.header("X-Requested-With") == "XMLHttpRequest") {
+    if (req.header(ajaxHead.text) == ajaxHead.value) {
         var NotAuth = {
             success: false,
             status: 40001,
@@ -37,7 +38,6 @@ AuthServerController.AuthAjax = function (req, res, next) {
         return next();
     }
 
-    //res.redirect('/login');
     var NotAuth = {
         success: false,
         status: 40001,

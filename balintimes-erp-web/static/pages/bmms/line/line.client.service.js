@@ -20,6 +20,16 @@ angular.module("app").factory('BMMS_Line_Service', ['AjaxRequest', function (Aja
             return AjaxRequest.post("/crm/line/save", line).then(function (req) {
                 return req;
             });
+        },
+        deleteLine:function(params){
+            return AjaxRequest.delete("/crm/line/delete",params).then(function(req){
+                return req;
+            })
+        },
+        showload: function () {
+            return AjaxRequest.get("/crm/line/showloadx").then(function (req) {
+                return req;
+            });
         }
     };
 }]);

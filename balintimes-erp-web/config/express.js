@@ -13,7 +13,8 @@ var express = require('express'),
     flash = require('connect-flash'),
     uuid = require('node-uuid');
 var RedisStore = require('connect-redis')(session);
-var config = require("./config");
+var settings = require("./settings");
+var requestError = require("../app/requestError");
 
 module.exports = function () {
     var app = express();
@@ -36,15 +37,17 @@ module.exports = function () {
         resave: true,
         saveUninitialized: true,
         store: new RedisStore({
-            "host": config.redis.host,
-            "port": config.redis.port,
-            "ttl": config.sessionexpire //Session的有效期为30天
+            "host": settings.redis.host,
+            "port": settings.redis.port,
+            "ttl": settings.sessionexpire //Session的有效期为30天
         })
     }));
     app.use(flash());
 
     app.use(passport.initialize());
     app.use(passport.session());
+
+    app.use(express.static(path.join(__dirname, '../static')));
 
     /* ==== middlewares begin ==== */
 
@@ -55,7 +58,6 @@ module.exports = function () {
     /* ==== middlewares end ==== */
 
     /* ==== routers begin ==== */
-
 
     var homeroute = require('../app/home/home.server.route'),
     //login = require('../app/login/login.server.route'),
@@ -70,8 +72,6 @@ module.exports = function () {
     /* ==== routers end ==== */
 
 
-    app.use(express.static(path.join(__dirname, '../static')));
-
 // catch 404 and forward to error handler
     app.use(function (req, res, next) {
         var err = new Error('Not Found');
@@ -80,6 +80,8 @@ module.exports = function () {
     });
 
 // error handlers
+
+    app.use(requestError);
 
 // development error handler
 // will print stacktrace

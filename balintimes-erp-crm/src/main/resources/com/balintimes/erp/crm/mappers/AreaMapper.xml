@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.AreaMapper">
+
+	<resultMap type="Area" id="areaInfoMap">
+		<id property="uid" column="uid" />
+		<result property="name" column="name" />
+		<result property="parentUid" column="parentuid" />
+		<result property="idx" column="idx" />
+		<result property="code" column="code" />
+	</resultMap>
+
+	<select id="getAreaInfoList" statementType="PREPARED"
+		resultType="Area" parameterType="Map">
+		select
+		*
+		from
+		areaInfo
+		<trim prefix="where" prefixOverrides="and">
+			<if test="name!=null">
+				name like #{name}
+			</if>
+			<if test="code!=null">
+				code like #{code}
+			</if>
+		</trim>
+	</select>
+
+	<select id="getAreaInfoListByParnetUid" statementType="PREPARED"
+		resultType="Area" parameterType="String">
+		select * from areaInfo where
+		parentuid=#{parentUid}
+	</select>
+
+	<select id="getAreaInfo" statementType="PREPARED" resultType="Area"
+		parameterType="String">
+		select * from areaInfo where uid=#{uid}
+	</select>
+
+	<insert id="createAreaInfo" statementType="PREPARED"
+		parameterType="Area">
+		insert into
+		areainfo(uid,name,parentuid,idx,code)values(#{uid},#{name},#{parentUid},#{idx},#{code})
+	</insert>
+
+	<update id="updateAreaInfo" statementType="PREPARED"
+		parameterType="Area">
+		update
+		areainfo
+		set
+		name=#{name},
+		parentuid=#{parentUid},
+		idx=#{idx},
+		code=#{code}
+		where
+		uid=#{uid}
+
+	</update>
+
+	<delete id="deleteAreaInfo" statementType="PREPARED"
+		parameterType="String">
+		delete from areainfo where uid=#{uid}
+	</delete>
+</mapper>

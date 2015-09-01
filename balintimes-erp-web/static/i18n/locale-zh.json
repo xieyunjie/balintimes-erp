@@ -1,0 +1,9 @@
+{
+  "LoginForm": {
+    "Title": "请登录",
+    "UserName": "用户名",
+    "Password": "密码",
+    "RememberMe": "记住我 ?",
+    "LoginBtn": "登录"
+  }
+}

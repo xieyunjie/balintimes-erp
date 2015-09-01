@@ -1,8 +1,10 @@
 package com.balintimes.erp.util.mvc;
 
+import com.balintimes.erp.util.exception.CurrentUserExpireException;
 import com.balintimes.erp.util.json.JsonUtil;
 import com.balintimes.erp.util.redis.RedisUserUtil;
 import org.springframework.core.MethodParameter;
+import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -14,7 +16,7 @@ import java.lang.annotation.Annotation;
 /**
  * Created by AlexXie on 2015/8/24.
  */
-public class MvcHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
+public class CtrlMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Resource
     private RedisUserUtil redisUserUtil;
@@ -23,9 +25,9 @@ public class MvcHandlerMethodArgumentResolver implements HandlerMethodArgumentRe
 
         Annotation[] as = methodParameter.getParameterAnnotations();
         for (Annotation a : as) {
-            if (a.annotationType() == MvcExModel.class) {
+            if (a.annotationType() == MvcModel.class) {
                 Class<?> clazz = methodParameter.getParameterType();
-                if (clazz.isAssignableFrom(MvcRUID.class) || clazz.isAssignableFrom(MvcWebUser.class)) {
+                if (clazz.isAssignableFrom(Ruid.class) || clazz.isAssignableFrom(WebUser.class)) {
                     return true;
                 }
             }
@@ -36,14 +38,21 @@ public class MvcHandlerMethodArgumentResolver implements HandlerMethodArgumentRe
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
 
         Class<?> clazz = methodParameter.getParameterType();
-        if (clazz.isAssignableFrom(MvcRUID.class)) {
-            MvcRUID sessionID = new MvcRUID();
-            sessionID.setRuid(nativeWebRequest.getHeader("nodejs-sessionid"));
+        if (clazz.isAssignableFrom(Ruid.class)) {
+            Ruid sessionID = new Ruid();
+            sessionID.setRuid(nativeWebRequest.getHeader("redissessionid"));
             return sessionID;
-        } else if (clazz.isAssignableFrom(MvcWebUser.class)) {
-            MvcWebUser mvcWebUser = JsonUtil.ToObject(redisUserUtil.GetRedisWebUser(nativeWebRequest.getHeader("nodejs-sessionid")), MvcWebUser.class);
-            return mvcWebUser;
+        } else if (clazz.isAssignableFrom(WebUser.class)) {
+            String userStr = redisUserUtil.GetRedisWebUser(nativeWebRequest.getHeader("redissessionid"));
+
+            if(userStr == null){
+
+                throw  new CurrentUserExpireException(nativeWebRequest.getHeader("redissessionid"));
+            }
+
+            WebUser webUser = JsonUtil.ToObject(userStr, WebUser.class);
+            return webUser;
         }
-        return null;
+        return WebArgumentResolver.UNRESOLVED;
     }
 }

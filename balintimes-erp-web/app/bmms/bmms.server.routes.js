@@ -4,10 +4,10 @@
 var express = require('express'),
     router = express.Router(),
     request = require("superagent"),
-    bmmurl = require("../erpserver").url.bmms;
+    bmmurl = require("../../config/settings").serverurl.bmms;
 var AuthCtrl = require('../authentication/authentication.server.controller');
 
-router.get("/",AuthCtrl.IsAuth,function(req,res,next){
+router.get("/", AuthCtrl.IsAuth, function (req, res, next) {
 
     res.render('bmms/bmms.html');
 
@@ -16,24 +16,24 @@ router.get("/",AuthCtrl.IsAuth,function(req,res,next){
 router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
 
     if (req.method == "GET") {
-        request.get(bmmurl + req.path).set('nodejs-sessionid', req.session.ruid).end(function (err, response) {
+        util.request(req, bmmurl, function (err, response) {
             if (err) {
                 res.send(err);
             }
             else {
                 res.send(response.text);
             }
-        });
-    } else if (req.method == "POST") {
-        request.post(bmmurl + req.path).set('nodejs-sessionid', req.session.ruid).set('Content-Type', 'application/x-www-form-urlencoded').send(req.body).end(function (err, response) {
+        })
+    }
+    else {
+        util.request(req, bmmurl, req.body, function (err, response) {
             if (err) {
-                console.log(err);
-                res.status(err.response.statusCode).send(err.response.text);
+                res.send(err);
             }
             else {
                 res.send(response.text);
             }
-        });
+        })
     }
 });
 

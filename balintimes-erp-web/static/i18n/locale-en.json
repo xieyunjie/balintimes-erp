@@ -1,0 +1,9 @@
+{
+  "LoginForm": {
+    "Title": "Please Sign In.",
+    "UserName": "UserName",
+    "Password": "Password",
+    "RememberMe": "Remember me ?",
+    "LoginBtn": "Login"
+  }
+}

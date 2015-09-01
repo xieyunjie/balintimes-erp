@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 
-public class MvcPermissionInterceptorAdapter extends HandlerInterceptorAdapter {
+public class PermissionInterceptorAdapter extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
@@ -25,9 +25,10 @@ public class MvcPermissionInterceptorAdapter extends HandlerInterceptorAdapter {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handler2 = (HandlerMethod) handler;
 
-            Annotation an = handler2.getMethodAnnotation(MvcHasPermissions.class);
+            Annotation an = handler2.getMethodAnnotation(HasPermissions.class);
             if (an != null) {
-                String[] permissions = handler2.getMethodAnnotation(MvcHasPermissions.class).value();
+                String[] permissions = handler2.getMethodAnnotation(HasPermissions.class).value();
+                if (permissions.length > 0) throw new AuthPermissionException("UnAuth");
             }
 
             boolean isPermissioin = true;

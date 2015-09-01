@@ -5,7 +5,7 @@ package com.balintimes.erp.util.redis;
  */
 public class RedisKeyUtil {
 
-    private final static String RedisUID = "nodejs-sessionid";
+    private final static String RedisUID = "redissessionid";
     private final static String WebUserID = "ucenter-WebUser-";
     private final static String PerssiomsID = "ucenter-USERPERMISSION-";
     private final static String RolesID = "ucenter-Roles-";
