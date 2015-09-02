@@ -1,8 +1,6 @@
 package com.balintimes.erp.util.mvc;
 
 import com.balintimes.erp.util.exception.CurrentUserExpireException;
-import com.balintimes.erp.util.json.JsonUtil;
-import com.balintimes.erp.util.redis.RedisUserUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -10,7 +8,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 
 /**
@@ -18,8 +15,8 @@ import java.lang.annotation.Annotation;
  */
 public class CtrlMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-    @Resource
-    private RedisUserUtil redisUserUtil;
+
+    private WebUserUtil webUserUtil;
 
     public boolean supportsParameter(MethodParameter methodParameter) {
 
@@ -39,20 +36,32 @@ public class CtrlMethodArgumentResolver implements HandlerMethodArgumentResolver
 
         Class<?> clazz = methodParameter.getParameterType();
         if (clazz.isAssignableFrom(Ruid.class)) {
-            Ruid sessionID = new Ruid();
-            sessionID.setRuid(nativeWebRequest.getHeader("redissessionid"));
-            return sessionID;
+//            Ruid sessionID = new Ruid();
+//            sessionID.setRuid(nativeWebRequest.getHeader("redissessionid"));
+//            return sessionID;
+            return webUserUtil.getUniqueID();
         } else if (clazz.isAssignableFrom(WebUser.class)) {
-            String userStr = redisUserUtil.GetRedisWebUser(nativeWebRequest.getHeader("redissessionid"));
+//            String userStr = redisUserUtil.GetRedisWebUser(nativeWebRequest.getHeader("redissessionid"));
+//
+//            if(userStr == null){
+//
+//                throw  new CurrentUserExpireException(nativeWebRequest.getHeader("redissessionid"));
+//            }
 
-            if(userStr == null){
+            WebUser webUser = webUserUtil.getWebUser();
+            if (webUser == null) throw new CurrentUserExpireException(nativeWebRequest.getHeader("redissessionid"));
 
-                throw  new CurrentUserExpireException(nativeWebRequest.getHeader("redissessionid"));
-            }
-
-            WebUser webUser = JsonUtil.ToObject(userStr, WebUser.class);
             return webUser;
         }
         return WebArgumentResolver.UNRESOLVED;
+    }
+
+
+    public WebUserUtil getWebUserUtil() {
+        return webUserUtil;
+    }
+
+    public void setWebUserUtil(WebUserUtil webUserUtil) {
+        this.webUserUtil = webUserUtil;
     }
 }

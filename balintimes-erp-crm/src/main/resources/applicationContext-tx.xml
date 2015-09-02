@@ -1,66 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
              http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
-	<!-- 事务配置 <tx:annotation-driven transaction-manager="transactionManager" 
-		proxy-target-class="true" /> -->
+    <!-- 事务配置 <tx:annotation-driven transaction-manager="transactionManager"
+        proxy-target-class="true" /> -->
 
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-	</bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
 
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.balintimes.erp.crm.mappers" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-	</bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.balintimes.erp.crm.mappers"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
 
-	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename" value="messages" />
-	</bean>
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages"/>
+    </bean>
 
-	<bean id="crmAdvice" class="com.balintimes.erp.crm.aspectadvice.CrmAdvice"></bean>
+    <bean id="crmAdvice" class="com.balintimes.erp.util.spring.ServicesAspectAdvice">
+        <property name="webUserUtil" ref="webUserUtil"/>
+        <property name="appUID" value="crm"/>
+        <property name="appName" value="客户管理"/>
+    </bean>
 
-	<!-- 事务配置，事务发生在服务层 -->
-	<tx:advice id="crmTxAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<tx:method name="delete*" propagation="REQUIRED" read-only="false"
-				rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException" />
-			<tx:method name="create*" propagation="REQUIRED" read-only="false"
-				rollback-for="java.lang.RuntimeException" />
-			<tx:method name="update*" propagation="REQUIRED" read-only="false"
-				rollback-for="java.lang.Exception" />
-			<tx:method name="save*" propagation="REQUIRED" read-only="false"
-				rollback-for="java.lang.Exception" />
+    <!-- 事务配置，事务发生在服务层 -->
+    <tx:advice id="crmTxAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="delete*" propagation="REQUIRED" read-only="false"
+                       rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException"/>
+            <tx:method name="create*" propagation="REQUIRED" read-only="false"
+                       rollback-for="java.lang.RuntimeException"/>
+            <tx:method name="update*" propagation="REQUIRED" read-only="false"
+                       rollback-for="java.lang.Exception"/>
+            <tx:method name="save*" propagation="REQUIRED" read-only="false"
+                       rollback-for="java.lang.Exception"/>
 
-			<tx:method name="find*" propagation="SUPPORTS" />
-			<tx:method name="get*" propagation="SUPPORTS" />
-			<tx:method name="select*" propagation="SUPPORTS" />
-		</tx:attributes>
-	</tx:advice>
+            <tx:method name="find*" propagation="SUPPORTS"/>
+            <tx:method name="get*" propagation="SUPPORTS"/>
+            <tx:method name="select*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
 
-	<aop:config>
-		<aop:pointcut id="crmPointcut"
-			expression="execution(public * com.balintimes.erp.crm.service.*.*(..))" />
-		<aop:advisor pointcut-ref="crmPointcut" advice-ref="crmTxAdvice" />
+    <aop:config>
+        <aop:pointcut id="crmPointcut"
+                      expression="execution(public * com.balintimes.erp.crm.service.*.*(..))"/>
+        <aop:advisor pointcut-ref="crmPointcut" advice-ref="crmTxAdvice"/>
 
-		<aop:aspect ref="crmAdvice">
-			<aop:pointcut id="crmRound"
-				expression="execution(* com.balintimes.erp.crm.service.impl.*.*(..))" />
-			<aop:around pointcut-ref="crmRound" method="CrmServiceAround" />
-		</aop:aspect>
-	</aop:config>
+        <aop:aspect ref="crmAdvice">
+            <aop:pointcut id="crmRound"
+                          expression="execution(* com.balintimes.erp.crm.service.impl.*.*(..))"/>
+            <aop:around pointcut-ref="crmRound" method="doAround"/>
+        </aop:aspect>
+    </aop:config>
 
 </beans>

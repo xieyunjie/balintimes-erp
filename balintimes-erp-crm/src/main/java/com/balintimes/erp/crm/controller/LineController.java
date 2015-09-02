@@ -1,6 +1,8 @@
 package com.balintimes.erp.crm.controller;
 
+import com.balintimes.erp.crm.model.Area;
 import com.balintimes.erp.crm.model.Line;
+import com.balintimes.erp.crm.service.AreaService;
 import com.balintimes.erp.util.json.AjaxResponse;
 import com.balintimes.erp.util.json.ResponseMessage;
 import com.balintimes.erp.util.mvc.MvcModel;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +28,8 @@ import java.util.UUID;
 public class LineController extends BaseController {
 
     static List<Line> list = null;
+    @Resource
+    private AreaService areaInfoService;
 
     public LineController() {
 
@@ -38,6 +43,14 @@ public class LineController extends BaseController {
 
             list.add(line);
         }
+    }
+
+    @RequestMapping(value="file")
+    @ResponseBody
+    public String getFile(){
+//        com.balintimes.erp.util.log.LogUtil.recordServiceLog();
+        List<Area> list = this.areaInfoService.getAreaInfoList(null, null);
+        return  "success";
     }
 
     @RequestMapping(value = "get/{uid}", method = RequestMethod.GET)

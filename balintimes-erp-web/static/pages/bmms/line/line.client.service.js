@@ -27,7 +27,7 @@ angular.module("app").factory('BMMS_Line_Service', ['AjaxRequest', function (Aja
             })
         },
         showload: function () {
-            return AjaxRequest.get("/crm/line/showloadx").then(function (req) {
+            return AjaxRequest.get("/crm/line/file").then(function (req) {
                 return req;
             });
         }
