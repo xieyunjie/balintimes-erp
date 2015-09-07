@@ -2,9 +2,17 @@
  * Created by AlexXie on 2015/8/19.
  */
 var request = require("superagent"),
+    agent = require("agentkeepalive"),
     settings = require("../config/settings");
 var cloneFn = require('lodash-node/modern/lang/clone');
 
+var keepaliveAgent = new agent({
+    keepAlive: true,
+    maxSockets: 100,
+    maxFreeSockets: 10,
+    timeout: 30000,
+    keepAliveTimeout: 2000 // free socket keepalive for 30 seconds
+});
 var Util = {};
 module.exports = Util;
 
@@ -39,6 +47,8 @@ Util.request = function (req, baseUrl, params, callback) {
 
     call.set(settings.redisKey.redissessionid, req.session.ruid)
         .set(settings.requestHeader.ajaxHead.text, settings.requestHeader.ajaxHead.value)
+        //.set("Accept","application/json")
+        .agent(keepaliveAgent)// keyalive貌似没什么作用
         .end(function (err, response) {
             callback(err, response)
         });

@@ -12,7 +12,7 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
 
         // config
         var app = $scope.app = {
-            name: 'ERP',
+            name: 'BalintimesERP',
             version: '0.0.1',
             // for chart colors
             color: {

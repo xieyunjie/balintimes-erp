@@ -1,8 +1,8 @@
 package com.balintimes.erp.bmms.controller;
 
-import com.balintimes.erp.util.mvc.MvcModel;
-import com.balintimes.erp.util.mvc.Ruid;
-import com.balintimes.erp.util.mvc.WebUser;
+import com.balintimes.erp.util.mvc.annon.MvcModel;
+import com.balintimes.erp.util.mvc.model.Ruid;
+import com.balintimes.erp.util.mvc.model.WebUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -7,5 +7,10 @@
     </bean>
 
     <!--当前用户工具定义-->
-    <bean id="webUserUtil" class="com.balintimes.erp.util.mvc.impl.RedisWebUserUtil"></bean>
+    <bean id="webUserUtil" class="com.balintimes.erp.util.mvc.util.impl.RedisWebUserUtil">
+        <property name="redisUserUtil" ref="redisUserUtil"/>
+    </bean>
+    <bean id="permittedUtil" class="com.balintimes.erp.util.mvc.util.impl.RedisPermittedUtil">
+        <property name="redisUserUtil" ref="redisUserUtil"/>
+    </bean>
 </beans>

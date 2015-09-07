@@ -1,4 +1,4 @@
-package com.balintimes.erp.util.mvc;
+package com.balintimes.erp.util.mvc.handler;
 
 import com.balintimes.erp.util.exception.AuthPermissionException;
 import com.balintimes.erp.util.exception.CurrentUserExpireException;

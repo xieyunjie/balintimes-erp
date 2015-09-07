@@ -5,9 +5,9 @@ import com.balintimes.erp.crm.model.Line;
 import com.balintimes.erp.crm.service.AreaService;
 import com.balintimes.erp.util.json.AjaxResponse;
 import com.balintimes.erp.util.json.ResponseMessage;
-import com.balintimes.erp.util.mvc.MvcModel;
-import com.balintimes.erp.util.mvc.HasPermissions;
-import com.balintimes.erp.util.mvc.WebUser;
+import com.balintimes.erp.util.mvc.annon.HasPermissions;
+import com.balintimes.erp.util.mvc.annon.MvcModel;
+import com.balintimes.erp.util.mvc.model.WebUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,12 +45,12 @@ public class LineController extends BaseController {
         }
     }
 
-    @RequestMapping(value="file")
+    @RequestMapping(value = "file")
     @ResponseBody
-    public String getFile(){
+    public String getFile() {
 //        com.balintimes.erp.util.log.LogUtil.recordServiceLog();
         List<Area> list = this.areaInfoService.getAreaInfoList(null, null);
-        return  "success";
+        return "success";
     }
 
     @RequestMapping(value = "get/{uid}", method = RequestMethod.GET)
@@ -98,7 +98,7 @@ public class LineController extends BaseController {
     }
 
     @RequestMapping(value = "delete/{uid}", method = RequestMethod.DELETE)
-    @HasPermissions("crm.line.delete")
+    @HasPermissions("crm.line.delete | organization:view")
     @ResponseBody
     public AjaxResponse DeleteLine(@MvcModel WebUser currentUser, @PathVariable String uid) {
 

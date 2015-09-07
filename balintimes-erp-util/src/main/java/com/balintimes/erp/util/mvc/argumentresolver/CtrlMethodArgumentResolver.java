@@ -1,6 +1,10 @@
-package com.balintimes.erp.util.mvc;
+package com.balintimes.erp.util.mvc.argumentresolver;
 
 import com.balintimes.erp.util.exception.CurrentUserExpireException;
+import com.balintimes.erp.util.mvc.model.Ruid;
+import com.balintimes.erp.util.mvc.model.WebUser;
+import com.balintimes.erp.util.mvc.annon.MvcModel;
+import com.balintimes.erp.util.mvc.util.WebUserUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -41,12 +45,6 @@ public class CtrlMethodArgumentResolver implements HandlerMethodArgumentResolver
 //            return sessionID;
             return webUserUtil.getUniqueID();
         } else if (clazz.isAssignableFrom(WebUser.class)) {
-//            String userStr = redisUserUtil.GetRedisWebUser(nativeWebRequest.getHeader("redissessionid"));
-//
-//            if(userStr == null){
-//
-//                throw  new CurrentUserExpireException(nativeWebRequest.getHeader("redissessionid"));
-//            }
 
             WebUser webUser = webUserUtil.getWebUser();
             if (webUser == null) throw new CurrentUserExpireException(nativeWebRequest.getHeader("redissessionid"));

@@ -24,7 +24,7 @@
 
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
-            <bean class="com.balintimes.erp.util.mvc.CtrlMethodArgumentResolver"/>
+            <bean class="com.balintimes.erp.util.mvc.argumentresolver.CtrlMethodArgumentResolver"/>
         </mvc:argument-resolvers>
         <!--<mvc:message-converters>-->
         <!--<bean class="com.balintimes.erp.util.spring.UTF8StringHttpMessageConverter"/>-->
@@ -45,7 +45,7 @@
     </mvc:annotation-driven>
 
     <mvc:interceptors>
-        <bean class="com.balintimes.erp.util.mvc.PermissionInterceptorAdapter"></bean>
+        <bean class="com.balintimes.erp.util.mvc.interceptor.PermissionInterceptorAdapter"></bean>
     </mvc:interceptors>
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
@@ -81,5 +81,5 @@
           class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
 
-    <bean class="com.balintimes.erp.util.mvc.RequestExceptionHandler"/>
+    <bean class="com.balintimes.erp.util.mvc.handler.RequestExceptionHandler"/>
 </beans>

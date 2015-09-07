@@ -1,4 +1,4 @@
-package com.balintimes.erp.util.mvc;
+package com.balintimes.erp.util.mvc.model;
 
 import java.io.Serializable;
 

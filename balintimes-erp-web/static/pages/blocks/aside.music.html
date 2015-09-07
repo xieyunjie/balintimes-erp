@@ -8,7 +8,7 @@
         <span class="thumb-xxs avatar pull-left m-r-sm">
           <img src="img/a0.jpg" alt="...">
         </span>
-        <span class="hidden-sm hidden-md m-t-xs text-ellipsis">John.Smith</span>
+        <span class="hidden-sm hidden-md m-t-xs text-ellipsis">{{app.webUser.employeeName}}</span>
       </a>      
       <!-- dropdown -->
       <ul class="dropdown-menu animated fadeInRight w">
@@ -35,7 +35,8 @@
         </li>
         <li class="divider"></li>
         <li>
-          <a ui-sref="access.signin">Logout</a>
+          <!--<a ui-sref="access.signin">Logout</a>-->
+          <a href="/logout" ><i class="fa fa-power-off text-danger"></i> {{ 'Logout' | translate }}</a>
         </li>
       </ul>
       <!-- / dropdown -->

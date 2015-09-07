@@ -8,11 +8,12 @@ angular.module('BMMS_Line_List_Module', [])
         function ($scope, $timeout, NgTableUtil, BMMS_Line_Service, AlertMsg, DlgMsg) {
             var vm = $scope.vm = {
                 title: '线路列表',
+                pamas:'aksdjakjsdls',
                 tableParams: NgTableUtil.initNgTableParams(function (exparam, tbparam) {
                     var params = {
                         pagesize: exparam.pagesize,
                         page: exparam.page,
-                        query: "lhms"
+                        query: angular.isUndefined(exparam.query) ? "*" : exparam.query
                     };
                     if (exparam.query) params.query = exparam.query;
 
@@ -25,7 +26,13 @@ angular.module('BMMS_Line_List_Module', [])
 
             $scope.reloadFirstPage = function () {
 
-                var par = {query: "lhms"};
+                var par = {query: "aaaa"};
+
+                NgTableUtil.reloadNgTable(vm.tableParams, par, 1);
+            };
+            $scope.reloadOtherPage = function () {
+
+                var par = {query: "zzz"};
 
                 NgTableUtil.reloadNgTable(vm.tableParams, par, 1);
             };

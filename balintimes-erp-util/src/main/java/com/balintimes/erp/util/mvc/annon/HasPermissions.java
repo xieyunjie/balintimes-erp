@@ -1,4 +1,4 @@
-package com.balintimes.erp.util.mvc;
+package com.balintimes.erp.util.mvc.annon;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HasPermissions {
-    String[] value();
+    String value();
 }

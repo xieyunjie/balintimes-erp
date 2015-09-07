@@ -3,8 +3,8 @@ package com.balintimes.erp.util.spring;
 import com.balintimes.erp.util.json.JsonUtil;
 import com.balintimes.erp.util.log.LogMethodModel;
 import com.balintimes.erp.util.log.LogUtil;
-import com.balintimes.erp.util.mvc.WebUser;
-import com.balintimes.erp.util.mvc.WebUserUtil;
+import com.balintimes.erp.util.mvc.model.WebUser;
+import com.balintimes.erp.util.mvc.util.WebUserUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 

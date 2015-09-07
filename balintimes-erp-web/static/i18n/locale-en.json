@@ -5,5 +5,14 @@
     "Password": "Password",
     "RememberMe": "Remember me ?",
     "LoginBtn": "Login"
+  },
+  "Logout":"Logout",
+  "SettingsPanel": {
+    "Title":"Settings",
+    "FixedHeader":"Fixed Header",
+    "FixedAside":"Fixed Aside",
+    "FoldedAside":"Folded Aside",
+    "DockAside":"Dock Aside",
+    "BoxedLayout":"Boxed Layout"
   }
 }

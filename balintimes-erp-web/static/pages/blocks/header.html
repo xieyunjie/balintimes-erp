@@ -8,9 +8,9 @@
     </button>
     <!-- brand -->
     <a href="#/" class="navbar-brand text-lt">
-        <i class="fa fa-btc"></i>
+        <i class="glyphicon glyphicon-tower text-primary-lter"></i>
         <img src="images/logo.png" alt="." class="hide">
-        <span class="hidden-folded m-l-xs">{{app.name}}</span>
+        <span class="hidden-folded m-l-xs" style="font-size: 16px"> {{app.name}}</span>
     </a>
     <!-- / brand -->
 </div>
@@ -240,7 +240,7 @@
                 <img src="images/a0.jpg" alt="...">
                 <i class="on md b-white bottom"></i>
               </span>
-                <span class="hidden-sm hidden-md">John.Smith</span> <b class="caret"></b>
+                <span class="hidden-sm hidden-md" ng-bind="app.webUser.employeeName"></span> <b class="caret"></b>
             </a>
             <!-- dropdown -->
             <ul class="dropdown-menu animated fadeInRight w">
@@ -267,7 +267,8 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a ui-sref="access.signin">Logout</a>
+                    <!--<a ui-sref="access.signin">Logout</a>-->
+                    <a href="/logout"><i class="fa fa-power-off text-danger"></i> {{ 'Logout' | translate }}</a>
                 </li>
             </ul>
             <!-- / dropdown -->

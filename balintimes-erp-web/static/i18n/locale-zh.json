@@ -5,5 +5,14 @@
     "Password": "密码",
     "RememberMe": "记住我 ?",
     "LoginBtn": "登录"
+  },
+  "Logout": "退出",
+  "SettingsPanel": {
+    "Title":"设置面板",
+    "FixedHeader":"固定标题",
+    "FixedAside":"固定边栏",
+    "FoldedAside":"折叠边栏",
+    "DockAside":"隐藏边栏",
+    "BoxedLayout":"装箱布局"
   }
 }

@@ -1,9 +1,9 @@
-package com.balintimes.erp.util.mvc.impl;
+package com.balintimes.erp.util.mvc.util.impl;
 
 import com.balintimes.erp.util.json.JsonUtil;
-import com.balintimes.erp.util.mvc.Ruid;
-import com.balintimes.erp.util.mvc.WebUser;
-import com.balintimes.erp.util.mvc.WebUserUtil;
+import com.balintimes.erp.util.mvc.model.Ruid;
+import com.balintimes.erp.util.mvc.model.WebUser;
+import com.balintimes.erp.util.mvc.util.WebUserUtil;
 import com.balintimes.erp.util.redis.RedisUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +18,6 @@ public class RedisWebUserUtil implements WebUserUtil {
     @Autowired(required = false)
     private HttpServletRequest httpRequest;
 
-    @Resource
     private RedisUserUtil redisUserUtil;
 
     public WebUser getWebUser() {
@@ -43,5 +42,14 @@ public class RedisWebUserUtil implements WebUserUtil {
             return ruid;
         }
         return null;
+    }
+
+
+    public RedisUserUtil getRedisUserUtil() {
+        return redisUserUtil;
+    }
+
+    public void setRedisUserUtil(RedisUserUtil redisUserUtil) {
+        this.redisUserUtil = redisUserUtil;
     }
 }

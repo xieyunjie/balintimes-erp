@@ -17,7 +17,7 @@
               <strong class="font-bold text-lt">{{app.webUser.employeeName}}</strong>
               <b class="caret"></b>
             </span>
-            <span class="text-muted text-xs block">{{app.webUser.postname}}</span>
+            <span class="text-muted text-xs block">{{app.webUser.lastLogin}}</span>
           </span>
                 </a>
                 <!-- dropdown -->
@@ -44,7 +44,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a ui-sref="access.signin">登出</a>
+                        <a href="/logout" ><i class="fa fa-power-off text-danger"></i> {{ 'Logout' | translate }}</a>
                     </li>
                 </ul>
                 <!-- / dropdown -->
