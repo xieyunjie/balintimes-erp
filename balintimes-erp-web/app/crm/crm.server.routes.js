@@ -2,11 +2,11 @@
  * Created by AlexXie on 2015/8/18.
  */
 var express = require('express'),
-    router = express.Router(),
-    request = require("superagent"),
-    crmurl = require("../../config/settings").serverurl.crm;
-var AuthCtrl = require('../authentication/authentication.server.controller');
-var util = require("../util");
+    router = express.Router();
+var crmurl = require("../../config/settings").serverurl.crm,
+    AuthCtrl = require('../authentication/authentication.server.controller'),
+    requestUtil = require("../util/requestUtil"),
+    logger = require("../util/log4jsUtil").logReq();
 
 
 router.get("/line/showload", function (req, res) {
@@ -36,6 +36,10 @@ router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
             var resObj = response.body;
 
             if (resObj.success == "false" && resObj.httpStatus != 200) {
+
+                var logMsg = [resObj.httpStatus, response.req.method, response.req.path, JSON.stringify(resObj)];
+                logger.debug(logMsg.join(" "));
+
                 var e = new Error(resObj.responseMsg);
                 e.status = resObj.httpStatus;
                 next(e);
@@ -47,10 +51,10 @@ router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
     };
 
     if (req.method == "GET") {
-        util.request(req, crmurl, ajaxRes)
+        requestUtil.request(req, crmurl, ajaxRes)
     }
     else {
-        util.request(req, crmurl, req.body, ajaxRes)
+        requestUtil.request(req, crmurl, req.body, ajaxRes)
     }
 
 });

@@ -98,7 +98,7 @@ public class LineController extends BaseController {
     }
 
     @RequestMapping(value = "delete/{uid}", method = RequestMethod.DELETE)
-    @HasPermissions("crm.line.delete | organization:view")
+    @HasPermissions("crm.line.delete")
     @ResponseBody
     public AjaxResponse DeleteLine(@MvcModel WebUser currentUser, @PathVariable String uid) {
 

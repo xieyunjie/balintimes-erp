@@ -5,16 +5,17 @@
 var express = require('express'),
     path = require('path'),
     favicon = require('serve-favicon'),
-    logger = require('morgan'),
+//logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
     passport = require('passport'),
     flash = require('connect-flash'),
-    uuid = require('node-uuid');
+    uuid = require('node-uuid'),
+    log4js = require("log4js");
 var RedisStore = require('connect-redis')(session);
 var settings = require("./settings");
-var requestError = require("../app/requestError");
+var requestError = require("../app/util/requestErrorUtil");
 
 module.exports = function () {
     var app = express();
@@ -25,7 +26,13 @@ module.exports = function () {
 
 // uncomment after placing your favicon in /public
     app.use(favicon(path.join(__dirname, '../static', 'favicon.ico')));
-    app.use(logger('dev'));
+    //app.use(logger('dev'));
+    var logger = log4js.getLogger("normal");
+    logger.setLevel("INFO");
+    app.use(log4js.connectLogger(logger, {
+        level: "auto",
+        format: ':method :url :status :response-time ms - :res[content-length]'
+    }));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieParser());
@@ -39,7 +46,7 @@ module.exports = function () {
         store: new RedisStore({
             "host": settings.redis.host,
             "port": settings.redis.port,
-            "ttl": settings.sessionexpire //Session的有效期为30天
+            "ttl": settings.sessionexpire
         })
     }));
     app.use(flash());

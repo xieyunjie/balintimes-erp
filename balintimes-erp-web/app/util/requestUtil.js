@@ -1,10 +1,13 @@
 /**
- * Created by AlexXie on 2015/8/19.
+ * Created by AlexXie on 2015/9/8.
  */
+
+"use strict";
 var request = require("superagent"),
     agent = require("agentkeepalive"),
-    settings = require("../config/settings");
+    settings = require("../../config/settings");
 var cloneFn = require('lodash-node/modern/lang/clone');
+var logger = require("./log4jsUtil").logReq();
 
 var keepaliveAgent = new agent({
     keepAlive: true,
@@ -22,6 +25,7 @@ Util.request = function (req, baseUrl, params, callback) {
         callback = params;
         params = {};
     }
+    var logMsg = [req.method, baseUrl + req.path, req.session.ruid, JSON.stringify(params)];
 
     var call = {};
     switch (req.method) {
@@ -50,6 +54,15 @@ Util.request = function (req, baseUrl, params, callback) {
         //.set("Accept","application/json")
         .agent(keepaliveAgent)// keyalive貌似没什么作用
         .end(function (err, response) {
+            if (err) {
+                logMsg.splice(0, 0, err.status);
+                logMsg.push(err);
+                logger.error(logMsg.join(" "));
+            }
+            else {
+                logMsg.splice(0, 0, response.status);
+                logger.debug(logMsg.join(" "));
+            }
             callback(err, response)
         });
 };

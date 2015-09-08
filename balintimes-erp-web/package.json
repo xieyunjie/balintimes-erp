@@ -16,6 +16,7 @@
     "express": "~4.13.1",
     "express-session": "^1.11.3",
     "lodash-node": "^3.10.1",
+    "log4js": "^0.6.26",
     "morgan": "~1.6.1",
     "node-uuid": "^1.4.3",
     "passport": "^0.2.2",
