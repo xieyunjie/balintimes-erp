@@ -17,11 +17,11 @@
 		from
 		areaInfo
 		<trim prefix="where" prefixOverrides="and">
-			<if test="name!=null">
-				name like #{name}
+			<if test="name!=null and name!='' ">
+				name like CONCAT(CONCAT('%', #{name, jdbcType=VARCHAR}),'%')
 			</if>
-			<if test="code!=null">
-				code like #{code}
+			<if test="code!=null and code!='' ">
+				and code like CONCAT(CONCAT('%', #{code, jdbcType=VARCHAR}),'%')
 			</if>
 		</trim>
 	</select>
@@ -29,7 +29,7 @@
 	<select id="getAreaInfoListByParnetUid" statementType="PREPARED"
 		resultType="Area" parameterType="String">
 		select * from areaInfo where
-		parentuid=#{parentUid}
+		parentuid=#{parentUid} order by idx
 	</select>
 
 	<select id="getAreaInfo" statementType="PREPARED" resultType="Area"

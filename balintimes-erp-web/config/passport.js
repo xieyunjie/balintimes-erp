@@ -17,17 +17,18 @@ module.exports = function () {
         passReqToCallback: true
     }, function (req, username, password, done) {
 
-        request.post(settings.authurl).set(settings.requestHeader.contentType.text, settings.requestHeader.contentType.value).send({
+        var authurl = settings.serverurl.ucenter + settings.authurl;
+        request.post(authurl).set(settings.requestHeader.contentType.text, settings.requestHeader.contentType.value).send({
             username: username,
             password: password
         }).end(function (err, response) {
             if (err) return done(err, null);
             var resObj = JSON.parse(response.text);
             if (resObj.success == 'true') {
-                var ruid = resObj.responseMsg;
+                var redisToken = resObj.responseMsg;
 
-                req.session.ruid = ruid;
-                return done(null, ruid);
+                req.session.redisToken = redisToken;
+                return done(null, redisToken);
             }
             else {
                 //return done({error: resObj.responseMsg}, null);
@@ -37,13 +38,13 @@ module.exports = function () {
 
     }));
 
-    passport.serializeUser(function (ruid, done) {
-        done(null, ruid);
+    passport.serializeUser(function (redisToken, done) {
+        done(null, redisToken);
     });
 
-    passport.deserializeUser(function (ruid, done) {
+    passport.deserializeUser(function (redisToken, done) {
 
-        redisClient.get(settings.redisKey.webuser + ruid, function (err, data) {
+        redisClient.get(settings.redisKey.webuser + redisToken, function (err, data) {
 
             if (err) return done(err, null);
 

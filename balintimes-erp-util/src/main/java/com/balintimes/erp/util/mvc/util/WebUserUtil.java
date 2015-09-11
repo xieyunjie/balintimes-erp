@@ -1,6 +1,6 @@
 package com.balintimes.erp.util.mvc.util;
 
-import com.balintimes.erp.util.mvc.model.Ruid;
+import com.balintimes.erp.util.mvc.model.RedisToken;
 import com.balintimes.erp.util.mvc.model.WebUser;
 
 /**
@@ -10,5 +10,5 @@ public interface WebUserUtil {
 
     WebUser getWebUser();
 
-    Ruid getUniqueID();
+    RedisToken getUniqueID();
 }

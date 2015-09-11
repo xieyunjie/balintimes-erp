@@ -1,7 +1,7 @@
 package com.balintimes.erp.bmms.controller;
 
 import com.balintimes.erp.util.mvc.annon.MvcModel;
-import com.balintimes.erp.util.mvc.model.Ruid;
+import com.balintimes.erp.util.mvc.model.RedisToken;
 import com.balintimes.erp.util.mvc.model.WebUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +21,8 @@ public class HomeController {
 //    }
     @RequestMapping("erpname")
     @ResponseBody
-    public String ErpName(@MvcModel Ruid sessionID) {
-        System.out.println("session id is:" + sessionID.getRuid());
+    public String ErpName(@MvcModel RedisToken sessionID) {
+        System.out.println("session id is:" + sessionID.getToken());
         return "this is Erp Bmms Res";
     }
 

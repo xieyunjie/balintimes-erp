@@ -11,6 +11,7 @@ log4js.configure({
         {
             type: 'file',
             filename: __dirname + '../../../logs/log.log',
+            pattern: "_yyyy-MM-dd",
             maxLogSize: 2048,
             backups: 3,
             category: 'request'

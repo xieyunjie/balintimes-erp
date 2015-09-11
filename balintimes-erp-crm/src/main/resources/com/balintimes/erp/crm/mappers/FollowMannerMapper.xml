@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.FollowMannerMapper">
+	<resultMap type="FollowManner" id="followMannerMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+	</resultMap>
+
+	<select id="getMannerList" statementType="PREPARED" resultType="FollowManner">
+		select * from followmanner
+	</select>
+
+	<insert id="createManner" statementType="PREPARED"
+		parameterType="FollowManner">
+		insert into followmanner(name)values(#{name});
+	</insert>
+
+</mapper>

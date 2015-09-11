@@ -56,4 +56,3 @@ angular.module('app')
             return message;
         };
     });
-;

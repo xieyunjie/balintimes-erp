@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.CityMediaMapper">
+	<resultMap type="CityMedia" id="cityMediaMap">
+		<id property="uid" column="uid" />
+		<result property="cityUid" column="cityuid" />
+		<result property="mediaUid" column="mediauid" />
+		<result property="protection" column="protection" />
+	</resultMap>
+
+	<select id="getCityMediaListByCity" statementType="PREPARED"
+		resultType="CityMedia" parameterType="String">
+		select * from citymedia where
+		cityuid=#{cityUid}
+	</select>
+
+	<select id="getCityMedia" statementType="PREPARED" resultType="CityMedia"
+		parameterType="String">
+		select * from citymedia where uid =#{uid}
+	</select>
+
+	<insert id="createCityMedia" statementType="PREPARED"
+		parameterType="CityMedia">
+		insert into citymedia(uid,cityuid,mediauid,protection)
+		values(uuid(),#{cityUid},#{mediaUid},#{protection})
+	</insert>
+
+	<delete id="deleteCityMedia" statementType="PREPARED"
+		parameterType="String">
+		delete from citymedia where uid=#{uid}
+	</delete>
+
+	<delete id="deleteCityMediaByCity" statementType="PREPARED"
+		parameterType="String">
+		delete from citymedia where cityuid=#{cityUid}
+	</delete>
+
+</mapper>

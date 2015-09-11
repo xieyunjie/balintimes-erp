@@ -50,12 +50,11 @@ router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
         }
     };
 
-    if (req.method == "GET") {
-        requestUtil.request(req, crmurl, ajaxRes)
-    }
-    else {
-        requestUtil.request(req, crmurl, req.body, ajaxRes)
-    }
+    requestUtil.transmit({
+        req: req,
+        baseUrl:crmurl,
+        callback: ajaxRes
+    });
 
 });
 

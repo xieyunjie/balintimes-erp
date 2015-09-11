@@ -236,4 +236,23 @@ angular.module('app')
                 });
             }
         }
+    }])
+    .factory("UserMenuAuth", ["$localStorage", function ($localStorage) {
+        return {
+            set: function (data) {
+                $localStorage.webUserMenus = data;
+            },
+            check: function (state) {
+                var data = $localStorage.webUserMenus;
+                var chkResult = true;
+
+                angular.forEach(data, function (menu) {
+                    if (menu.state == state && menu.enable == false) {
+                        chkResult = false;
+                        return false;
+                    }
+                });
+                return chkResult;
+            }
+        }
     }]);

@@ -3,8 +3,8 @@
  */
 'use strict';
 
-angular.module('app').controller('AppController', ['$scope', '$q', '$localStorage', '$window', 'AjaxRequest',
-    function ($scope, $q, $localStorage, $window, AjaxRequest) {
+angular.module('app').controller('AppController', ['$scope', '$q', '$localStorage', '$window', 'AjaxRequest', 'UserMenuAuth',
+    function ($scope, $q, $localStorage, $window, AjaxRequest, UserMenuAuth) {
         // add 'ie' classes to html
         var isIE = !!navigator.userAgent.match(/MSIE/i);
         isIE && angular.element($window.document.body).addClass('ie');
@@ -37,7 +37,10 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
                 container: false
             },
             webUser: {},
-            menus: {}
+            menuTree: {},
+            sysSetting: {},
+            webUserMenus: [],
+            webUserPermissions: []
         };
 
         // save settings to local storage
@@ -72,16 +75,32 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
             var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
             // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
             return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
-        };
+        }
+
+
 
         $scope.initAppCtrl = function () {
+            console.log("initAppCtrlinitAppCtrlinitAppCtrlinitAppCtrlinitAppCtrlinitAppCtrl");
             var webuserPromise = AjaxRequest.get("/home/inituser"),
-                menusPromise = AjaxRequest.get("/home/initmenus");
-            $q.all({user: webuserPromise, menus: menusPromise}).then(function (results) {
+                treePromise = AjaxRequest.get("/home/initmenus"),
+                permissionsPromise = AjaxRequest.get("/home/inituserauthority"),
+                settingPromise = AjaxRequest.get("/home/getsettings");
+            $q.all({
+                user: webuserPromise,
+                treePromise: treePromise,
+                settings: settingPromise,
+                permissions: permissionsPromise
+            }).then(function (results) {
                 app.webUser = results.user;
-                app.menus = results.menus;
-            });
+                app.menuTree = results.menus;
+                app.sysSetting = results.settings;
+                //app.webUserMenus = results.permissions.menus.data;
+                UserMenuAuth.set(results.permissions.menus.data);
+                app.webUserPermissions = results.permissions.permissions.data;
+                console.log("permissions.datapermissions.datapermissions.datapermissions.datapermissions.data");
 
+                //console.log(results.permissions);
+            });
         };
 
     }]);

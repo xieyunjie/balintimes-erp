@@ -35,8 +35,34 @@ angular.module('app')
                     };
                     if (angular.isDefined(router.controllername)) {
                         state.resolve = {
-                            deps: ['$ocLazyLoad',
-                                function ($ocLazyLoad) {
+                            deps: ['$ocLazyLoad', 'UserMenuAuth', '$q',
+                                function ($ocLazyLoad, UserMenuAuth, $q) {
+
+                                    //var deferred = $q.defer();
+                                    //var promise = deferred.promise;
+                                    //
+                                    //if (UserMenuAuth.check(abstractState + "." + router.state) == false) {
+                                    //    promise.then(function(data){
+                                    //        console.log(data);
+                                    //    });
+                                    //
+                                    //    deferred.reject("$UnAuthState");
+                                    //}
+                                    //else {
+                                    //    var sq = angular.isArray(router.script) ? angular.copy(router.script) : [];
+                                    //    sq.push("/pages/" + router.url + ".controller.js");
+                                    //    $ocLazyLoad.load(sq).then(function(data){
+                                    //        deferred.resolve(data);
+                                    //    });
+                                    //}
+                                    //return promise;
+                                    console.log("resolveresolveresolveresolveresolveresolve");
+
+                                    if (UserMenuAuth.check(abstractState + "." + router.state) == false) {
+                                        return $q.reject("$UnAuthState");
+                                    }
+
+
                                     var sq = angular.isArray(router.script) ? angular.copy(router.script) : [];
                                     sq.push("/pages/" + router.url + ".controller.js");
                                     return $ocLazyLoad.load(sq);

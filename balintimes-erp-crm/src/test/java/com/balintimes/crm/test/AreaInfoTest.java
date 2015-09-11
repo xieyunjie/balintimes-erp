@@ -21,7 +21,7 @@ public class AreaInfoTest {
 
 	@Test
 	public void GetList() {
-		List<Area> list = this.areaInfoService.getAreaInfoList(null, null);
+		List<Area> list = this.areaInfoService.getAreaInfoList("", "020");
 		for (Area item : list) {
 			System.out.println(item.getName());
 		}

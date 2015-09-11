@@ -1,0 +1,22 @@
+package com.balintimes.erp.center.mappers;
+
+import java.util.List;
+import java.util.Map;
+
+import com.balintimes.erp.center.model.RoleResource;
+
+public interface RoleResourceMapper {
+	List<RoleResource> GetRoleResourceListByRole(String roleUid);
+	
+	int GetRoleResourceCountByRoleAndApp(Map<String, Object> map);
+	
+	void CreateRoleResource(RoleResource roleResource);
+	
+	void DeleteRoleResourceByRoleAndResource(Map<String, Object> map);
+	
+	void DeleteRoleResourceByRole(String roleUid);
+	
+	void DeleteRoleResourceByResource(String resourceUid);
+	
+	void DeleteRoleResourceByRoleAndApp(Map<String, Object> map);
+}

@@ -14,6 +14,7 @@
         <module>balintimes-erp-bmms</module>
         <!-- <module>balintimes-oa-ucenter</module> -->
         <module>balintimes-erp-util</module>
+        <module>balintimes-erp-center</module>
     </modules>
 
     <properties>

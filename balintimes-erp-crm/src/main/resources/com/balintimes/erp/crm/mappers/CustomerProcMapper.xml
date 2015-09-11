@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.CustomerProcMapper">
+
+	<resultMap type="EmpCustomer" id="empCustomerMap">
+		<id property="id" column="id" />
+		<result property="uid" column="uid" />
+		<result property="name" column="name" />
+		<result property="businessTypeUid" column="businesstypeuid" />
+		<result property="businessTypeName" column="businesstypename" />
+		<result property="areaUid" column="areauid" />
+		<result property="areaName" column="areaname" />
+		<result property="areaCode" column="areacode" />
+		<result property="phone" column="phone" />
+		<result property="companyAddress" column="companyaddress" />
+		<result property="postCode" column="postcode" />
+		<result property="parentUid" column="parentuid" />
+		<result property="forbidden" column="forbidden" />
+		<result property="isDeleted" column="isdeleted" />
+		<result property="brand" column="brand" />
+		<result property="customerCategoryUid" column="customercategoryuid" />
+		<result property="customerCategoryName" column="customercategoryname" />
+		<result property="proxyCompany" column="proxycompany" />
+		<result property="state" column="state" />
+		<result property="stateName" column="statename" />
+		<result property="userUid" column="useruid" />
+	</resultMap>
+
+	<select id="getCustomerByEmp" statementType="CALLABLE"
+		resultType="EmpCustomer" parameterType="Map">
+		call getcustomerbyemp(
+		#{name,mode=IN,jdbcType=VARCHAR},
+		#{userUids,mode=IN,jdbcType=VARCHAR},
+		#{businessTypeUid,mode=IN,jdbcType=VARCHAR},
+		#{isreg,mode=IN,jdbcType=INTEGER},
+		#{brand,mode=IN,jdbcType=VARCHAR},
+		#{pageSize,mode=IN,jdbcType=INTEGER},
+		#{currPage,mode=IN,jdbcType=INTEGER},
+		#{totalCount,mode=OUT,jdbcType=INTEGER}
+		)
+	</select>
+
+</mapper>

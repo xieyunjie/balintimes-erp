@@ -1,10 +1,11 @@
 package com.balintimes.erp.util.mvc.argumentresolver;
 
 import com.balintimes.erp.util.exception.CurrentUserExpireException;
-import com.balintimes.erp.util.mvc.model.Ruid;
+import com.balintimes.erp.util.mvc.model.RedisToken;
 import com.balintimes.erp.util.mvc.model.WebUser;
 import com.balintimes.erp.util.mvc.annon.MvcModel;
 import com.balintimes.erp.util.mvc.util.WebUserUtil;
+import com.balintimes.erp.util.redis.RedisUserUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -28,7 +29,7 @@ public class CtrlMethodArgumentResolver implements HandlerMethodArgumentResolver
         for (Annotation a : as) {
             if (a.annotationType() == MvcModel.class) {
                 Class<?> clazz = methodParameter.getParameterType();
-                if (clazz.isAssignableFrom(Ruid.class) || clazz.isAssignableFrom(WebUser.class)) {
+                if (clazz.isAssignableFrom(RedisToken.class) || clazz.isAssignableFrom(WebUser.class)) {
                     return true;
                 }
             }
@@ -39,15 +40,12 @@ public class CtrlMethodArgumentResolver implements HandlerMethodArgumentResolver
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
 
         Class<?> clazz = methodParameter.getParameterType();
-        if (clazz.isAssignableFrom(Ruid.class)) {
-//            Ruid sessionID = new Ruid();
-//            sessionID.setRuid(nativeWebRequest.getHeader("redissessionid"));
-//            return sessionID;
+        if (clazz.isAssignableFrom(RedisToken.class)) {
             return webUserUtil.getUniqueID();
         } else if (clazz.isAssignableFrom(WebUser.class)) {
 
             WebUser webUser = webUserUtil.getWebUser();
-            if (webUser == null) throw new CurrentUserExpireException(nativeWebRequest.getHeader("redissessionid"));
+            if (webUser == null) throw new CurrentUserExpireException(nativeWebRequest.getHeader(RedisUserUtil.GetRedisTokenName()));
 
             return webUser;
         }

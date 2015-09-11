@@ -8,7 +8,8 @@
             <div class="dropdown wrapper" dropdown>
                 <a ui-sref="app.page.profile">
           <span class="thumb-lg w-auto-folded avatar m-t-sm">
-            <img src="img/a0.jpg" class="img-full" alt="...">
+            <!--<img src="img/a0.jpg" class="img-full" alt="...">-->
+              <img ng-src="{{app.sysSetting.avatarsurl + app.webUser.avatarUrl}}" class="img-full" alt=".....">
           </span>
                 </a>
                 <a href class="dropdown-toggle hidden-folded" dropdown-toggle>
@@ -44,7 +45,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="/logout" ><i class="fa fa-power-off text-danger"></i> {{ 'Logout' | translate }}</a>
+                        <a href="/logout"><i class="fa fa-power-off text-danger"></i> {{ 'Logout' | translate }}</a>
                     </li>
                 </ul>
                 <!-- / dropdown -->

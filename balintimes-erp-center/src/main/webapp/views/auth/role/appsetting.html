@@ -1,0 +1,88 @@
+<ol class="breadcrumb">
+	<li><a href="#">首页</a></li>
+	<li><a href="#">权限设置</a></li>
+	<li class="active">角色应用程序设置</li>
+</ol>
+
+<div class="panel-body">
+
+	<div class="box">
+
+		<div class="box-header">
+
+			<div class="box-title">
+				<h4>
+					<i class="fa fa-list-ol"></i>角色：{{role.name}}
+				</h4>
+			</div>
+			<div class="box-tools">
+				<div class="input-group" style="width: 150px;">
+
+					<div class="input-group-btn">
+						<button class="btn btn-sm btn-default" ui-sref="auth/role">
+							<i class="fa fa-times"></i> 返回
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="box-body box-body table-responsive no-padding">
+			<table class="table">
+				<thead>
+					<tr>
+						<th style="width: 50px; text-align: center;"></th>
+						<th style="width: 150px; text-align: center;">名称</th>
+						<th style="width: 150px; text-align: center;">类型</th>
+						<th style="width: 350px; text-align: center;">备注</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in applicationList">
+						<!-- 					<td style="width: 50px; text-align: center;"><input
+							type="checkbox" ng-com.balintimes.erp.center.model="item.checked"
+							ng-change="saveCheckedValue(item.uid,item.checked)"></td>
+						<td>{{item.name}}</td>
+						<td>{{item.typeName}}</td>
+						<td>{{item.comment}}</td> -->
+
+
+
+						<td colspan="5">
+							<table class="table">
+								<tr>
+									<td style="width: 50px; text-align: center;"><input
+										type="checkbox" ng-model="item.checked"
+										ng-change="saveCheckedValue(item.uid,item.checked)"></td>
+									<td style="width: 150px; text-align: center;">{{item.name}}</td>
+									<td style="width: 150px; text-align: center;">{{item.typeName}}</td>
+									<td style="width: 350px; text-align: center;">{{item.comment}}</td>
+									<td><a href="#" ng-click="showDiv(item.uid);">设置资源功能 </a></td>
+								</tr>
+								<!-- <tr ng-if="IsShow(item.uid)"> -->
+								<tr ng-if="openDiv && item.uid==appuid">
+									<td colspan="5">
+										<ul class="tree">
+											<node-tree children="tree" text="name" expanded="true">
+											</node-tree>
+										</ul>
+										<button class="btn btn-primary" ng-click="saveRoleResources()">
+											<i class="fa fa-check"></i>保存
+										</button> <a class="btn btn-warning" herf="#" ng-click="hideDiv()">
+											<i class="fa fa-times"></i>关闭
+									</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+
+	</div>
+
+</div>

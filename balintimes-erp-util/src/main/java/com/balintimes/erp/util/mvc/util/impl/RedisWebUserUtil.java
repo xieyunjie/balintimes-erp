@@ -1,13 +1,12 @@
 package com.balintimes.erp.util.mvc.util.impl;
 
 import com.balintimes.erp.util.json.JsonUtil;
-import com.balintimes.erp.util.mvc.model.Ruid;
+import com.balintimes.erp.util.mvc.model.RedisToken;
 import com.balintimes.erp.util.mvc.model.WebUser;
 import com.balintimes.erp.util.mvc.util.WebUserUtil;
 import com.balintimes.erp.util.redis.RedisUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -23,7 +22,7 @@ public class RedisWebUserUtil implements WebUserUtil {
     public WebUser getWebUser() {
         if (this.httpRequest != null) {
 
-            String userStr = redisUserUtil.GetRedisWebUser(httpRequest.getHeader("redissessionid"));
+            String userStr = redisUserUtil.GetRedisWebUser(httpRequest.getHeader(RedisUserUtil.GetRedisTokenName()));
             if (userStr == null) {
                 return null;
             }
@@ -33,13 +32,13 @@ public class RedisWebUserUtil implements WebUserUtil {
         return null;
     }
 
-    public Ruid getUniqueID() {
+    public RedisToken getUniqueID() {
         if (this.httpRequest != null) {
 
-            String id = httpRequest.getHeader("redissessionid");
-            Ruid ruid = new Ruid();
-            ruid.setRuid(id);
-            return ruid;
+            String id = httpRequest.getHeader(RedisUserUtil.GetRedisTokenName());
+            RedisToken token = new RedisToken();
+            token.setToken(id);
+            return token;
         }
         return null;
     }

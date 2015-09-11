@@ -19,38 +19,46 @@ var keepaliveAgent = new agent({
 var Util = {};
 module.exports = Util;
 
-Util.request = function (req, baseUrl, params, callback) {
+/*
+ config =
+ {
+ method
+ url
+ redisToken
+ params
+ callback
+ }*/
 
-    if (typeof params == 'function') {
-        callback = params;
-        params = {};
-    }
-    var logMsg = [req.method, baseUrl + req.path, req.session.ruid, JSON.stringify(params)];
+var clientRequest = function (config) {
+
+    var logMsg = [config.method, config.url, config.redisToken, JSON.stringify(config.params)];
 
     var call = {};
-    switch (req.method) {
+    switch (config.method) {
         case "GET":
-            call = request.get(baseUrl + req.path);
+            call = request.get(config.url);
             break;
         case "POST":
-            call = request.post(baseUrl + req.path).set(settings.requestHeader.contentType.text, settings.requestHeader.contentType.value).send(params);
+            call = request.post(config.url).set(settings.requestHeader.contentType.text, settings.requestHeader.contentType.value).send(config.params);
             break;
         case "PUT":
-            call = request.put(baseUrl + req.path).set(settings.requestHeader.contentType.text, settings.requestHeader.contentType.value).send(params);
+            call = request.put(config.url).set(settings.requestHeader.contentType.text, settings.requestHeader.contentType.value).send(config.params);
             break;
         case "DELETE":
-            call = request.del(baseUrl + req.path);
+            call = request.del(config.url);
             break;
         case "HEAD":
-            call = request.head(baseUrl + req.path);
+            call = request.head(config.url);
             break;
         case "OPTIONS":
-            call = request.options(baseUrl + req.path);
+            call = request.options(config.url);
             break;
     }
+    if (config.headers) call.set(config.headers);
+    if (config.redisToken)  call.set(settings.redisKey.redisToken, config.redisToken);
 
-    call.set(settings.redisKey.redissessionid, req.session.ruid)
-        .set(settings.requestHeader.ajaxHead.text, settings.requestHeader.ajaxHead.value)
+    call.set(settings.requestHeader.ajaxHead.text, settings.requestHeader.ajaxHead.value)
+        .set(settings.requestHeader.appToken.text, settings.requestHeader.appToken.value)
         //.set("Accept","application/json")
         .agent(keepaliveAgent)// keyalive貌似没什么作用
         .end(function (err, response) {
@@ -63,8 +71,30 @@ Util.request = function (req, baseUrl, params, callback) {
                 logMsg.splice(0, 0, response.status);
                 logger.debug(logMsg.join(" "));
             }
-            callback(err, response)
+            config.callback(err, response)
         });
+
+};
+
+Util.transmit = function (config) {
+
+    clientRequest({
+        method: config.req.method,
+        redisToken: config.req.session.redisToken,
+        url: config.baseUrl + config.req.path,
+        params: config.req.body,
+        callback: config.callback
+    });
+};
+
+Util.request = function (method, url, params, callback, redisToken) {
+    clientRequest({
+        method: method,
+        redisToken: redisToken,
+        url: url,
+        params: params,
+        callback: callback
+    });
 };
 
 Util.errResponseMessage = {

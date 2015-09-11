@@ -29,6 +29,15 @@ angular.module('app', [
 
             });
         });
+        $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, err) {
+            $timeout(function () {
+                console.log(event);
+                console.log(err);
+                if (err === "$UnAuthState") {
+                    $state.go("app.index");
+                }
+            });
+        });
 
         $rootScope.$on("$stateChangeStart", function () {
             $timeout(function () {

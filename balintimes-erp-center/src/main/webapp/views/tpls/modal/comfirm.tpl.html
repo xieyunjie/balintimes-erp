@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <h4 class="modal-title"><i class="fa fa-exclamation-triangle text-yellow"></i>{{viewContent.title}}</h4>
+</div>
+<div class="modal-body"><i class="fa fa-exclamation-triangle text-yellow fa-3x"></i> <span ng-bind="viewContent.content"></span></div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="btnClick('ok')">
+        <i class="fa fa-check"></i> 确认
+    </button>
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times"></i> 取消
+    </button>
+</div>

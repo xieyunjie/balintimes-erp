@@ -13,6 +13,7 @@
             <list>
                 <value>classpath:redis.properties</value>
                 <value>classpath:jdbc.properties</value>
+                <value>classpath:webapiUrl.properties</value>
             </list>
         </property>
     </bean>

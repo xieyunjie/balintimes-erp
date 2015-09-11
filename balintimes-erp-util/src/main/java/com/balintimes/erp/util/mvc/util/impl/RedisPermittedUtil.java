@@ -24,7 +24,7 @@ public class RedisPermittedUtil implements PermittedUtil {
 
         HttpServletRequest httpRequest = request;
         Set<String> userPermissions;
-        String data = redisUserUtil.GetRedisUserPermissions(httpRequest.getHeader("redissessionid"));
+        String data = redisUserUtil.GetRedisUserPermissions(httpRequest.getHeader(RedisUserUtil.GetRedisTokenName()));
 
         userPermissions = JsonUtil.ToObject(data, Set.class);
 
