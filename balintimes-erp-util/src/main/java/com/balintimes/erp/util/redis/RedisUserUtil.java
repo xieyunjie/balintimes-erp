@@ -16,6 +16,7 @@ public class RedisUserUtil {
     private final static String PerssiomsKey = "permissions:";
     private final static String MenusKey = "menus:";
     private final static String RolesID = "roles:";
+    private final static String AppsID = "apps:";
 
     private RedisTemplate<String, String> redisTemplate;
     private final int expireHour = 10;
@@ -70,6 +71,23 @@ public class RedisUserUtil {
             return true;
         }
         return false;
+    }
+
+    public boolean SetRedisUserApps(String redistoken, String data) {
+
+        if (redisTemplate.opsForValue().size(AppsID + redistoken) == 0) {
+
+            redisTemplate.opsForValue().set(AppsID + redistoken, data, expireHour, TimeUnit.HOURS);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public String GetRedisUserApps(String redistoken) {
+
+        return redisTemplate.opsForValue().get(AppsID + redistoken);
     }
 
 

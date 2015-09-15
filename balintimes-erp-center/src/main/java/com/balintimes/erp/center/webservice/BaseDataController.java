@@ -16,7 +16,7 @@ import com.balintimes.erp.center.service.base.CustomerCategoryService;
 import com.balintimes.erp.center.util.JsonUtil;
 
 @Controller
-@RequestMapping("basedata")
+@RequestMapping("ws/basedata")
 public class BaseDataController {
 
 	@Resource

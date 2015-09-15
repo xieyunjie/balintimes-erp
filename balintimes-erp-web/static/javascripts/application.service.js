@@ -237,22 +237,45 @@ angular.module('app')
             }
         }
     }])
-    .factory("UserMenuAuth", ["$localStorage", function ($localStorage) {
+    .factory("AppStorage", ["$localStorage", function ($localStorage) {
+        return {
+            set: function (key, data) {
+                $localStorage[key] = data;
+            },
+            get: function (key) {
+                return $localStorage[key];
+            }
+        }
+    }])
+    .factory("UserStgService", ["$localStorage", function ($localStorage) {
+
         return {
             set: function (data) {
-                $localStorage.webUserMenus = data;
+                $localStorage.apps = data;
             },
-            check: function (state) {
-                var data = $localStorage.webUserMenus;
+            get: function () {
+                return $localStorage.apps;
+            },
+            checkMenuAuth: function (state, root) {
                 var chkResult = true;
+                var apps = $localStorage.apps,
+                    app;
+                angular.forEach(apps, function (a) {
+                    if (a.code == root) {
+                        app = a;
+                        return false;
+                    }
+                });
 
-                angular.forEach(data, function (menu) {
+                angular.forEach(app.menuList, function (menu) {
                     if (menu.state == state && menu.enable == false) {
                         chkResult = false;
                         return false;
                     }
                 });
+
                 return chkResult;
             }
         }
+
     }]);

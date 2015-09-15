@@ -13,4 +13,10 @@
     <bean id="permittedUtil" class="com.balintimes.erp.util.mvc.util.impl.RedisPermittedUtil">
         <property name="redisUserUtil" ref="redisUserUtil"/>
     </bean>
+
+
+    <!--webapi-->
+    <bean id="ucenterWebApi" class="com.balintimes.erp.util.webapi.HttpApiUtil">
+        <property name="prefixUrl"  value="${oaucenter.base}"/>
+    </bean>
 </beans>

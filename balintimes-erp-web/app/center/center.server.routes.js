@@ -3,7 +3,7 @@
  */
 var express = require('express'),
     router = express.Router();
-var ucenterurl = require("../../config/settings").serverurl.ucenter,
+var ucenterServer = require("../../config/settings").server.ucenter,
     requestUtil = require("../util/requestUtil"),
     logger = require("../util/log4jsUtil").logReq();
 
@@ -30,13 +30,11 @@ router.all("*", function (req, res, next) {
         }
     };
 
-    if (req.method == "GET") {
-        requestUtil.transmit(req, ucenterurl, ajaxRes)
-    }
-    else {
-        requestUtil.transmit(req, ucenterurl, req.body, ajaxRes)
-    }
-
+    requestUtil.transmit({
+        req: req,
+        baseUrl:ucenterServer.url,
+        callback: ajaxRes
+    });
 });
 
 module.exports = router;

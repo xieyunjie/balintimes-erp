@@ -3,29 +3,10 @@
  */
 var express = require('express'),
     router = express.Router();
-var crmurl = require("../../config/settings").serverurl.crm,
+var crmServer = require("../../config/settings").server.crm,
     AuthCtrl = require('../authentication/authentication.server.controller'),
     requestUtil = require("../util/requestUtil"),
     logger = require("../util/log4jsUtil").logReq();
-
-
-router.get("/line/showload", function (req, res) {
-    var NotAuth = {
-        success: true,
-        status: 40001,
-        path: req.path
-    };
-
-    res.setTimeout(5000, function () {
-        res.send(NotAuth);
-    });
-});
-
-router.get("/", AuthCtrl.IsAuth, function (req, res) {
-
-    res.render('crm/crm.html');
-
-});
 
 router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
 
@@ -52,7 +33,7 @@ router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
 
     requestUtil.transmit({
         req: req,
-        baseUrl:crmurl,
+        baseUrl: crmServer.url,
         callback: ajaxRes
     });
 

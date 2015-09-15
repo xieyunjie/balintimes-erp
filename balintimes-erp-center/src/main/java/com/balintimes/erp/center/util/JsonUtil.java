@@ -17,9 +17,9 @@ public class JsonUtil {
 
             objectMapper.setDateFormat(dateFormat);
 
-            SimpleModule module = new SimpleModule();
-            module.addSerializer(String.class, new StringUnicodeSerializer());
-            objectMapper.registerModule(module);
+//            SimpleModule module = new SimpleModule();
+//            module.addSerializer(String.class, new StringUnicodeSerializer());
+//            objectMapper.registerModule(module);
         }
 
         try {
@@ -36,9 +36,9 @@ public class JsonUtil {
             objectMapper = new ObjectMapper();
             objectMapper.setDateFormat(dateFormat);
 
-            SimpleModule module = new SimpleModule();
-            module.addSerializer(String.class, new StringUnicodeSerializer());
-            objectMapper.registerModule(module);
+//            SimpleModule module = new SimpleModule();
+//            module.addSerializer(String.class, new StringUnicodeSerializer());
+//            objectMapper.registerModule(module);
         }
         try {
             return objectMapper.writeValueAsString(object);

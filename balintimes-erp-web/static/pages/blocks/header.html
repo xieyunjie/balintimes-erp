@@ -7,10 +7,14 @@
         <i class="glyphicon glyphicon-align-justify"></i>
     </button>
     <!-- brand -->
-    <a href="#/" class="navbar-brand text-lt">
-        <i class="glyphicon glyphicon-tower text-primary-lter"></i>
+    <a href="#" class="navbar-brand text-lt">
+        <!--<i class="glyphicon glyphicon-tower text-primary-lter"></i>-->
+
+        <i ng-show="app.content.iconClass != undefined" class="fa {{app.content.iconClass}}"></i>
+        <i ng-show="app.content.iconClass == undefined" class="glyphicon glyphicon-tower text-primary-lter"></i>
         <img src="images/logo.png" alt="." class="hide">
-        <span class="hidden-folded m-l-xs" style="font-size: 16px"> {{app.name}}</span>
+        <span class="hidden-folded m-l-xs"
+              style="font-size: 16px"> {{app.content.name == undefined ? app.name:app.content.name}}</span>
     </a>
     <!-- / brand -->
 </div>
@@ -212,7 +216,8 @@
                     <div class="list-group">
                         <a href class="media list-group-item">
                     <span class="pull-left thumb-sm">
-                         <img ng-src="{{app.sysSetting.avatarsurl + app.webUser.avatarUrl}}" class="img-circle" alt=".....">
+                         <img ng-src="{{app.sysSetting.avatarsurl + app.webUser.avatarUrl}}" class="img-circle"
+                              alt=".....">
                     </span>
                     <span class="media-body block m-b-none">
                       Use awesome animate.css<br>
@@ -269,7 +274,8 @@
                 <li class="divider"></li>
                 <li>
                     <!--<a ui-sref="access.signin">Logout</a>-->
-                    <a href="/logout"><i class="fa fa-power-off text-danger"></i> {{ 'Logout' | translate }}</a>
+                    <a href="#" ng-click="logout()"><i class="fa fa-power-off text-danger"></i> {{ 'Logout' | translate
+                        }}</a>
                 </li>
             </ul>
             <!-- / dropdown -->

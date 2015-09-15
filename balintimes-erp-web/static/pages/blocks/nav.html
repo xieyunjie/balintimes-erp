@@ -1,34 +1,74 @@
 <!-- list -->
 <ul class="nav">
     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-        <span>Navigation</span>
+        <span>模块</span>
     </li>
+    <!--<li>-->
+    <!--<a href class="auto">-->
+    <!--<span class="pull-right text-muted">-->
+    <!--<i class="fa fa-fw fa-angle-right text"></i>-->
+    <!--<i class="fa fa-fw fa-angle-down text-active"></i>-->
+    <!--</span>-->
+    <!--<i class="glyphicon glyphicon-stats icon text-primary-dker"></i>-->
+    <!--<span class="font-bold">Dashboard</span>-->
+    <!--</a>-->
+    <!--<ul class="nav nav-sub dk">-->
+    <!--<li class="nav-sub-header">-->
+    <!--<a href>-->
+    <!--<span>Dashboard</span>-->
+    <!--</a>-->
+    <!--</li>-->
+    <!--<li ui-sref-active="active">-->
+    <!--<a ui-sref="app.dashboard-v1">-->
+    <!--<span>Dashboard v1</span>-->
+    <!--</a>-->
+    <!--</li>-->
+    <!--<li ui-sref-active="active">-->
+    <!--<a ui-sref="app.dashboard-v2">-->
+    <!--<b class="label bg-info pull-right">N</b>-->
+    <!--<span>Dashboard v2</span>-->
+    <!--</a>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--</li>-->
+
     <li>
         <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
-            <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
-            <span class="font-bold">Dashboard</span>
+            <i class="glyphicon glyphicon-th-large icon text-success"></i>
+            <span class="font-bold">ERP</span>
         </a>
         <ul class="nav nav-sub dk">
             <li class="nav-sub-header">
                 <a href>
-                    <span>Dashboard</span>
+                    <span>ERP</span>
                 </a>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.dashboard-v1">
-                    <span>Dashboard v1</span>
+
+            <li ng-repeat="app in app.apps" ui-sref-active="active">
+                <a href="#" ng-click="swithApp(app.uid)">
+                    <span><i class="fa {{app.iconClass}}"></i> {{app.name}}</span>
                 </a>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.dashboard-v2">
-                    <b class="label bg-info pull-right">N</b>
-                    <span>Dashboard v2</span>
-                </a>
-            </li>
+
+            <!--            <li ui-sref-active="active">
+                            <a ui-sref="apps.note">
+                                <span>Note</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="apps.contact">
+                                <span>Contacts</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="app.weather">
+                                <span>Weather</span>
+                            </a>
+                        </li>-->
         </ul>
     </li>
 
@@ -40,38 +80,35 @@
         </a>
     </li>
 
-    <li>
+    <li class="line dk"></li>
+
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span>菜单</span>
+    </li>
+
+    <li ng-repeat="menu in app.menuTree">
         <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
-            <i class="glyphicon glyphicon-th-large icon text-success"></i>
-            <span class="font-bold">Apps</span>
+            <i class="fa {{menu.iconclass}}"></i>
+            <span> {{menu.name}}</span>
         </a>
         <ul class="nav nav-sub dk">
             <li class="nav-sub-header">
                 <a href>
-                    <span>Apps</span>
+                    <span><i class="fa {{menu.iconclass}}"></i> {{menu.name}}</span>
                 </a>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="apps.note">
-                    <span>Note</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="apps.contact">
-                    <span>Contacts</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.weather">
-                    <span>Weather</span>
+            <li ng-repeat="child in menu.children" ui-sref-active="active">
+                <a ui-sref="{{child.state}}">
+                    <span><i class="fa {{child.iconclass}}"></i> {{child.name}}</span>
                 </a>
             </li>
         </ul>
     </li>
+
 
     <li class="line dk"></li>
 
@@ -137,115 +174,6 @@
             <li ui-sref-active="active">
                 <a ui-sref="layout.mobile">
                     <span>Mobile</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-
-
-
-    <li>
-        <a href class="auto">
-      <span class="pull-right text-muted">
-        <i class="fa fa-fw fa-angle-right text"></i>
-        <i class="fa fa-fw fa-angle-down text-active"></i>
-      </span>
-            <b class="badge bg-info pull-right">3</b>
-            <i class="glyphicon glyphicon-th"></i>
-            <span>Layout</span>
-        </a>
-        <ul class="nav nav-sub dk">
-            <li class="nav-sub-header">
-                <a href>
-                    <span>Layout</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="layout.app">
-                    <span>Application</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="layout.fullwidth">
-                    <span>Full width</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="layout.mobile">
-                    <span>Mobile</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <li ui-sref-active="active">
-        <a ui-sref="app.chart">
-            <i class="glyphicon glyphicon-signal"></i>
-            <span>Chart</span>
-        </a>
-    </li>
-    <li ng-class="{active:$state.includes('app.page')}">
-        <a href class="auto">
-      <span class="pull-right text-muted">
-        <i class="fa fa-fw fa-angle-right text"></i>
-        <i class="fa fa-fw fa-angle-down text-active"></i>
-      </span>
-            <i class="glyphicon glyphicon-file icon"></i>
-            <span>Pages</span>
-        </a>
-        <ul class="nav nav-sub dk">
-            <li class="nav-sub-header">
-                <a href>
-                    <span translate="aside.nav.components.pages.PAGES">Pages</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.page.profile">
-                    <span translate="aside.nav.components.pages.PROFILE">Profile</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.page.post">
-                    <span translate="aside.nav.components.pages.POST">Post</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.page.search">
-                    <span translate="aside.nav.components.pages.SEARCH">Search</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.page.invoice">
-                    <span translate="aside.nav.components.pages.INVOICE">Invoice</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.page.price">
-                    <span>Price</span>
-                </a>
-            </li>
-            <li>
-                <a ui-sref="lockme">
-                    <span translate="aside.nav.components.pages.LOCK_SCREEN">Lock screen</span>
-                </a>
-            </li>
-            <li>
-                <a ui-sref="access.signin">
-                    <span translate="aside.nav.components.pages.SIGNIN">Signin</span>
-                </a>
-            </li>
-            <li>
-                <a ui-sref="access.signup">
-                    <span translate="aside.nav.components.pages.SIGNUP">Signup</span>
-                </a>
-            </li>
-            <li>
-                <a ui-sref="access.forgotpwd">
-                    <span translate="aside.nav.components.pages.FORGOT_PASSWORD">Forgot password</span>
-                </a>
-            </li>
-            <li>
-                <a ui-sref="access.404">
-                    <span translate="aside.nav.components.pages.404">404</span>
                 </a>
             </li>
         </ul>

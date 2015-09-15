@@ -3,8 +3,8 @@
  */
 'use strict';
 
-angular.module('app').controller('AppController', ['$scope', '$q', '$localStorage', '$window', 'AjaxRequest', 'UserMenuAuth',
-    function ($scope, $q, $localStorage, $window, AjaxRequest, UserMenuAuth) {
+angular.module('app').controller('AppController', ['$scope', '$q', '$localStorage', '$window','$state', 'AjaxRequest', 'UserStgService',
+    function ($scope, $q, $localStorage, $window,$state, AjaxRequest, UserStgService) {
         // add 'ie' classes to html
         var isIE = !!navigator.userAgent.match(/MSIE/i);
         isIE && angular.element($window.document.body).addClass('ie');
@@ -38,9 +38,10 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
             },
             webUser: {},
             menuTree: {},
+            apps: [],
+            currentApp:[],
             sysSetting: {},
-            webUserMenus: [],
-            webUserPermissions: []
+            content:{}
         };
 
         // save settings to local storage
@@ -78,29 +79,65 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
         }
 
 
-
         $scope.initAppCtrl = function () {
-            console.log("initAppCtrlinitAppCtrlinitAppCtrlinitAppCtrlinitAppCtrlinitAppCtrl");
             var webuserPromise = AjaxRequest.get("/home/inituser"),
-                treePromise = AjaxRequest.get("/home/initmenus"),
-                permissionsPromise = AjaxRequest.get("/home/inituserauthority"),
-                settingPromise = AjaxRequest.get("/home/getsettings");
+                userappsPromise = AjaxRequest.get("/home/inituserapps"),
+                sysSettingPromise = AjaxRequest.get("/home/getsettings")
             $q.all({
                 user: webuserPromise,
-                treePromise: treePromise,
-                settings: settingPromise,
-                permissions: permissionsPromise
+                apps: userappsPromise,
+                sys: sysSettingPromise
             }).then(function (results) {
                 app.webUser = results.user;
-                app.menuTree = results.menus;
-                app.sysSetting = results.settings;
-                //app.webUserMenus = results.permissions.menus.data;
-                UserMenuAuth.set(results.permissions.menus.data);
-                app.webUserPermissions = results.permissions.permissions.data;
-                console.log("permissions.datapermissions.datapermissions.datapermissions.datapermissions.data");
 
-                //console.log(results.permissions);
+                UserStgService.set(results.apps);
+
+                var apps = results.apps;
+
+                angular.forEach(apps, function (a) {
+                    app.apps.push({
+                        uid: a.uid,
+                        name: a.name,
+                        code: a.code,
+                        url: a.url,
+                        iconClass: a.iconClass
+                    })
+
+                });
+
+                app.sysSetting = results.sys;
+
+                if($localStorage.appUID){
+                    $scope.swithApp($localStorage.appUID);
+                }
             });
         };
 
+        $scope.swithApp = function (uid) {
+            var apps =  UserStgService.get();
+            var currentApp = {};
+
+            angular.forEach(apps,function(a){
+                if(uid == a.uid) {
+                    $localStorage.appUID = a.uid;
+                    app.menuTree = a.menuTree;
+                    currentApp = a;
+                    return false;
+                }
+            });
+
+            angular.forEach(app.apps,function(a){
+                if(uid == a.uid) {
+                    app.content = a;
+                    return false;
+                }
+            });
+            $state.go(currentApp.code+".index");
+
+        };
+
+        $scope.logout = function(){
+            $localStorage.$reset();
+            $window.location.replace("/logout");
+        };
     }]);

@@ -7,8 +7,7 @@ var passport = require('passport'),
     request = require("superagent");
 var settings = require("./settings");
 
-var redis = require("redis"),
-    redisClient = redis.createClient(settings.redis.port, settings.redis.host);
+var redisUtil = require("../app/util/redisUtil");
 
 module.exports = function () {
     passport.use(new LocalStrategy({
@@ -17,7 +16,8 @@ module.exports = function () {
         passReqToCallback: true
     }, function (req, username, password, done) {
 
-        var authurl = settings.serverurl.ucenter + settings.authurl;
+        var authurl = settings.server.ucenter.url + settings.server.ucenter.authurl;
+
         request.post(authurl).set(settings.requestHeader.contentType.text, settings.requestHeader.contentType.value).send({
             username: username,
             password: password
@@ -44,8 +44,7 @@ module.exports = function () {
 
     passport.deserializeUser(function (redisToken, done) {
 
-        redisClient.get(settings.redisKey.webuser + redisToken, function (err, data) {
-
+        redisUtil.getUser(redisToken, function (err, data) {
             if (err) return done(err, null);
 
             return done(null, JSON.parse(data));

@@ -2,10 +2,19 @@
  * Created by AlexXie on 2015/9/1.
  */
 module.exports = {
-    serverurl: {
-        bmms: "http://www.balintimes-web.net:9090/bmms",
-        crm: "http://www.balintimes-web.net:9090/crm",
-        ucenter: "http://www.balintimes-web.net:9090/oaucenter"
+
+    server: {
+        bmms: {
+            url: "http://www.balintimes-web.net:9090/bmms"
+        },
+        crm: {
+            url: "http://www.balintimes-web.net:9090/crm"
+        },
+        ucenter: {
+            url: "http://www.balintimes-web.net:9090/oaucenter",
+            authurl: "/ws/authority/userauthentication",
+            userapps: "/ws/authority/userapps"
+        }
     },
     redis: {
         host: "172.16.0.250",
@@ -19,9 +28,9 @@ module.exports = {
         webuser: "webuser:",
         permissions: "permissions:",
         roles: "roles:",
-        menus:"menus:"
+        menus: "menus:",
+        apps: "apps:"
     },
-    authurl: "/ws/authority/userauthentication",
 
     requestHeader: {
         contentType: {
@@ -32,11 +41,10 @@ module.exports = {
             text: "X-Requested-With",
             value: "XMLHttpRequest"
         },
-        appToken:{
-            text:"applicationToken",
-            value:"_iloP^2nql8~"
+        appToken: {
+            text: "applicationToken",
+            value: "_iloP^2nql8~"
         }
-
     }
 
 };

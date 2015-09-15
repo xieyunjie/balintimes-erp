@@ -67,17 +67,14 @@ module.exports = function () {
     /* ==== routers begin ==== */
 
     var homeroute = require('../app/home/home.server.route'),
-    //login = require('../app/login/login.server.route'),
         ucenter = require("../app/center/center.server.routes"),
         bmms = require('../app/bmms/bmms.server.routes'),
         crm = require('../app/crm/crm.server.routes');
 
     app.use('/', homeroute);
     app.use('/center', ucenter);
-    //app.use('/login', login);
     app.use('/bmms', bmms);
     app.use('/crm', crm);
-
     /* ==== routers end ==== */
 
 
@@ -88,8 +85,7 @@ module.exports = function () {
         next(err);
     });
 
-// error handlers
-
+// customer error handlers
     app.use(requestError);
 
 // development error handler

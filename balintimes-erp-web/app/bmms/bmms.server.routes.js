@@ -4,8 +4,9 @@
 var express = require('express'),
     router = express.Router(),
     request = require("superagent"),
-    bmmurl = require("../../config/settings").serverurl.bmms;
-var AuthCtrl = require('../authentication/authentication.server.controller');
+    bmmServer = require("../../config/settings").server.bmms;
+var AuthCtrl = require('../authentication/authentication.server.controller'),
+    requestUtil = require("../util/requestUtil");
 
 router.get("/", AuthCtrl.IsAuth, function (req, res, next) {
 
@@ -15,26 +16,32 @@ router.get("/", AuthCtrl.IsAuth, function (req, res, next) {
 
 router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
 
-    if (req.method == "GET") {
-        util.request(req, bmmurl, function (err, response) {
-            if (err) {
-                res.send(err);
-            }
-            else {
+    var ajaxRes = function (err, response) {
+        if (err) {
+            if (err) next(err);
+        } else {
+            var resObj = response.body;
+
+            if (resObj.success == "false" && resObj.httpStatus != 200) {
+
+                var logMsg = [resObj.httpStatus, response.req.method, response.req.path, JSON.stringify(resObj)];
+                logger.debug(logMsg.join(" "));
+
+                var e = new Error(resObj.responseMsg);
+                e.status = resObj.httpStatus;
+                next(e);
+
+            } else {
                 res.send(response.text);
             }
-        })
-    }
-    else {
-        util.request(req, bmmurl, req.body, function (err, response) {
-            if (err) {
-                res.send(err);
-            }
-            else {
-                res.send(response.text);
-            }
-        })
-    }
+        }
+    };
+
+    requestUtil.transmit({
+        req: req,
+        baseUrl:bmmServer.url,
+        callback: ajaxRes
+    });
 });
 
 module.exports = router;

@@ -5,12 +5,12 @@ import com.balintimes.erp.center.model.Role;
 import com.balintimes.erp.center.model.authority.Employee;
 import com.balintimes.erp.center.model.authority.Menu;
 import com.balintimes.erp.center.model.authority.Permission;
+import com.balintimes.erp.center.service.AuthorityService;
+import com.balintimes.erp.center.shiro.WebUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import com.balintimes.erp.center.service.AuthorityService;
-import com.balintimes.erp.center.shiro.WebUser;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -45,11 +45,16 @@ public class WebUserUtil {
         return webUser;
     }
 
-    public List<Menu> GetUserMenuTree(String username) {
+    public List<Application> GetUserApps(String username) {
+
+        return this.authorityService.GetUserApplications(username);
+    }
+
+    public List<Menu> GetUserMenuTree(String username,String appUID) {
 
         List<Menu> list = new ArrayList<>();
 
-        List<com.balintimes.erp.center.model.Resource> list_resources = this.authorityService.GetUserMenu(username, APPUID);
+        List<com.balintimes.erp.center.model.Resource> list_resources = this.authorityService.GetUserMenu(username, appUID);
 
         list = this.GenMenuTree("00000000-0000-0000-0000-000000000000", list_resources);
 
@@ -68,7 +73,7 @@ public class WebUserUtil {
         list = (List<Menu>) subject.getSession().getAttribute(USERMENUS_KEY);
 
         if (list == null) {
-            list = this.GetUserMenuTree(SecurityUtils.getSubject().getPrincipal().toString());
+            list = this.GetUserMenuTree(SecurityUtils.getSubject().getPrincipal().toString(),APPUID);
 
             subject.getSession().setAttribute(USERMENUS_KEY, list);
         }
@@ -76,9 +81,9 @@ public class WebUserUtil {
 
     }
 
-    public List<Menu> GetUserMenus(String username) {
+    public List<Menu> GetUserMenus(String username,String appUID) {
         List<Menu> list = new ArrayList<>();
-        List<com.balintimes.erp.center.model.Resource> list_resources = this.authorityService.GetUserMenu(username, APPUID);
+        List<com.balintimes.erp.center.model.Resource> list_resources = this.authorityService.GetUserMenu(username, appUID);
 
         for (com.balintimes.erp.center.model.Resource resource : list_resources) {
             Menu menu = new Menu(resource.getUid(), resource.getName(), resource.getState(), resource.getIconClass(), resource.getUrl(), resource.getPriority());
@@ -88,12 +93,12 @@ public class WebUserUtil {
         return list;
     }
 
-    public List<Menu> GetUserDisableMenus(String username) {
+    public List<Menu> GetUserDisableMenus(String username,String appUID) {
         List<Menu> list = new ArrayList<>();
-        List<com.balintimes.erp.center.model.Resource> list_resources = this.authorityService.GetUserDisableMenus(username, APPUID);
+        List<com.balintimes.erp.center.model.Resource> list_resources = this.authorityService.GetUserDisableMenus(username, appUID);
 
         for (com.balintimes.erp.center.model.Resource resource : list_resources) {
-            Menu menu = new Menu(resource.getUid(), resource.getName(), resource.getState(), resource.getIconClass(), resource.getUrl(), resource.getPriority(),false);
+            Menu menu = new Menu(resource.getUid(), resource.getName(), resource.getState(), resource.getIconClass(), resource.getUrl(), resource.getPriority(), false);
             list.add(menu);
         }
         Collections.sort(list);
@@ -107,7 +112,7 @@ public class WebUserUtil {
             return list;
         }
 
-        return GetUserMenus(SecurityUtils.getSubject().getPrincipal().toString());
+        return GetUserMenus(SecurityUtils.getSubject().getPrincipal().toString(),APPUID);
     }
 
     public List<Permission> GetUserPermission() {

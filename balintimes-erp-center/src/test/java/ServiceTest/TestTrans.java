@@ -2,6 +2,8 @@ package ServiceTest;
 
 import com.balintimes.erp.center.dao.OrganizationDao;
 import com.balintimes.erp.center.model.Organization;
+import com.balintimes.erp.center.model.User;
+import com.balintimes.erp.center.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -81,6 +83,15 @@ public class TestTrans {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         System.out.println(dateFormat.format(new Date()));
+    }
+
+    @Test
+    public  void JasonTest(){
+
+        User u = new User();
+        u.setUsername("谢云杰");
+
+        System.out.println(JsonUtil.ToJson(u));
     }
 
 

@@ -5,19 +5,34 @@ import com.balintimes.erp.center.dao.ResourceDao;
 import com.balintimes.erp.center.dao.RoleDao;
 import com.balintimes.erp.center.dao.UserDao;
 import com.balintimes.erp.center.model.Resource;
-
+import com.balintimes.erp.center.service.AuthorityService;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.SubjectThreadState;
+import org.apache.shiro.util.ThreadState;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.balintimes.erp.center.service.AuthorityService;
 
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 public class AuthorityServiceTest {
+
+
+    private ThreadState _threadState;
+    protected Subject _mockSubject;
+
+    @Before
+    public void before() {
+        _mockSubject = Mockito.mock(Subject.class);
+        _threadState = new SubjectThreadState(_mockSubject);
+        _threadState.bind();
+    }
+
     @javax.annotation.Resource
     private ApplicationDao applicationDao;
     @javax.annotation.Resource
@@ -40,15 +55,15 @@ public class AuthorityServiceTest {
 //	}
 
     @Test
-    public void GetUserDisableMenus(){
-    	String username="admin";
-    	String appUid="05bd7806-3026-11e5-8396-c86000a05d5f";
-    	List<Resource> list=this.authorityService.GetUserDisableMenus(username, appUid);
-    	for(Resource item:list){
-    		System.out.println(item.getName());
-    	}
+    public void GetUserDisableMenus() {
+        String username = "admin";
+        String appUid = "05bd7806-3026-11e5-8396-c86000a05d5f";
+        List<Resource> list = this.authorityService.GetUserDisableMenus(username, appUid);
+        for (Resource item : list) {
+            System.out.println(item.getName());
+        }
     }
-    
+
 //    @Test
 //    public void GetUserMenu() {
 //        String username = "33";
