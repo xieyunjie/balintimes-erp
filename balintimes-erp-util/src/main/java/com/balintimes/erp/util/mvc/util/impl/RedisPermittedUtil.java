@@ -3,10 +3,14 @@ package com.balintimes.erp.util.mvc.util.impl;
 import com.balintimes.erp.util.json.JsonUtil;
 import com.balintimes.erp.util.mvc.util.PermittedUtil;
 import com.balintimes.erp.util.redis.RedisUserUtil;
+import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -15,6 +19,7 @@ import java.util.Set;
 public class RedisPermittedUtil implements PermittedUtil {
 
     private RedisUserUtil redisUserUtil;
+    private String appCode = "crm";
 
     private static final String OR_OPERATOR = " | ";
     private static final String AND_OPERATOR = " & ";
@@ -24,9 +29,13 @@ public class RedisPermittedUtil implements PermittedUtil {
 
         HttpServletRequest httpRequest = request;
         Set<String> userPermissions;
-        String data = redisUserUtil.GetRedisUserPermissions(httpRequest.getHeader(RedisUserUtil.GetRedisTokenName()));
+        String data = redisUserUtil.GetRedisUserApps(httpRequest.getHeader(RedisUserUtil.GetRedisTokenName()));
 
-        userPermissions = JsonUtil.ToObject(data, Set.class);
+
+        userPermissions = this.takeUserPermission(data);
+        if (userPermissions.size() == 0) {
+            return true;
+        }
 
         if (permissionValue.contains(OR_OPERATOR)) {
             String[] permissions = permissionValue.split(OR_OPERATOR);
@@ -47,6 +56,29 @@ public class RedisPermittedUtil implements PermittedUtil {
         } else {
             return isPermittedWithNotOperator(userPermissions, permissionValue);
         }
+    }
+
+    private Set<String> takeUserPermission(String data) {
+        Set<String> userPermissions = new HashSet<String>();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode root = mapper.readTree(data);
+
+            int treeNodeSize = root.size();
+
+            for (int i = 0; i < treeNodeSize; i++) {
+                JsonNode jsonNode = root.get(i);
+                if (jsonNode.get("code").asText().equals(appCode)) {
+                    String p = jsonNode.get("permissions").toString();
+                    userPermissions = JsonUtil.ToObject(p, Set.class);
+
+                    return userPermissions;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return userPermissions;
     }
 
     private boolean isPermittedWithNotOperator(Set<String> userPermissions, String permission) {
@@ -72,5 +104,13 @@ public class RedisPermittedUtil implements PermittedUtil {
 
     public void setRedisUserUtil(RedisUserUtil redisUserUtil) {
         this.redisUserUtil = redisUserUtil;
+    }
+
+    public String getAppCode() {
+        return appCode;
+    }
+
+    public void setAppCode(String appCode) {
+        this.appCode = appCode;
     }
 }

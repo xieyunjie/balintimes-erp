@@ -48,8 +48,8 @@
                 </a>
             </li>
 
-            <li ng-repeat="app in app.apps" ui-sref-active="active">
-                <a href="#" ng-click="swithApp(app.uid)">
+            <li ng-repeat="app in app.apps | orderBy:sort " ui-sref-active="active">
+                <a href="#" ng-click="switchApp(app.uid)">
                     <span><i class="fa {{app.iconClass}}"></i> {{app.name}}</span>
                 </a>
             </li>
@@ -85,8 +85,7 @@
     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
         <span>菜单</span>
     </li>
-
-    <li ng-repeat="menu in app.menuTree">
+    <li ng-repeat="menu in app.menuTree" ng-class="{active:$state.includes(menu.state)}">
         <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -117,7 +116,7 @@
     </li>
 
     <!--bmms-->
-    <li ng-class="{active:$state.includes('bmms')}">
+    <li>
         <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -146,7 +145,7 @@
     </li>
     <!--bmms-->
 
-    <li ng-class="{active:$state.includes('crm')}">
+    <li>
         <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>

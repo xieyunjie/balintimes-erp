@@ -18,7 +18,7 @@ public class LogInterceptorAdapter extends HandlerInterceptorAdapter {
 
             String thisName = e.nextElement().toString();
             String thisValue = request.getHeader(thisName);
-            System.out.println(thisName + " ## " + thisValue);
+            System.out.println(thisName + " == " + thisValue);
         }
         return true;
     }

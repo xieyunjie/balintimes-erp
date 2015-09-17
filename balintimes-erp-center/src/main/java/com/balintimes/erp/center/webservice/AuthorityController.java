@@ -1,11 +1,11 @@
 package com.balintimes.erp.center.webservice;
 
 import com.balintimes.erp.center.model.Application;
-import com.balintimes.erp.center.model.authority.UserApp;
 import com.balintimes.erp.center.service.UserService;
-import com.balintimes.erp.center.shiro.WebUser;
 import com.balintimes.erp.center.util.JsonUtil;
 import com.balintimes.erp.center.util.WebUserUtil;
+import com.balintimes.erp.util.mvc.model.UserApp;
+import com.balintimes.erp.util.mvc.model.WebUser;
 import com.balintimes.erp.util.redis.RedisUserUtil;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.stereotype.Controller;
@@ -42,22 +42,30 @@ public class AuthorityController {
         }
         String inputpsw = passwordService.encryptPassword(password);
 
-        if (inputpsw.equals(dbpsw)) {
-            WebUser webUser = webUserUtil.InitUser(username);
-            if (webUser == null) {
-                return JsonUtil.ResponseFailureMessage("init user failture!");
-            }
+        if (!inputpsw.equals(dbpsw)) {
+            return JsonUtil.ResponseFailureMessage("password or user is invald");
+        }
 
-            String redisToken = redisUserUtil.SetRedisWebUser(JsonUtil.ToJson(webUser));
+        WebUser webUser = webUserUtil.InitUser(username);
+        if (webUser == null) {
+            return JsonUtil.ResponseFailureMessage("init user failture!");
+        }
+
+        String redisToken = redisUserUtil.GenToken();
+
+        if (!redisUserUtil.SetRedisWebUser(redisToken,webUser)) {
+            return JsonUtil.ResponseFailureMessage("Cache user failture");
+        }
 
             /*初始化用户程序 权限*/
-            List<UserApp> userApps = this.GenUserApps(username);
-            redisUserUtil.SetRedisUserApps(redisToken, JsonUtil.ToJson(userApps));
+        List<UserApp> userApps = this.GenUserApps(username);
 
-
-            return JsonUtil.ResponseSuccessfulMessage(redisToken);
+        if (!redisUserUtil.SetRedisUserApps(redisToken, userApps)) {
+            return JsonUtil.ResponseFailureMessage("Cache apps failture");
         }
-        return JsonUtil.ResponseFailureMessage("password or user is invald");
+
+        return JsonUtil.ResponseSuccessfulMessage(redisToken);
+
     }
 
     private List<UserApp> GenUserApps(String username) {
@@ -73,7 +81,8 @@ public class AuthorityController {
 
             UserApp userApp = new UserApp();
             userApp.setUid(app.getUid());
-            userApp.setCode(app.getComment());
+            userApp.setCode(app.getCode());
+            userApp.setSort(app.getSort());
             userApp.setName(app.getName());
             userApp.setUrl(app.getUrl());
             userApp.setIconClass(app.getIconUrl());

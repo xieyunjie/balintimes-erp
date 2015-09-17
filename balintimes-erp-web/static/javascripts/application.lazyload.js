@@ -14,7 +14,7 @@ angular.module('app')
                 events: true,
                 modules: [{
                     name: 'BMM_Line_Service',
-                    files:["/pages/bmms/line/line.client.service.js"]
+                    files:["/pages/bmms/base/line/line.client.service.js"]
                 }]
             });
         }]);

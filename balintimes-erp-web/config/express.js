@@ -37,7 +37,7 @@ module.exports = function () {
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieParser());
     app.use(session({
-        genid: function (req) {
+        genid: function () {
             return uuid.v4();
         },
         secret: 'balintimes-erp-secret',

@@ -3,10 +3,10 @@ package com.balintimes.erp.center.util;
 import com.balintimes.erp.center.model.Application;
 import com.balintimes.erp.center.model.Role;
 import com.balintimes.erp.center.model.authority.Employee;
-import com.balintimes.erp.center.model.authority.Menu;
-import com.balintimes.erp.center.model.authority.Permission;
 import com.balintimes.erp.center.service.AuthorityService;
-import com.balintimes.erp.center.shiro.WebUser;
+import com.balintimes.erp.util.mvc.model.Menu;
+import com.balintimes.erp.util.mvc.model.Permission;
+import com.balintimes.erp.util.mvc.model.WebUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
@@ -209,7 +209,7 @@ public class WebUserUtil {
         webUser.setLastLogin(employee.getLastlogin());
         int v = (int) (1 + Math.random() * (100 - 1 + 1));
         webUser.setAvatarUrl(this.employeeAvatarsurl + "/" + employee.getAvatarurl() + "?v=" + v);
-        webUser.setPostList(employee.getPosts());
+//        webUser.setPostList(employee.getPosts());
 
         return webUser;
     }

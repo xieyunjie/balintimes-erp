@@ -1,4 +1,4 @@
-package com.balintimes.erp.center.model.authority;
+package com.balintimes.erp.util.mvc.model;
 
 import java.io.Serializable;
 

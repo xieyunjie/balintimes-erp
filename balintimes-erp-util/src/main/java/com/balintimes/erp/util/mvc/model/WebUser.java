@@ -9,6 +9,10 @@ import java.util.List;
  */
 public class WebUser implements Serializable {
 
+
+    private static final long serialVersionUID = 5213071169092575948L;
+
+
     private String uid;
     private String username;
     private boolean admin;
@@ -19,7 +23,7 @@ public class WebUser implements Serializable {
     private Date lastLogin;
     private String avatarUrl;
 
-    private List<EmployeePost> postList;
+    private List<EmpPost> postList;
 
 
     public String getUid() {
@@ -79,11 +83,11 @@ public class WebUser implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public List<EmployeePost> getPostList() {
+    public List<EmpPost> getPostList() {
         return postList;
     }
 
-    public void setPostList(List<EmployeePost> postList) {
+    public void setPostList(List<EmpPost> postList) {
         this.postList = postList;
     }
 

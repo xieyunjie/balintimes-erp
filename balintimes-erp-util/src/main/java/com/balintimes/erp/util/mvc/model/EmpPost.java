@@ -5,14 +5,14 @@ import java.io.Serializable;
 /**
  * Created by AlexXie on 2015/8/20.
  */
-public class EmployeePost implements Serializable {
+public class EmpPost implements Serializable {
 
     private String postuid;
     private String postname;
     private String organizationuid;
     private String organizationname;
 
-    public EmployeePost() {
+    public EmpPost() {
     }
 
     public String getPostuid() {

@@ -24,27 +24,19 @@ public class RequestExceptionHandler {
         HttpServletResponse response = (HttpServletResponse) request.getNativeResponse();
         HttpServletRequest req = (HttpServletRequest) request.getNativeRequest();
 
-        System.out.println(req.getRequestURL());
-
         try {
             boolean ajax = "XMLHttpRequest".equals(req.getHeader("X-Requested-With"));
             String ajaxFlag = null == request.getParameter("ajax") ? "false" : request.getParameter("ajax");
             boolean isAjax = ajax || ajaxFlag.equalsIgnoreCase("true");
 
-            //
             if (isAjax) {
-                System.out.println("AuthPermissionException AuthPermissionException AuthPermissionException AuthPermissionException");
-
                 AjaxResponse ajaxResponse = new AjaxResponse();
                 ajaxResponse.setSuccess("false");
                 ajaxResponse.setAuthenicated(false);
                 ajaxResponse.setResponseMsg("你没有当前操作权限(40001)，请联系管理员。");
                 ajaxResponse.setHttpStatus(40001);
                 return ajaxResponse;
-
-
             } else {
-//                WebUtils.response(req, response, "/login");
                 response.sendRedirect("/login");
             }
         } catch (Exception ex) {
@@ -60,16 +52,12 @@ public class RequestExceptionHandler {
         HttpServletResponse response = (HttpServletResponse) request.getNativeResponse();
         HttpServletRequest req = (HttpServletRequest) request.getNativeRequest();
 
-        System.out.println(req.getRequestURL());
-
         try {
             boolean ajax = "XMLHttpRequest".equals(req.getHeader("X-Requested-With"));
             String ajaxFlag = null == request.getParameter("ajax") ? "false" : request.getParameter("ajax");
             boolean isAjax = ajax || ajaxFlag.equalsIgnoreCase("true");
 
-            //
             if (isAjax) {
-                System.out.println("CurrentUserExpireException CurrentUserExpireException CurrentUserExpireException CurrentUserExpireException");
 
                 AjaxResponse ajaxResponse = new AjaxResponse();
                 ajaxResponse.setSuccess("false");
@@ -79,7 +67,6 @@ public class RequestExceptionHandler {
                 return ajaxResponse;
 
             } else {
-//                WebUtils.response(req, response, "/login");
                 response.sendRedirect("/login");
             }
         } catch (Exception ex) {

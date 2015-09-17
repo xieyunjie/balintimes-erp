@@ -1,13 +1,13 @@
 package com.balintimes.erp.center.controller;
 
 import com.balintimes.erp.center.base.BaseController;
-import com.balintimes.erp.center.model.authority.Menu;
+import com.balintimes.erp.center.util.JsonUtil;
+import com.balintimes.erp.center.util.WebUserUtil;
+import com.balintimes.erp.util.mvc.model.Menu;
+import com.balintimes.erp.util.mvc.model.WebUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.balintimes.erp.center.shiro.WebUser;
-import com.balintimes.erp.center.util.JsonUtil;
-import com.balintimes.erp.center.util.WebUserUtil;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;

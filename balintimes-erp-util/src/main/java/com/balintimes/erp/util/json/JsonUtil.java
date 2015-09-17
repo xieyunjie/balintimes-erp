@@ -22,9 +22,7 @@ public class JsonUtil {
     public static <T> T ToObject(String content, Class<T> valueType) {
         if (objectMapper == null) {
             objectMapper = new ObjectMapper();
-
             objectMapper.setDateFormat(dateFormat);
-
         }
 
         try {
@@ -60,6 +58,7 @@ public class JsonUtil {
         }
         try {
             JsonNode root = objectMapper.readTree(data);
+
             String value = root.get("data").toString();
             return value;
         } catch (IOException e) {

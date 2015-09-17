@@ -9,8 +9,8 @@ import com.balintimes.erp.center.model.Resource;
 import com.balintimes.erp.center.model.Role;
 import com.balintimes.erp.center.model.User;
 import com.balintimes.erp.center.model.authority.Employee;
-import com.balintimes.erp.center.model.authority.EmployeePost;
 
+import com.balintimes.erp.util.mvc.model.EmpPost;
 import org.springframework.stereotype.Service;
 
 import com.balintimes.erp.center.service.AuthorityService;
@@ -39,6 +39,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 	private PostDao postDao;
 
 	public List<Application> GetUserApplications(String username) {
+
 		User user = this.userDao.getUserByName(username);
 		if (!user.isIsadmin()) {
 			return this.applicationDao.GetUserApplications(username);
@@ -149,9 +150,9 @@ public class AuthorityServiceImpl implements AuthorityService {
 		employee.setRootdeep(0);
 
 		List<Post> posts = postDao.GetPostByEmployee(user.getUid());
-		List<EmployeePost> employeePosts = new ArrayList<EmployeePost>();
+		List<EmpPost> employeePosts = new ArrayList<EmpPost>();
 		for (Post post : posts) {
-			EmployeePost employeePost = new EmployeePost();
+			EmpPost employeePost = new EmpPost();
 			employeePost.setOrganizationname(post.getOrganizationname());
 			employeePost.setOrganizationuid(post.getOrganizationuid());
 			employeePost.setPostname(post.getName());

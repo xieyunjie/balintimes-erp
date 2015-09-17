@@ -30,20 +30,16 @@ public class PermissionInterceptorAdapter extends HandlerInterceptorAdapter {
             HandlerMethod handler2 = (HandlerMethod) handler;
 
             Annotation an = handler2.getMethodAnnotation(HasPermissions.class);
-
+            boolean isPermissioin = true;
             if (an != null) {
                 String permissions = handler2.getMethodAnnotation(HasPermissions.class).value();
                 if (permissions != null && "".equals(permissions) == false) {
 
-                    if (permittedUtil.isPermitted(request, response, permissions) == false) {
-
-                        throw new AuthPermissionException("UnAuth");
-
+                    if (!permittedUtil.isPermitted(request, response, permissions)) {
+                        isPermissioin = false;
                     }
                 }
             }
-
-            boolean isPermissioin = true;
 
             if (isPermissioin) {
                 return true;

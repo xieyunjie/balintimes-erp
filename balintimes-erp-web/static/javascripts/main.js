@@ -3,8 +3,8 @@
  */
 'use strict';
 
-angular.module('app').controller('AppController', ['$scope', '$q', '$localStorage', '$window','$state', 'AjaxRequest', 'UserStgService',
-    function ($scope, $q, $localStorage, $window,$state, AjaxRequest, UserStgService) {
+angular.module('app').controller('AppController', ['$scope', '$q', '$localStorage', '$window', '$state', 'AjaxRequest', 'UserStgService',
+    function ($scope, $q, $localStorage, $window, $state, AjaxRequest, UserStgService) {
         // add 'ie' classes to html
         var isIE = !!navigator.userAgent.match(/MSIE/i);
         isIE && angular.element($window.document.body).addClass('ie');
@@ -39,9 +39,9 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
             webUser: {},
             menuTree: {},
             apps: [],
-            currentApp:[],
+            currentApp: [],
             sysSetting: {},
-            content:{}
+            content: {}
         };
 
         // save settings to local storage
@@ -99,6 +99,7 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
                         uid: a.uid,
                         name: a.name,
                         code: a.code,
+                        sort: a.sort,
                         url: a.url,
                         iconClass: a.iconClass
                     })
@@ -107,37 +108,40 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
 
                 app.sysSetting = results.sys;
 
-                if($localStorage.appUID){
-                    $scope.swithApp($localStorage.appUID);
+                if ($localStorage.appUID) {
+                    $scope.switchApp($localStorage.appUID, false);
                 }
             });
         };
 
-        $scope.swithApp = function (uid) {
-            var apps =  UserStgService.get();
+        $scope.switchApp = function (uid, toIndex) {
+            if(angular.isUndefined(toIndex)) toIndex = true;
+
+            var apps = UserStgService.get();
             var currentApp = {};
 
-            angular.forEach(apps,function(a){
-                if(uid == a.uid) {
-                    $localStorage.appUID = a.uid;
+            angular.forEach(apps, function (a) {
+                if (uid == a.uid) {
+                    //$localStorage.appUID = a.uid;
                     app.menuTree = a.menuTree;
                     currentApp = a;
                     return false;
                 }
             });
 
-            angular.forEach(app.apps,function(a){
-                if(uid == a.uid) {
+            angular.forEach(app.apps, function (a) {
+                if (uid == a.uid) {
                     app.content = a;
                     return false;
                 }
             });
-            $state.go(currentApp.code+".index");
-
+            if (toIndex) {
+                $state.go(currentApp.code + ".index");
+            }
         };
 
-        $scope.logout = function(){
-            $localStorage.$reset();
+        $scope.logout = function () {
+            UserStgService.remove();
             $window.location.replace("/logout");
         };
     }]);

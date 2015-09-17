@@ -5,7 +5,7 @@
 define(function () {
     var p = {
         rootpath: "/oaucenter",
-        pageSize: 3,
+        pageSize: 20,
 
         views: [{
             stateName: "profile",

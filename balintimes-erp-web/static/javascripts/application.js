@@ -34,7 +34,7 @@ angular.module('app', [
                 console.log(event);
                 console.log(err);
                 if (err === "$UnAuthState") {
-                    $state.go("app.index");
+                    $state.go("app.notauth");
                 }
             });
         });

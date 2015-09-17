@@ -1,7 +1,6 @@
-package com.balintimes.erp.center.model.authority;
+package com.balintimes.erp.util.mvc.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,6 +10,7 @@ public class UserApp {
 
     private String uid;
     private String code;
+    private int sort;
     private String name;
     private String url;
     private String iconClass;
@@ -28,13 +28,15 @@ public class UserApp {
         menuTree = new ArrayList<Menu>();
     }
 
-    public void addMenus(List<Menu> menus){
+    public void addMenus(List<Menu> menus) {
         this.menuList.addAll(menus);
     }
-    public void addPermissions(List<String> permissions){
+
+    public void addPermissions(List<String> permissions) {
         this.permissions.addAll(permissions);
     }
-    public void addMenuTree(List<Menu> menus){
+
+    public void addMenuTree(List<Menu> menus) {
         this.menuTree.addAll(menus);
     }
 
@@ -103,4 +105,18 @@ public class UserApp {
     }
 
 
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
+
+    @Override
+    public String toString() {
+        return "UserApp{" +
+                "url='" + url + '\'' +
+                ", uid='" + uid + '\'' +
+                ", code='" + code + '\'' +
+                ", sort=" + sort +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

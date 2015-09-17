@@ -22,11 +22,8 @@ public class RedisWebUserUtil implements WebUserUtil {
     public WebUser getWebUser() {
         if (this.httpRequest != null) {
 
-            String userStr = redisUserUtil.GetRedisWebUser(httpRequest.getHeader(RedisUserUtil.GetRedisTokenName()));
-            if (userStr == null) {
-                return null;
-            }
-            WebUser webUser = JsonUtil.ToObject(userStr, WebUser.class);
+            WebUser webUser = redisUserUtil.GetRedisWebUser(httpRequest.getHeader(RedisUserUtil.GetRedisTokenName()),WebUser.class);
+
             return webUser;
         }
         return null;

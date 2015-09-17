@@ -30,6 +30,7 @@ public class TokenProcessor {
             //Base64编码
             BASE64Encoder be = new BASE64Encoder();
             be.encode(b);
+
             return be.encode(b);//制定一个编码
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

@@ -8,10 +8,6 @@ var passport = require("passport"),
     settings = require("../../config/settings"),
     async = require("async");
 var redisUtil = require("../util/redisUtil");
-//var redis = require("redis"),
-//    redisClient = redis.createClient(settings.redis.port, settings.redis.host);
-
-//var requestUtil = require("../util/requestUtil");
 
 var HomeController = {};
 module.exports = HomeController;
@@ -29,9 +25,7 @@ HomeController.loginSubmit = passport.authenticate('local', {
 
 HomeController.logout = function (req, res) {
     var redisToken = req.session.redisToken;
-
-    redisClient.del(settings.redisKey.webuser + redisToken, redis.print);
-    redisClient.del(settings.redisKey.apps + redisToken, redis.print);
+    redisUtil.removeAll(redisToken);
     req.logout();
 
     res.redirect("/login");
@@ -49,6 +43,7 @@ HomeController.initUser = function (req, res) {
 HomeController.initUserApps = function (req, res) {
 
     redisUtil.getApps(req.session.redisToken, function (err, data) {
+        var obj = JSON.parse(data);
         res.json(JSON.parse(data));
     });
 
@@ -90,6 +85,14 @@ HomeController.getSettings = function (req, res) {
     res.json(sysSettings);
 };
 // ========= Webuser end
+
+
+
+
+
+
+
+
 
 HomeController.initUserAuthority = function (req, res) {
     //var params = {

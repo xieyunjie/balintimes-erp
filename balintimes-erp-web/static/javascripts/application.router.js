@@ -7,63 +7,41 @@ angular.module('app')
     .config(['$stateProvider', '$urlRouterProvider', 'BMMROUTER', 'CRMROUTER',
         function ($stateProvider, $urlRouterProvider, BmmsRouter, CrmRouter) {
 
-            var RetRouters = function (routers) {
+            var regRouter = function (router) {
+                var abstract = false;
+                if (angular.isDefined(router.abstract)) {
+                    abstract = router.abstract;
+                }
+                var state = {
+                    abstract: abstract,
+                    url: router.url,
+                    templateUrl: "/pages/" + router.filepath + ".view.html",
+                    controller: router.controllername
+                };
 
-                var results = [];
-                var abstractState = "";
-                angular.forEach(routers, function (router) {
-                    var u = "";
-
-                    if (angular.isArray(router.params)) {
-                        u = "/" + router.state.replace(/_/g, "/") + "/:" + router.params.join("/:");
-                    }
-                    else {
-                        u = "/" + router.state.replace(/_/g, "/");
-                    }
-                    var abstract = false;
-                    if (angular.isDefined(router.abstract)) {
-                        abstract = router.abstract;
-                        if (router.abstract == true) {
-                            abstractState = router.state;
-                        }
-                    }
-                    var state = {
-                        abstract: abstract,
-                        url: u,
-                        templateUrl: "/pages/" + router.url + ".view.html",
-                        controller: router.controllername
-                    };
-                    if (angular.isDefined(router.controllername)) {
-                        state.resolve = {
-                            deps: ['$ocLazyLoad', '$q',
-                                function ($ocLazyLoad, $q) {
-                                    //
-                                    //if (UserMenuAuth.check(abstractState + "." + router.state) == false) {
-                                    //    return $q.reject("$UnAuthState");
-                                    //}
-                                    //
-
-                                    var sq = angular.isArray(router.script) ? angular.copy(router.script) : [];
-                                    sq.push("/pages/" + router.url + ".controller.js");
-                                    return $ocLazyLoad.load(sq);
+                if (angular.isDefined(router.controllername)) {
+                    state.resolve = {
+                        deps: ['$ocLazyLoad','UserStgService', '$q',
+                            function ($ocLazyLoad, UserStgService, $q) {
+                                if(UserStgService.checkMenuAuth(router.state) == false){
+                                    return $q.reject("$UnAuthState");
                                 }
-                            ]
-                        }
-                    }
-                    if (abstract == true) {
-                        $stateProvider.state(abstractState, state);
 
+                                var sq = angular.isArray(router.script) ? angular.copy(router.script) : [];
+                                sq.push("/pages/" + router.filepath + ".controller.js");
+                                return $ocLazyLoad.load(sq);
+                            }]
                     }
-                    else {
-                        $stateProvider.state(abstractState + "." + router.state, state);
-                        results.push({
-                            statename: abstractState + "." + router.state,
-                            statevalue: state
-                        })
-                    }
+                }
+                $stateProvider.state(router.state, state);
+            };
 
+            var recursionRouter = function (routers) {
+                angular.forEach(routers, function (router) {
+                    regRouter(router);
                 });
             };
+
 
             $urlRouterProvider.otherwise('/app/index');
 
@@ -76,13 +54,13 @@ angular.module('app')
                 url: '/index',
                 templateUrl: '/pages/index.view.html'
             });
+            $stateProvider.state("app.notauth", {
+                url: '/noauth',
+                templateUrl: '/pages/error/NotAuth.html'
+            });
 
-            var rs = RetRouters(BmmsRouter);
-            angular.forEach(rs, function (r) {
-                $stateProvider.state(r.statename, r.statevalue);
-            });
-            rs = RetRouters(CrmRouter);
-            angular.forEach(rs, function (r) {
-                $stateProvider.state(r.statename, r.statevalue);
-            });
-        }]);
+
+            recursionRouter(BmmsRouter);
+            //recursionRouter(CrmRouter);
+        }
+    ]);

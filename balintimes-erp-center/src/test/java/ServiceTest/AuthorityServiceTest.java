@@ -4,7 +4,9 @@ import com.balintimes.erp.center.dao.ApplicationDao;
 import com.balintimes.erp.center.dao.ResourceDao;
 import com.balintimes.erp.center.dao.RoleDao;
 import com.balintimes.erp.center.dao.UserDao;
+import com.balintimes.erp.center.model.Application;
 import com.balintimes.erp.center.model.Resource;
+import com.balintimes.erp.center.model.Role;
 import com.balintimes.erp.center.service.AuthorityService;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
@@ -45,6 +47,19 @@ public class AuthorityServiceTest {
     @javax.annotation.Resource
     private AuthorityService authorityService;
 
+    @Test
+    public void GetUserApps(){
+
+//        List<Application> list = this.authorityService.GetUserApplications("adminb");
+//        for (Application application : list) {
+//            System.out.println(application);
+//        }
+        List<Role> list = this.authorityService.GetUserRoles("adminb");
+        for (Role role : list) {
+            System.out.println(role);
+        }
+    }
+
 //	@Test
 //	public void GetUserApplications() {
 //		String username="llll";
@@ -56,12 +71,18 @@ public class AuthorityServiceTest {
 
     @Test
     public void GetUserDisableMenus() {
-        String username = "admin";
-        String appUid = "05bd7806-3026-11e5-8396-c86000a05d5f";
-        List<Resource> list = this.authorityService.GetUserDisableMenus(username, appUid);
+        String username = "adminb";
+        String appUid = "31c84f63-5a92-11e5-a3e5-c86000a05d5f";
+        List<Resource> list = this.authorityService.GetUserMenu(username, appUid);
         for (Resource item : list) {
             System.out.println(item.getName());
         }
+
+         list = this.authorityService.GetUserDisableMenus(username, appUid);
+        for (Resource item : list) {
+            System.out.println(item.getName());
+        }
+
     }
 
 //    @Test

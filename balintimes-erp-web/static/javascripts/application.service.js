@@ -256,7 +256,11 @@ angular.module('app')
             get: function () {
                 return $localStorage.apps;
             },
-            checkMenuAuth: function (state, root) {
+            remove: function () {
+                delete $localStorage.apps;
+            },
+            checkMenuAuth: function (state) {
+                var root = state.substr(0, state.indexOf("."));
                 var chkResult = true;
                 var apps = $localStorage.apps,
                     app;
@@ -266,6 +270,9 @@ angular.module('app')
                         return false;
                     }
                 });
+                if (!app) {
+                    return false;
+                }
 
                 angular.forEach(app.menuList, function (menu) {
                     if (menu.state == state && menu.enable == false) {

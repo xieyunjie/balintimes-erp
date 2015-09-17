@@ -1,5 +1,6 @@
 package com.balintimes.erp.center.aspectadvice;
 
+import com.balintimes.erp.util.mvc.model.WebUser;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
-import com.balintimes.erp.center.shiro.WebUser;
 import com.balintimes.erp.center.util.JsonUtil;
 import com.balintimes.erp.center.util.WebUserUtil;
 

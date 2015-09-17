@@ -1,5 +1,7 @@
 package com.balintimes.erp.center.model.authority;
 
+import com.balintimes.erp.util.mvc.model.EmpPost;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +22,7 @@ public class Employee implements Serializable {
     private String avatarurl;
     private int rootdeep = 0;
 
-    private List<EmployeePost> posts;
+    private List<EmpPost> posts;
 
     public Employee() {
         // TODO Auto-generated constructor stub
@@ -106,11 +108,11 @@ public class Employee implements Serializable {
         return rootdeep;
     }
 
-    public void setPosts(List<EmployeePost> posts) {
+    public void setPosts(List<EmpPost> posts) {
         this.posts = posts;
     }
 
-    public List<EmployeePost> getPosts() {
+    public List<EmpPost> getPosts() {
         return posts;
     }
 

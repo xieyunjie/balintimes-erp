@@ -1,4 +1,4 @@
-package com.balintimes.erp.center.model.authority;
+package com.balintimes.erp.util.mvc.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,6 +8,9 @@ import java.util.List;
  * Created by AlexXie on 2015/8/3.
  */
 public class Menu implements Serializable, Comparable<Menu> {
+
+
+    private static final long serialVersionUID = -2759086530976526009L;
 
     private String uid;
     private String name;
@@ -25,7 +28,7 @@ public class Menu implements Serializable, Comparable<Menu> {
         this.url = url;
         this.priority = priority;
 
-        this.children = new ArrayList<>();
+        this.children = new ArrayList<Menu>();
     }
 
     public Menu(String uid, String name, String state, String iconclass, String url, Integer priority, boolean enable) {
@@ -37,7 +40,7 @@ public class Menu implements Serializable, Comparable<Menu> {
         this.url = url;
         this.enable = enable;
 
-        this.children = new ArrayList<>();
+        this.children = new ArrayList<Menu>();
     }
 
     private List<Menu> children;

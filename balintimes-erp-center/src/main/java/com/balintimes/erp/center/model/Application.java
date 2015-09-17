@@ -8,6 +8,8 @@ public class Application implements Serializable {
 	private static final long serialVersionUID = -1411141711813542173L;
 	
 	private String uid;
+	private String code;
+	private int sort;
 	private String name;
 	private String typeUid;
 	private String typeName;
@@ -26,6 +28,23 @@ public class Application implements Serializable {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
+
 	public String getName() {
 		return name;
 	}

@@ -6,25 +6,46 @@ angular.module('app').constant("BMMROUTER", {
     bmms: {
         abstract: true,
         state: 'bmms',
-        url: 'app'//可以与crm不一样
+        url: "/bmms",
+        filepath: "app"
     },
     bmms_index: {
-        state: 'index',
-        url: 'bmms/index'
+        state: 'bmms.index',
+        filepath: 'bmms/index',
+        url: '/index'
     },
-    bmms_line_list: {
-        state: 'line_list',
+    bmms_base: {
+        state: 'bmms.base',
+        filepath: 'bmms/base/base',
+        url: '/base'
+    },
+    bmms_base_line_list: {
+        state: 'bmms.base.line_list',
+        url: '/line/list',
         controllername: 'BMMS_Line_List_Controller',
-        url: 'bmms/line/line.client.list',
-
+        filepath: 'bmms/base/line/line.client.list',
         script: ["BMM_Line_Service"]
     },
-    bmms_line_edit: {
-        state: 'line_edit',
+    bmms_base_line_edit: {
+        state: 'bmms.base.line_edit',
+        url: '/line/edit',
         params: ["uid"],
         controllername: 'BMMS_Line_Edit_Controller',
-        url: 'bmms/line/line.client.edit',
-
+        filepath: 'bmms/base/line/line.client.edit',
         script: ["BMM_Line_Service"]
+    },
+
+
+    bmms_media: {
+        state: 'bmms.media',
+        url: '/media',
+        filepath: 'bmms/media/media'
+    },
+    bmms_media_bus_list: {
+        state: 'bmms.media.bus_list',
+        url: '/bus/list',
+        controllername: 'BMMS_Media_Bus_List_Controller',
+        filepath: 'bmms/media/bus/bus.client.list'
     }
+
 });

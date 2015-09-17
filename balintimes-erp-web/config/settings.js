@@ -25,11 +25,11 @@ module.exports = {
     sessionexpire: 10 * 60 * 60,
     redisKey: {
         redisToken: "redisToken",
-        webuser: "webuser:",
-        permissions: "permissions:",
-        roles: "roles:",
-        menus: "menus:",
-        apps: "apps:"
+        webuser: "webuser",
+        permissions: "permissions",
+        roles: "roles",
+        menus: "menus",
+        apps: "apps"
     },
 
     requestHeader: {
