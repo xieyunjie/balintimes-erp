@@ -1,28 +1,45 @@
 package com.balintimes.erp.center.controller;
 
-import com.balintimes.erp.center.base.BaseController;
-import com.balintimes.erp.center.model.Post;
-import com.balintimes.erp.center.model.User;
-import com.balintimes.erp.center.model.UserTree;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import com.balintimes.erp.center.base.BaseController;
+import com.balintimes.erp.center.model.Post;
+import com.balintimes.erp.center.model.User;
+import com.balintimes.erp.center.model.UserTree;
 import com.balintimes.erp.center.service.PostService;
 import com.balintimes.erp.center.service.UserService;
 import com.balintimes.erp.center.util.JsonUtil;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.*;
 
 @Controller
 @RequestMapping("user")
@@ -121,14 +138,22 @@ public class UserController extends BaseController {
     @RequestMapping(value = "update")
     @ResponseBody
     public String updateUser(User user) {
-        // 相同用户名
-        if (this.userService.ExistsUserName(user.getUsername(), user.getUid()) == true) {
-            return JsonUtil.ResponseFailureMessage("已经存在相同用户名，请重新录入。");
+    	User userFromDB=this.userService.ExistsUserUid(user.getUid());
+    	
+    	if(!userFromDB.getUsername().equalsIgnoreCase(user.getUsername())){
+    		 // 相同用户名
+            if (this.userService.ExistsUserName(user.getUsername(), user.getUid()) == true) {
+                return JsonUtil.ResponseFailureMessage("已经存在相同用户名，请重新录入。");
+            }
+    	}
+    	
+        if(!userFromDB.getEmployeename().equalsIgnoreCase(user.getEmployeename())){
+        	//相同员工名
+        	if (this.userService.ExistsEmployeeName(user.getEmployeename()) == true) {
+                return JsonUtil.ResponseFailureMessage("已经存在相同员工名，请重新录入。");
+            }
         }
-
-        if (this.userService.ExistsEmployeeName(user.getEmployeename()) == true) {
-            return JsonUtil.ResponseFailureMessage("已经存在相同员工名，请重新录入。");
-        }
+       
         user.setEditby(webUsrUtil.CurrentUser().getEmployeeName());
         user.setEdittime(new Date());
         this.userService.updateUser(user);

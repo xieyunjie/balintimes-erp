@@ -53,9 +53,9 @@ public class LineController extends BaseController {
         return "success";
     }
 
-    @RequestMapping(value = "get/{uid}", method = RequestMethod.GET)
+    @RequestMapping(value = "get", method = RequestMethod.GET)
     @ResponseBody
-    public AjaxResponse listAll(@PathVariable String uid) {
+    public AjaxResponse listAll( String uid) {
 
         Line l = null;
         for (Line line : list) {
@@ -68,12 +68,28 @@ public class LineController extends BaseController {
         return ResponseMessage.successful(l);
     }
 
-    @RequestMapping(value = "query/{pagesize}/{page}/{query}", method = RequestMethod.GET)
+//    @RequestMapping(value = "query/{pagesize}/{page}/{query}", method = RequestMethod.GET)
+//    @ResponseBody
+//    public AjaxResponse getLine(@PathVariable String query, @PathVariable int pagesize, @PathVariable int page) {
+//
+//        int start = (page - 1) * pagesize;
+//        int take = 0;
+//
+//        List<Line> sublist = new ArrayList<Line>(pagesize);
+//        for (int i = start; i < this.list.size() && take < pagesize; i++, take++) {
+//            sublist.add(list.get(i));
+//        }
+//
+//        return ResponseMessage.successful(sublist, 54);
+//    }
+
+    @RequestMapping(value = "query", method = RequestMethod.GET)
     @ResponseBody
-    public AjaxResponse getLine(@PathVariable String query, @PathVariable int pagesize, @PathVariable int page) {
+    public AjaxResponse getLine(String query, Integer pagesize, Integer page) {
 
         int start = (page - 1) * pagesize;
         int take = 0;
+        System.out.println(query);
 
         List<Line> sublist = new ArrayList<Line>(pagesize);
         for (int i = start; i < this.list.size() && take < pagesize; i++, take++) {
@@ -82,6 +98,7 @@ public class LineController extends BaseController {
 
         return ResponseMessage.successful(sublist, 54);
     }
+
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
     @ResponseBody

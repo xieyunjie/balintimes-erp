@@ -81,7 +81,7 @@ Util.transmit = function (config) {
     clientRequest({
         method: config.req.method,
         redisToken: config.req.session.redisToken,
-        url: config.baseUrl + config.req.path,
+        url: config.baseUrl + config.req.url,
         params: config.req.body,
         callback: config.callback
     });

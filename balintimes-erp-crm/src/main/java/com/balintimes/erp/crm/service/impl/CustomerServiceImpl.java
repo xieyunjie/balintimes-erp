@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.balintimes.erp.crm.dao.CustomerDao;
+import com.balintimes.erp.crm.dao.SalerCustomerDao;
 import com.balintimes.erp.crm.model.Customer;
 import com.balintimes.erp.crm.service.CustomerService;
 import com.balintimes.erp.util.tuples.TuplePage;
@@ -16,6 +17,8 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Resource
 	private CustomerDao customerDao;
+	@Resource
+	private SalerCustomerDao salerCustomerDao;
 
 	public TuplePage<List<Customer>, Integer> getCustomerList(String name,
 			int currPage, int pageSize) {
@@ -31,5 +34,5 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 		return this.customerDao.getCustomer(uid);
 	}
-
+	
 }

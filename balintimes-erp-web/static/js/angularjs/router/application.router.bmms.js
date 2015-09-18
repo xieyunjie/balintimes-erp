@@ -24,7 +24,7 @@ angular.module('app').constant("BMMROUTER", {
         url: '/line/list',
         controllername: 'BMMS_Line_List_Controller',
         filepath: 'bmms/base/line/line.client.list',
-        script: ["BMM_Line_Service"]
+        script: ["BMMS_Line_Service"]
     },
     bmms_base_line_edit: {
         state: 'bmms.base.line_edit',
@@ -32,7 +32,7 @@ angular.module('app').constant("BMMROUTER", {
         params: ["uid"],
         controllername: 'BMMS_Line_Edit_Controller',
         filepath: 'bmms/base/line/line.client.edit',
-        script: ["BMM_Line_Service"]
+        script: ["BMMS_Line_Service"]
     },
 
 

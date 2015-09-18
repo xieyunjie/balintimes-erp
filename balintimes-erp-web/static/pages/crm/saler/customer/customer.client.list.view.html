@@ -1,0 +1,83 @@
+<div>
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list"></i> {{vm.title}}
+            </div>
+
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="panel-body b-b b-light">
+                        <div class="btn-group">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <input id="filter_name" type="text" class="form-control input-sm w-sm inline m-r"
+                                           ng-model="vm.params.name"
+                                           placeholder="客户名">
+                                </div>
+                                <div class="form-group">
+                                    <input id="filter_brand" type="text" class="form-control input-sm w-sm inline m-r"
+                                           ng-model="vm.params.brand" placeholder="发布品牌">
+                                </div>
+                                <div class="form-group">
+                                    <label>行业</label>
+                                    <select class="form-control input-sm w-sm inline m-r"
+                                            ng-model="vm.params.businessType">
+                                        <option value=""></option>
+                                        <option ng-repeat="item in vm.businessTypeList" value="{{item.uid}}">
+                                            {{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>类型</label>
+                                    <select class="form-control input-sm w-sm inline m-r" ng-model="vm.params.isReg">
+                                        <option ng-repeat="item in vm.regTypeList" value="{{item.id}}">{{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="checkbox m-l m-r-xs">
+                                    <label class="i-checks">
+                                        <input type="checkbox" ng-model="vm.params.isShowDown"><i></i> 查询下级
+                                    </label>
+                                </div>
+
+                                <button type="button" class="btn btn-success" ng-click="reloadFirstPage()">查询</button>
+
+                                <button type="button" class="btn btn-primary" ui-sref="crm.customer.customer_edit"><i
+                                        class="fa fa-plus"></i> 添加
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <table ng-table="vm.tableParams" class="table table-hover table-striped">
+                        <tr ng-repeat="row in $data">
+                            <td title="'#'" td-mouseover-toggle="" style="width: 100px">
+                                <div>
+                                    <a href="#" ui-sref="crm.customer.customer_edit({uid:row.uid,isReg:row.reg})"><i
+                                            class="fa fa-edit  fa-fw fa-lg"></i> </a>
+                                    <a><i class="fa fa-trash fa-fw fa-lg"></i> </a>
+                                </div>
+                            </td>
+                            <!--<td title="'uid'" filter="{uid: 'text'}" sortable="'uid'">-->
+                            <!--{{row.uid}}-->
+                            <!--</td>-->
+                            <td title="'销售员'">{{row.userName}}</td>
+                            <td title="'客户名称'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
+                            <td title="'行业'" filter="{businessTypeName: 'text'}">{{row.businessTypeName}}</td>
+                            <td title="'发布品牌'" filter="{brand: 'text'}" sortable="'brand'">{{row.brand}}</td>
+                            <td title="'销售渠道'">{{row.customerCategoryName}}</td>
+                            <td title="'代理公司'">{{row.proxyCompany}}</td>
+                            <td title="'地区'">{{row.areaName}}</td>
+                            <td title="'电话'">{{row.phone}}</td>
+                            <td title="'地址'">{{row.companyAddress}}</td>
+                            <td title="'邮编'">{{row.postCode}}</td>
+                            <td title="'状态'">{{row.stateName}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

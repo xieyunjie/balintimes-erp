@@ -8,16 +8,9 @@ angular.module('BMMS_Line_List_Module', [])
         function ($scope, $timeout, NgTableUtil, BMMS_Line_Service, AlertMsg, DlgMsg) {
             var vm = $scope.vm = {
                 title: '线路列表',
-                pamas:'aksdjakjsdls',
                 tableParams: NgTableUtil.initNgTableParams(function (exparam, tbparam) {
-                    var params = {
-                        pagesize: exparam.pagesize,
-                        page: exparam.page,
-                        query: angular.isUndefined(exparam.query) ? "*" : exparam.query
-                    };
-                    if (exparam.query) params.query = exparam.query;
 
-                    return BMMS_Line_Service.queryLine(params).then(function (res) {
+                    return BMMS_Line_Service.queryLine(exparam).then(function (res) {
                         tbparam.total(res.total);
                         return res.data;
                     })
@@ -55,8 +48,6 @@ angular.module('BMMS_Line_List_Module', [])
                     }
 
                 });
-
-
             };
 
         }]);

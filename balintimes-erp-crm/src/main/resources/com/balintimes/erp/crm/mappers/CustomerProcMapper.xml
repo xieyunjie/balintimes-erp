@@ -24,6 +24,7 @@
 		<result property="state" column="state" />
 		<result property="stateName" column="statename" />
 		<result property="userUid" column="useruid" />
+		<result property="isReg" column="isreg" />
 	</resultMap>
 
 	<select id="getCustomerByEmp" statementType="CALLABLE"
@@ -32,7 +33,7 @@
 		#{name,mode=IN,jdbcType=VARCHAR},
 		#{userUids,mode=IN,jdbcType=VARCHAR},
 		#{businessTypeUid,mode=IN,jdbcType=VARCHAR},
-		#{isreg,mode=IN,jdbcType=INTEGER},
+		#{isReg,mode=IN,jdbcType=INTEGER},
 		#{brand,mode=IN,jdbcType=VARCHAR},
 		#{pageSize,mode=IN,jdbcType=INTEGER},
 		#{currPage,mode=IN,jdbcType=INTEGER},

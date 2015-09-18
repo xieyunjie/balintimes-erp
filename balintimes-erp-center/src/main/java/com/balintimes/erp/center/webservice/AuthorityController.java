@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("ws/authority")
-public class AuthorityController {
+public class /**/AuthorityController {
 
     @Resource
     private WebUserUtil webUserUtil;
@@ -99,6 +99,16 @@ public class AuthorityController {
         }
         return userApps;
     }
+
+    @RequestMapping("gets")
+    @ResponseBody
+    public String GetS(String name,String post){
+
+        System.out.println(name + " ## " + post);
+
+        return  "success";
+    }
+
 
 
     @RequestMapping("/userapps")

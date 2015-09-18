@@ -75,11 +75,11 @@ public class AuthorityServiceTest {
         String appUid = "31c84f63-5a92-11e5-a3e5-c86000a05d5f";
         List<Resource> list = this.authorityService.GetUserMenu(username, appUid);
         for (Resource item : list) {
-            System.out.println(item.getName());
+            System.out.println(item.getUid()+":"+item.getName());
         }
 
-         list = this.authorityService.GetUserDisableMenus(username, appUid);
-        for (Resource item : list) {
+        List<Resource> dlist = this.authorityService.GetUserDisableMenus(username, appUid);
+        for (Resource item : dlist) {
             System.out.println(item.getName());
         }
 

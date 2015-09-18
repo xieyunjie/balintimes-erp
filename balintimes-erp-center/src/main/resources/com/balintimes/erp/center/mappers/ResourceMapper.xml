@@ -171,8 +171,11 @@
 		where 
 			a.forbidden=0 and a.showinmenu=1 and a.resourcetype=1 and b.forbidden=0 
 			and (ifnull(#{appUid},'')='' or a.appuid=#{appUid})
-			and a.uid not in (#{uids})
-			and a.uid not in (select z.parentuid from resource as z) 
+			and a.uid not in 
+			<foreach item="item" index="index" collection="uids" open="(" separator="," close=")">
+					#{item}
+            </foreach>
+			and a.uid not in (select z.parentuid from resource as z  where z.resourcetype=1) 
 	</select>
 
 </mapper>

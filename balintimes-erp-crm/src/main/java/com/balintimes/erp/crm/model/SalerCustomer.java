@@ -1,16 +1,21 @@
 package com.balintimes.erp.crm.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class EmpCustomer implements Serializable {
+public class SalerCustomer implements Serializable {
 
-	private static final long serialVersionUID = -4429378154101334973L;
+	private static final long serialVersionUID = -4981359396594011153L;
 
-	private int id;
 	private int uid;
 	private String name;
-	private String businessTypeUid;
+	private String businessType;
 	private String businessTypeName;
+	private String userUid;
+	private String brand;
+	private String customerCategory;
+	private String customerCategoryName;
+	private String proxyCompany;
 	private String areaUid;
 	private String areaName;
 	private String areaCode;
@@ -20,23 +25,11 @@ public class EmpCustomer implements Serializable {
 	private Integer parentUid;
 	private boolean forbidden;
 	private boolean isDeleted;
-	private String brand;
-	private String customerCategoryUid;
-	private String customerCategoryName;
-	private String proxyCompany;
-	private int state;
-	private String stateName;
-	private String userUid;
-	private String userName;
-	private boolean isReg;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	private String createBy;
+	private Date createTime;
+	private String editBy;
+	private Date editTime;
+	private String Remarks;
 
 	public int getUid() {
 		return uid;
@@ -54,12 +47,12 @@ public class EmpCustomer implements Serializable {
 		this.name = name;
 	}
 
-	public String getBusinessTypeUid() {
-		return businessTypeUid;
+	public String getBusinessType() {
+		return businessType;
 	}
 
-	public void setBusinessTypeUid(String businessTypeUid) {
-		this.businessTypeUid = businessTypeUid;
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
 	}
 
 	public String getBusinessTypeName() {
@@ -68,6 +61,46 @@ public class EmpCustomer implements Serializable {
 
 	public void setBusinessTypeName(String businessTypeName) {
 		this.businessTypeName = businessTypeName;
+	}
+
+	public String getUserUid() {
+		return userUid;
+	}
+
+	public void setUserUid(String userUid) {
+		this.userUid = userUid;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public String getCustomerCategory() {
+		return customerCategory;
+	}
+
+	public void setCustomerCategory(String customerCategory) {
+		this.customerCategory = customerCategory;
+	}
+
+	public String getCustomerCategoryName() {
+		return customerCategoryName;
+	}
+
+	public void setCustomerCategoryName(String customerCategoryName) {
+		this.customerCategoryName = customerCategoryName;
+	}
+
+	public String getProxyCompany() {
+		return proxyCompany;
+	}
+
+	public void setProxyCompany(String proxyCompany) {
+		this.proxyCompany = proxyCompany;
 	}
 
 	public String getAreaUid() {
@@ -142,76 +175,44 @@ public class EmpCustomer implements Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	public String getBrand() {
-		return brand;
+	public String getCreateBy() {
+		return createBy;
 	}
 
-	public void setBrand(String brand) {
-		this.brand = brand;
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
 	}
 
-	public String getCustomerCategoryUid() {
-		return customerCategoryUid;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setCustomerCategoryUid(String customerCategoryUid) {
-		this.customerCategoryUid = customerCategoryUid;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
-	public String getCustomerCategoryName() {
-		return customerCategoryName;
+	public String getEditBy() {
+		return editBy;
 	}
 
-	public void setCustomerCategoryName(String customerCategoryName) {
-		this.customerCategoryName = customerCategoryName;
+	public void setEditBy(String editBy) {
+		this.editBy = editBy;
 	}
 
-	public String getProxyCompany() {
-		return proxyCompany;
+	public Date getEditTime() {
+		return editTime;
 	}
 
-	public void setProxyCompany(String proxyCompany) {
-		this.proxyCompany = proxyCompany;
+	public void setEditTime(Date editTime) {
+		this.editTime = editTime;
 	}
 
-	public int getState() {
-		return state;
+	public String getRemarks() {
+		return Remarks;
 	}
 
-	public void setState(int state) {
-		this.state = state;
-	}
-
-	public String getStateName() {
-		return stateName;
-	}
-
-	public void setStateName(String stateName) {
-		this.stateName = stateName;
-	}
-
-	public String getUserUid() {
-		return userUid;
-	}
-
-	public void setUserUid(String userUid) {
-		this.userUid = userUid;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public boolean isReg() {
-		return isReg;
-	}
-
-	public void setReg(boolean isReg) {
-		this.isReg = isReg;
+	public void setRemarks(String remarks) {
+		Remarks = remarks;
 	}
 
 }

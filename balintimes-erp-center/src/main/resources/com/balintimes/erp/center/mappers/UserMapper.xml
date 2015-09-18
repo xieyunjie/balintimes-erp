@@ -136,6 +136,14 @@
 		and delflag = 0
 	</select>
 
+	<select id="CheckUserUid" parameterType="String" resultType="User">
+		select
+		<include refid="userColumns"/>
+        from user a
+        inner join usertype b on a.usertype = b.uid
+        where a.delflag = 0 and a.uid=#{uid}
+	</select>
+	
 	<select id="GetUserList" statementType="PREPARED" parameterType="string" resultMap="userResultMap">
         select
 		<include refid="userColumns"/>

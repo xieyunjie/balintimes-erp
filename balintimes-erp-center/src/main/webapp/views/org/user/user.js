@@ -249,19 +249,19 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 		$scope.SaveUser = function() {
 			if ($scope.user.uid == "0") {
 				AjaxRequest.Post("/user/create", $scope.user).then(function(res) {
-					if (res.data == null) {
-						DlgMsg.alert("系统提示", res.responseMsg);
+					if (res.responseMsg == "保存成功") {						
 						$state.go("org/user");
 					} else
-						$state.go("org/user");
+						DlgMsg.alert("系统提示", res.responseMsg);
 				})
 			} else {
-				AjaxRequest.Post("/user/update", $scope.user).then(function(res) {
-					if (res.data == null) {
+				AjaxRequest.Post("/user/update", $scope.user).then(function(res) {					
+					if (res.responseMsg == "修改成功") {								
+						$state.go("org/user");
+					}
+					else{
 						DlgMsg.alert("系统提示", res.responseMsg);
-						$state.go("org/user");
-					} else
-						$state.go("org/user");
+					}						
 				})
 			}
 		};

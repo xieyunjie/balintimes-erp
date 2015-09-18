@@ -12,8 +12,12 @@
                 <div class="dataTables_wrapper form-inline dt-bootstrap">
                     <div class="panel-body b-b b-light">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" ng-click="reloadFirstPage()"><i class="fa fa-plus"></i> 添加</button>
-                            <button type="button" class="btn btn-success" ng-click="reloadOtherPage()"><i class="fa fa-refresh"></i> 刷新</button>
+                            <button type="button" class="btn btn-primary" ng-click="reloadFirstPage()"><i
+                                    class="fa fa-plus"></i> 添加
+                            </button>
+                            <button type="button" class="btn btn-success" ng-click="reloadOtherPage()"><i
+                                    class="fa fa-refresh"></i> 刷新
+                            </button>
                             <button type="button" class="btn btn-danger"
                                     ng-click="deleteLine('424e0549-a07e-4f0b-8974-e75c14c87188')"><i
                                     class="fa fa-trash"></i> 删除
@@ -23,20 +27,20 @@
                             </button>
                         </div>
                     </div>
-                    <table ng-table="vm.tableParams" class="table table-hover table-striped">
+                    <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
                         <tr ng-repeat="row in $data">
-                            <td title="'#'" td-mouseover-toggle="" style="width: 100px">
+                            <td data-title="'#'" td-mouseover-toggle="" style="width: 100px">
                                 <div>
                                     <a href="#" ui-sref="bmms.base.line_edit({uid:row.uid})"><i
                                             class="fa fa-edit  fa-fw fa-lg"></i> </a>
                                     <a><i class="fa fa-trash fa-fw fa-lg"></i> </a>
                                 </div>
                             </td>
-                            <td title="'uid'" filter="{uid: 'text'}" sortable="'uid'">
+                            <td data-title="'uid'" filter="{uid: 'text'}" sortable="'uid'">
                                 {{row.uid}}
                             </td>
-                            <td title="'名称'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
-                            <td title="'创建时间'" filter="{createtime: 'text'}" sortable="'createtime'">
+                            <td data-title="'名称'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
+                            <td data-title="'创建时间'" sortable="'createtime'">
                                 {{row.createtime}}
                             </td>
 

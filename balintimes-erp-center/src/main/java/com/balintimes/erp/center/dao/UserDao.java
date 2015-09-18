@@ -22,6 +22,8 @@ public interface UserDao {
     void deleteUserPost(String useruid);
     
     boolean ExistsEmployeeName(String employeename);
+    
+    User ExistsUserUid(String useruid);
 
     void updateUser(User user);
 

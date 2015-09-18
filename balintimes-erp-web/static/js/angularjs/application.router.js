@@ -12,9 +12,13 @@ angular.module('app')
                 if (angular.isDefined(router.abstract)) {
                     abstract = router.abstract;
                 }
+                var url = router.url;
+                if (angular.isArray(router.params)) {
+                    url +=  "/:" + router.params.join("/:");
+                }
                 var state = {
                     abstract: abstract,
-                    url: router.url,
+                    url: url,
                     templateUrl: "/pages/" + router.filepath + ".view.html",
                     controller: router.controllername
                 };
@@ -61,6 +65,6 @@ angular.module('app')
 
 
             recursionRouter(BmmsRouter);
-            //recursionRouter(CrmRouter);
+            recursionRouter(CrmRouter);
         }
     ]);

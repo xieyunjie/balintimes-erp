@@ -4,15 +4,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.balintimes.erp.center.model.User;
-
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.stereotype.Service;
 
-import com.balintimes.erp.center.service.UserService;
-import com.balintimes.erp.center.tuples.TuplePage;
 import com.balintimes.erp.center.annotation.CustomerTransactional;
 import com.balintimes.erp.center.dao.UserDao;
+import com.balintimes.erp.center.model.User;
+import com.balintimes.erp.center.service.UserService;
+import com.balintimes.erp.center.tuples.TuplePage;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -175,5 +174,11 @@ public class UserServiceImpl implements UserService {
 	public void UpdateHeadByUser(String uid, String url) {
 		// TODO Auto-generated method stub
 		this.userDao.UpdateHeadByUser(uid, url);
+	}
+
+	
+	public User ExistsUserUid(String useruid) {
+		// TODO Auto-generated method stub
+		return this.userDao.ExistsUserUid(useruid);
 	}
 }

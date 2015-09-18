@@ -51,4 +51,6 @@ public interface UserService {
     List<User> GetUserByEmpName(String empName);
     
 	void UpdateHeadByUser(String uid, String url);
+	
+	User ExistsUserUid(String useruid);
 }

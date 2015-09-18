@@ -6,13 +6,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.balintimes.erp.center.mappers.UserMapper;
-import com.balintimes.erp.center.model.User;
-
 import org.springframework.stereotype.Repository;
 
-import com.balintimes.erp.center.tuples.TuplePage;
 import com.balintimes.erp.center.dao.UserDao;
+import com.balintimes.erp.center.mappers.UserMapper;
+import com.balintimes.erp.center.model.User;
+import com.balintimes.erp.center.tuples.TuplePage;
 
 @Repository("userdao")
 public class UserDaoImpl implements UserDao {
@@ -231,6 +230,12 @@ public class UserDaoImpl implements UserDao {
 		map.put("uid", uid);
 
 		this.userMapper.UpdateHeadByUser(map);
+	}
+	
+	public User ExistsUserUid(String useruid) {
+		User user = userMapper.CheckUserUid(useruid);
+
+		return user;
 	}
 
 }

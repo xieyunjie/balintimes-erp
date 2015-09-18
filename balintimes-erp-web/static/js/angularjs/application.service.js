@@ -17,7 +17,7 @@ angular.module('app')
         };
         return responseInterceptor;
     }])
-    .factory("AjaxRequest", ["$http", "AlertMsg", function ($http, AlertMsg) {
+    .factory("AjaxRequest", ["$http", "AlertMsg", "AppUtil", function ($http, AlertMsg, AppUtil) {
 
         return {
             post: function (url, params, alertmsg) {
@@ -53,6 +53,14 @@ angular.module('app')
                 });
             },
             get: function (url, params) {
+                var strParams = AppUtil.toQueryString(params);
+                url += "?" + strParams;
+                console.log("get:" + url);
+                return $http.get(url).then(function (response) {
+                    return response.data;
+                });
+            },
+            restGet: function (url, params) {
                 var strParams = "";
                 if (params) {
                     var values = [];
@@ -107,10 +115,12 @@ angular.module('app')
             initNgTableParams: function (getDataService) {
                 return new NgTableParams({
                     page: 1,
-                    count: 20
+                    count: 20,
+                    filter: {}
                 }, {
                     counts: [],
-                    filterDelay: 0,
+                    // 只有当1.5s内无变化时才会过滤
+                    filterDelay: 1500,
                     getData: function (params) {
 
                         var exparams = {};
@@ -118,9 +128,16 @@ angular.module('app')
                         if (params.parameters().extParams) exparams = angular.copy(params.parameters().extParams);
                         exparams.page = params.page();
                         exparams.pagesize = params.count();
-                        exparams.sort = params.sorting();
-                        exparams.filter = params.filter();
-
+                        // 此处应该要优化一下，媒体sorting和filter为空的Object，就可以不理了。
+                        var sort = params.sorting();
+                        for (var key in sort) {
+                            exparams.orderby = key;
+                            exparams.desc = sort[key] == "desc";
+                        }
+                        var filter = params.filter();
+                        for (var key in filter) {
+                            exparams[key] = filter[key];
+                        }
                         return getDataService(exparams, params);
                     }
                 });
@@ -285,4 +302,33 @@ angular.module('app')
             }
         }
 
-    }]);
+    }])
+    .factory("AppUtil", function () {
+        function toQueryPair(key, value) {
+            if (typeof value == 'undefined') {
+                return key;
+            }
+            return key + '=' + encodeURIComponent(value === null ? '' : String(value));
+        }
+
+        return {
+            toQueryString: function toQueryString(obj) {
+                var ret = [];
+                for (var key in obj) {
+                    key = encodeURIComponent(key);
+                    var values = obj[key];
+                    if (values && values.constructor == Array) {
+                        var queryValues = [];
+                        for (var i = 0, len = values.length, value; i < len; i++) {
+                            value = values[i];
+                            queryValues.push(toQueryPair(key, value));
+                        }
+                        ret = ret.concat(queryValues);
+                    } else {
+                        ret.push(toQueryPair(key, values));
+                    }
+                }
+                return ret.join('&');
+            }
+        }
+    });

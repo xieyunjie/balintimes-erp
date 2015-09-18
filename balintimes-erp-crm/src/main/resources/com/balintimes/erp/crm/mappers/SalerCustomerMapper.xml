@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.SalerCustomerMapper">
+	<resultMap type="SalerCustomer" id="salerCustomerMap">
+		<id property="uid" column="uid" />
+		<result property="name" column="name" />
+		<result property="businessType" column="businesstype" />
+		<result property="businessTypeName" column="businesstypename" />
+		<result property="userUid" column="useruid" />
+		<result property="customerCategory" column="customercategory" />
+		<result property="customerCategoryName" column="customercategoryname" />
+		<result property="proxyCompany" column="proxycompany" />
+		<result property="areaUid" column="areauid" />
+		<result property="areaName" column="areaname" />
+		<result property="areaCode" column="areacode" />
+		<result property="phone" column="phone" />
+		<result property="companyAddress" column="companyAddress" />
+		<result property="postCode" column="postcode" />
+		<result property="parnetUid" column="parentuid" />
+		<result property="forbidden" column="forbidden" />
+		<result property="isDeleted" column="isdeleted" />
+		<result property="createBy" column="createby" />
+		<result property="createTime" column="createtime" />
+		<result property="editBy" column="editby" />
+		<result property="editTime" column="edittime" />
+		<result property="remarks" column="remarks" />
+	</resultMap>
+
+	<select id="getSalerCustomer" parameterType="int" resultType="SalerCustomer"
+		statementType="PREPARED">
+		select a.*,b.name as areaname from salercustomer as a
+		join areainfo as b on a.areauid=b.uid where a.uid=#{uid}
+	</select>
+
+	<insert id="createSalerCustomer" statementType="PREPARED"
+		parameterType="SalerCustomer">
+		insert into salercustomer(
+		name,businesstype,useruid,brand,customercategory,proxycompany,
+		areauid,areacode,phone,companyaddress,postcode,parentuid,forbidden,
+		isdeleted,createby,createtime,businesstypename,customercategoryname
+		)values(
+		#{name},#{businessType},#{userUid},#{brand},#{customerCategory},#{proxyCompany},
+		#{areaUid},'#{areaCode},#{phone},#{companyAddress},#{postCode},#{parentUid},#{forbidden},
+		#{isDeleted},#{createBy},now(),#{businessTypeName},#{customerCategoryName}
+		)
+	</insert>
+
+	<update id="updateSalerCustomer" statementType="PREPARED"
+		parameterType="SalerCustomer">
+		update
+		salercustomer
+		set
+		name=#{name},
+		businesstype=#{businessType},
+		useruid=#{userUid},
+		brand=#{brand},
+		customercategory=#{customerCategory},
+		proxycompany=#{proxyCompany},
+		areauid=#{areaUid},
+		areacode=#{areaCode},
+		phone=#{phone},
+		companyaddress=#{companyAddress},
+		postcode=#{postCode},
+		parentuid=#{parentUid},
+		forbidden=#{forbidden},
+		editby=#{editBy},
+		edittime=now(),
+		businesstypename=#{businessTypeName},
+		customercategoryname=#{customerCategoryName}
+		where
+		uid=#{uid}
+	</update>
+
+	<update id="updateSalerCustomerByForbidden" statementType="PREPARED"
+		parameterType="int">
+		update
+		salercustomer
+		set
+		forbidden=1
+		where
+		uid=#{uid}
+	</update>
+
+	<update id="updateSalerCustomerByDel" statementType="PREPARED"
+		parameterType="int">
+		update
+		salercustomer
+		set
+		isdeleted=1
+		where
+		uid=#{uid}
+	</update>
+
+	<delete id="deleteSalerCustomer" statementType="PREPARED"
+		parameterType="int">
+		delete from salercustomer where uid=#{uid}
+	</delete>
+
+</mapper>

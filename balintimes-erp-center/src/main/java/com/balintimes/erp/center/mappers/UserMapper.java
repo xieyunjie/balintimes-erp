@@ -17,6 +17,8 @@ public interface UserMapper {
 	void deleteUserPost(String useruid);
 
 	List<String> CheckEmployeeName(String employeename);
+	
+	User CheckUserUid(String useruid);
 
 	void updateUser(User user);
 

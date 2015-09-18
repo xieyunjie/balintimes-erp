@@ -87,9 +87,10 @@ public class ResourceDaoImpl implements ResourceDao {
 
 	public List<Resource> GetUserDisableMenus(String appUid, String uids) {
 		// TODO Auto-generated method stub
+		String[] ary = uids.split(",");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("appUid", appUid);
-		map.put("uids", uids);
+		map.put("uids", ary);
 		return this.resourceMapper.GetUserDisableMenus(map);
 	}
 

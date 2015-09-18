@@ -13,8 +13,14 @@ angular.module('app')
                 debug: false,
                 events: true,
                 modules: [{
-                    name: 'BMM_Line_Service',
+                    name: 'BMMS_Line_Service',
                     files:["/pages/bmms/base/line/line.client.service.js"]
+                },{
+                    name: 'CRM_Customer_Service',
+                    files:["/pages/crm/saler/customer/customer.client.service.js"]
+                },{
+                    name: 'CRM_BaseData_Service',
+                    files:["/pages/crm/base/services/customer.basedata.service.js"]
                 }]
             });
         }]);
