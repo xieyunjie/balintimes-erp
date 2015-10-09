@@ -13,7 +13,17 @@ public class Employee {
 	private String sex;
 	private String avatarurl;
 	private int rootdeep = 0;
+	
+	
+	public Object getPosts() {
+		return posts;
+	}
 
+	public void setPosts(Object posts) {
+		this.posts = posts;
+	}
+
+	private Object posts;
 	public String getUid() {
 		return uid;
 	}

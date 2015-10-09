@@ -6,13 +6,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.balintimes.erp.center.mappers.PostMapper;
-import com.balintimes.erp.center.model.Post;
-
 import org.springframework.stereotype.Repository;
 
-import com.balintimes.erp.center.tuples.TuplePage;
 import com.balintimes.erp.center.dao.PostDao;
+import com.balintimes.erp.center.mappers.PostMapper;
+import com.balintimes.erp.center.model.Post;
+import com.balintimes.erp.center.tuples.TuplePage;
 
 @Repository("PostDao")
 public class PostDaoImpl implements PostDao {
@@ -96,6 +95,12 @@ public class PostDaoImpl implements PostDao {
 		
 		List<Post> posts=this.postMapper.GetPostParent(params);
 		return posts;
+	}
+
+	
+	public List<Post> GetOneUserPosts(String useruid) {
+		List<Post> postList=this.postMapper.GetOneUserPosts(useruid);
+		return postList;
 	}
 
 }

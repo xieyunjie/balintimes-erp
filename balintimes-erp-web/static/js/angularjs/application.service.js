@@ -111,24 +111,19 @@ angular.module('app')
         }
     }])
     .factory("NgTableUtil", ["NgTableParams", function (NgTableParams) {
+
         return {
             initNgTableParams: function (getDataService) {
-                return new NgTableParams({
-                    page: 1,
-                    count: 20,
-                    filter: {}
-                }, {
-                    counts: [],
-                    // 只有当1.5s内无变化时才会过滤
-                    filterDelay: 1500,
-                    getData: function (params) {
+
+                var funGetData;
+                if (getDataService) {
+                    funGetData = function (params) {
 
                         var exparams = {};
 
                         if (params.parameters().extParams) exparams = angular.copy(params.parameters().extParams);
                         exparams.page = params.page();
                         exparams.pagesize = params.count();
-                        // 此处应该要优化一下，媒体sorting和filter为空的Object，就可以不理了。
                         var sort = params.sorting();
                         for (var key in sort) {
                             exparams.orderby = key;
@@ -139,9 +134,48 @@ angular.module('app')
                             exparams[key] = filter[key];
                         }
                         return getDataService(exparams, params);
+                    };
+                }
+                else {
+                    funGetData = function () {
+                        return false;
+                    }
+                }
+
+
+                return new NgTableParams({
+                    page: 1,
+                    count: 20,
+                    filter: {}
+                }, {
+                    counts: [],
+                    // 只有当1.5s内无变化时才会过滤
+                    filterDelay: 1500,
+                    getData: funGetData
+                });
+            },
+
+            setNgTableFn: function (ngtable, fn) {
+                ngtable.settings({
+                    getData: function (params) {
+
+                        var exparams = {};
+
+                        if (params.parameters().extParams) exparams = angular.copy(params.parameters().extParams);
+                        exparams.page = params.page();
+                        exparams.pagesize = params.count();
+                        var sort = params.sorting();
+                        for (var key in sort) {
+                            exparams.orderby = key;
+                            exparams.desc = sort[key] == "desc";
+                        }
+                        var filter = params.filter();
+                        for (var key in filter) {
+                            exparams[key] = filter[key];
+                        }
+                        return fn(exparams, params);
                     }
                 });
-
             },
             reloadNgTable: function (ngtable, extParams, page) {
 
@@ -267,14 +301,23 @@ angular.module('app')
     .factory("UserStgService", ["$localStorage", function ($localStorage) {
 
         return {
-            set: function (data) {
+            setWebuser: function (data) {
+                $localStorage.webUser = data;
+
+            },
+            getWebuser: function () {
+                return $localStorage.webUser;
+
+            },
+            setApps: function (data) {
                 $localStorage.apps = data;
             },
-            get: function () {
+            getApps: function () {
                 return $localStorage.apps;
             },
             remove: function () {
                 delete $localStorage.apps;
+                delete $localStorage.webUser;
             },
             checkMenuAuth: function (state) {
                 var root = state.substr(0, state.indexOf("."));

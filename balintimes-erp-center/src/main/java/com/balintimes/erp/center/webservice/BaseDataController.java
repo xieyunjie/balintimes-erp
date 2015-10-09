@@ -9,6 +9,7 @@ import com.balintimes.erp.center.model.base.BusinessType;
 import com.balintimes.erp.center.model.base.CustomerCategory;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -37,6 +38,13 @@ public class BaseDataController {
 		return ResponseMessage.successful(list);
 	}
 
+	@RequestMapping("businesstype/{uid}")
+	@ResponseBody
+	public AjaxResponse getBusinessType(@PathVariable String uid) {
+		BusinessType bt = this.businessTypeService.GetBusinessType(uid);
+		return ResponseMessage.successful(bt);
+	}
+
 	@RequestMapping("customercategorylist")
 	@ResponseBody
 	public AjaxResponse getCustomerCategoryList() {
@@ -45,10 +53,18 @@ public class BaseDataController {
 		return ResponseMessage.successful(list);
 	}
 
-	@RequestMapping("getsubordinates")
+	@RequestMapping("customercategory/{uid}")
 	@ResponseBody
-	public AjaxResponse getSubordinates(String userName) {
-		List<Employee> list = this.authorityService.GetSubordinates(userName);
+	public AjaxResponse getCustomerCategory(@PathVariable String uid) {
+		CustomerCategory cc = this.customerCategoryService
+				.GetCustomerCategory(uid);
+		return ResponseMessage.successful(cc);
+	}
+
+	@RequestMapping("getsubordinates/{username}")
+	@ResponseBody
+	public AjaxResponse getSubordinates(@PathVariable String username) {
+		List<Employee> list = this.authorityService.GetSubordinates(username);
 		return ResponseMessage.successful(list);
 	}
 }

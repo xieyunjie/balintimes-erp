@@ -26,11 +26,11 @@
     <import resource="classpath:applicationContext-beans.xml"/>
     <import resource="classpath:applicationContext-db.xml"/>
     <import resource="classpath:applicationContext-tx.xml"/>
+    <import resource="classpath:activiti.cfg.xml"/>
     <!--  -->
 
     <context:annotation-config/>
-    <context:component-scan
-            base-package="com.balintimes.erp.crm.dao.batisimpl,com.balintimes.erp.crm.dao,com.balintimes.erp.crm.service.impl,com.balintimes.erp.crm.service"/>
+    <context:component-scan base-package="com.balintimes.erp.crm.dao.batisimpl,com.balintimes.erp.crm.dao,com.balintimes.erp.crm.service.impl,com.balintimes.erp.crm.service"/>
     <aop:aspectj-autoproxy/>
     <!-- <context:annotation-config/> <context:component-scan base-package="util"/>
         <aop:aspectj-autoproxy/> -->

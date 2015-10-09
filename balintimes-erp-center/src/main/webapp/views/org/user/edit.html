@@ -1,3 +1,27 @@
+<script type="text/ng-template" id='postGroupTpl'>
+	<div class="panel-body" >
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-ol"></i> 设置职位组
+			</div>
+		</div>
+		
+		<ul class="tree">
+			<nodepost-tree children="postTreeGroupData" text="name" expanded="true" checkchildren="false">
+			</nodepost-tree>
+		</ul>
+		<div class="col-sm-4 col-sm-offset-4">
+			<button class="btn btn-primary" ng-click="saveChoose()">
+				<i class="fa fa-check"></i>保存
+			</button>
+			<button class="btn btn-warning" ng-click="closeWin()">
+				<i class="fa fa-times"></i>关闭
+			</button>
+			
+		</div>
+	</div>
+</script>
+
 <ol class="breadcrumb">
 	<li><a href="#">首页</a></li>
 	<li><a href="#">员工设置</a></li>
@@ -18,9 +42,13 @@
 				</span>
 			</div>
 			<div class="dropdown-menu combo-dropdown-menu collapse" ng-class="{in: userDropDown}" ng-blur="userDropDown = false">
-				<treecontrol class="tree-light treecontrolfont" tree-model="treeData" expanded-nodes="expandedNodes" on-selection="SelectTreeuser(node)">
-				{{node.employeename}} </treecontrol>
+				<treecontrol class="tree-light treecontrolfont" tree-model="treeData" expanded-nodes="expandedNodes" on-selection="SelectTreeuser(node)">				
+					<span ng-if="node.users.length>1" ng-repeat="x in node.users">{{x.employeename+","}} </span>				
+					<span ng-if="node.users.length==1">{{node.users[0].employeename}} </span>				
+					<span ng-if="node.users.length<=0">{{node.name}} </span>				
+				</treecontrol>
 			</div>
+			
 		</div>
 	</div>
 
@@ -43,19 +71,15 @@
 		<div class="col-sm-4">
 			<div class="input-group">
 				<input type="text" class="form-control" name='parentname3' ng-model="user.postname" readonly> <span class="input-group-btn">
-<!-- 					<button class="btn btn-default" type="button" ng-click="postDropDown=!postDropDown"> -->
-<!-- 						<i class="fa fa-angle-double-right"></i> 选择单个职位 -->
+<!-- 					<button class="btn btn-default" type="button" ng-click="go(user.postuid,user.postname)"> -->
+<!-- 						<i class="fa fa-angle-double-right"></i> 设置职位组 -->
 <!-- 					</button> -->
-					<button class="btn btn-default" type="button" ng-click="go(user.postuid,user.postname)">
-						<i class="fa fa-angle-double-right"></i> 设置职位组
+					<button class="btn btn-default" type="button" ng-click="SelectTreePostModal()">
+						<i class="fa fa-angle-double-right"></i> 设置职位
 					</button>
+
 				</span>
-				
 			</div>
-<!-- 			<div class="dropdown-menu combo-dropdown-menu collapse" ng-class="{in: postDropDown}" ng-blur="postDropDown = false"> -->
-<!-- 				<treecontrol class="tree-light treecontrolfont" tree-com.balintimes.erp.center.model="post" expanded-nodes="expandedNodes" on-selection="SelectTreePost(node)"> {{node.name}} </treecontrol> -->
-<!-- 			</div> -->
-			
 		</div>
 	</div>
 
@@ -190,7 +214,7 @@
 		<label for="address" class="col-sm-1 control-label">住址:</label>
 
 		<div class="col-sm-4">
-			<input type="text" class="form-control" name='address' ng-model="user.address"  ng-maxlength="100" ng-minlength="10" />
+			<input type="text" class="form-control" name='address' ng-model="user.address" ng-maxlength="100" ng-minlength="10" />
 
 			<div ng-if="editForm.status.$dirty">
 				<div ng-messages="editForm.status.$error" class="errormsg" role="alert">
@@ -204,7 +228,7 @@
 		<label for="mobile" class="col-sm-1 control-label">手机:</label>
 
 		<div class="col-sm-4">
-			<input type="text" class="form-control" name='mobile' ng-model="user.mobile"  ng-maxlength="11" ng-minlength="11" />
+			<input type="text" class="form-control" name='mobile' ng-model="user.mobile" ng-maxlength="11" ng-minlength="11" />
 
 			<div ng-if="editForm.status.$dirty">
 				<div ng-messages="editForm.status.$error" class="errormsg" role="alert">
@@ -218,7 +242,7 @@
 		<label for="telephone" class="col-sm-1 control-label">电话:</label>
 
 		<div class="col-sm-4">
-			<input type="text" class="form-control" name='telephone' ng-model="user.telephone"  ng-maxlength="20" ng-minlength="7" />
+			<input type="text" class="form-control" name='telephone' ng-model="user.telephone" ng-maxlength="20" ng-minlength="7" />
 
 			<div ng-if="editForm.status.$dirty">
 				<div ng-messages="editForm.status.$error" class="errormsg" role="alert">

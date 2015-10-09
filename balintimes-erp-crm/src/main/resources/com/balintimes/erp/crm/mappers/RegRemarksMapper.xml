@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.RegRemarksMapper">
+	<resultMap type="RegRemarks" id="regRemarksMap">
+		<id property="uid" column="uid" />
+		<result property="customerUid" column="customeruid" />
+		<result property="customerName" column="customername" />
+		<result property="userUid" column="useruid" />
+		<result property="contract" column="contract" />
+		<result property="mannerUid" column="manneruid" />
+		<result property="mannerName" column="mannername" />
+		<result property="phone" column="phone" />
+		<result property="remarks" column="remarks" />
+		<result property="followUpDate" column="followUpdate" />
+		<result property="summary" column="summary" />
+		<result property="persons" column="persons" />
+		<result property="isDeleted" column="isdeleted" />
+		<result property="createBy" column="createby" />
+		<result property="createTime" column="createtime" />
+		<result property="editBy" column="editby" />
+		<result property="editTime" column="edittime" />
+	</resultMap>
+
+	<select id="getRegRemarks" statementType="PREPARED" resultType="RegRemarks"
+		parameterType="int">
+		select a.*,b.name as mannername,c.name as customername
+		from regremarks
+		as a join followmanner as b on a.manneruid=b.id join
+		salercustomer as
+		c on a.customeruid=c.uid where a.uid =#{uid} and
+		c.isdeleted=0 and
+		c.forbidden=0;
+	</select>
+
+	<insert id="createRegRemarks" statementType="PREPARED"
+		parameterType="RegRemarks">
+		insert into regremarks(
+		customeruid,useruid,contract,manneruid,phone,remarks,followupdate,summary,persons,isdeleted,createtime,createby
+		)values(
+		#{customerUid},#{userUid},#{contract},#{mannerUid},#{phone},#{remarks},#{followUpDate},#{summary},#{persons},#{isDeleted},now(),#{createBy}
+		)
+	</insert>
+
+	<update id="updateRegRemarksByDel" statementType="PREPARED"
+		parameterType="int">
+		update regremarks set isdeleted=1 where uid=#{uid}
+	</update>
+
+	<update id="updateRegRemarks" statementType="PREPARED"
+		parameterType="RegRemarks">
+		update
+		regremarks
+		set
+		contract=#{contract},
+		manneruid=#{mannerUid},
+		phone=#{phone},
+		remarks=#{remarks},
+		followupdate=#{followUpDate},
+		summary=#{summary},
+		persons=#{persons},
+		edittime=now(),
+		editby=#{editBy}
+		where
+		uid=#{uid}
+	</update>
+
+
+
+</mapper>

@@ -31,6 +31,7 @@
     "angular-translate": "~2.7.2",
     "angular-translate-loader-static-files": "~2.7.2",
     "angular-translate-storage-local": "~2.7.2",
+    "angular-ui-grid": "~3.0.6",
     "angular-ui-router": "~0.2.15",
     "angularjs": "~1.4.5",
     "bootstrap": "~3.3.5",
@@ -43,6 +44,7 @@
     "ngstorage": "~0.3.9",
     "oclazyload": "~1.0.4",
     "screenfull": "~2.0.0",
-    "simple-line-icons": "~2.0.0"
+    "simple-line-icons": "~2.0.0",
+    "ui-select": "angular-ui-select#~0.12.1"
   }
 }

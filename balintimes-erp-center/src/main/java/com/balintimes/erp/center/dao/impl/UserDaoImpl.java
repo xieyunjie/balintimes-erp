@@ -48,8 +48,8 @@ public class UserDaoImpl implements UserDao {
 
 	public void updateUser(User user) {
 		this.userMapper.updateUser(user);
-		this.userMapper.deleteUserPost(user.getUid());
-		this.userMapper.createUserPost(user);
+//		this.userMapper.deleteUserPost(user.getUid());
+//		this.userMapper.createUserPost(user);
 	}
 
 	public void deleteUser(String uid, String employeename) {
@@ -237,5 +237,10 @@ public class UserDaoImpl implements UserDao {
 
 		return user;
 	}
+	
+	public List<User> getUserParent(String parentuid) {
+		List<User> userParent=this.userMapper.getUserParent(parentuid);
+		return userParent;
+	}		
 
 }

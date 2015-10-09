@@ -27,4 +27,6 @@ public interface PostMapper
 	List<Post> GetPostByEmployee(String useruid);
 	
 	List<Post> GetPostParent(Map<String, Object> params);
+	
+	List<Post> GetOneUserPosts(String useruid);
 }

@@ -29,6 +29,7 @@ public class EmpCustomer implements Serializable {
 	private String userUid;
 	private String userName;
 	private boolean isReg;
+	private Integer followUid;
 
 	public int getId() {
 		return id;
@@ -212,6 +213,14 @@ public class EmpCustomer implements Serializable {
 
 	public void setReg(boolean isReg) {
 		this.isReg = isReg;
+	}
+
+	public Integer getFollowUid() {
+		return followUid;
+	}
+
+	public void setFollowUid(Integer followUid) {
+		this.followUid = followUid;
 	}
 
 }

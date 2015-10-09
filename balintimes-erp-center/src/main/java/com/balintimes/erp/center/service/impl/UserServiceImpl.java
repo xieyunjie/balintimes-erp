@@ -64,17 +64,17 @@ public class UserServiceImpl implements UserService {
 
 	@CustomerTransactional
 	public void updateUser(User user) {
-		String postUidAry[] = user.getPostuid().split(",");
-		String postNameAry[] = user.getPostname().split(",");
-
-		for (int k = 0; k < postUidAry.length; k++) {
-			User itemUser = new User();
-			itemUser = user;
-			itemUser.setPostuid(postUidAry[k]);
-			itemUser.setPostname(postNameAry[k]);
-			this.userDao.updateUser(itemUser);
-		}
-		// this.userDao.updateUser(user);
+//		String postUidAry[] = user.getPostuid().split(",");
+//		String postNameAry[] = user.getPostname().split(",");
+//
+//		for (int k = 0; k < postUidAry.length; k++) {
+//			User itemUser = new User();
+//			itemUser = user;
+//			itemUser.setPostuid(postUidAry[k]);
+//			itemUser.setPostname(postNameAry[k]);
+//			this.userDao.updateUser(itemUser);
+//		}
+		this.userDao.updateUser(user);
 	}
 
 	@CustomerTransactional
@@ -180,5 +180,20 @@ public class UserServiceImpl implements UserService {
 	public User ExistsUserUid(String useruid) {
 		// TODO Auto-generated method stub
 		return this.userDao.ExistsUserUid(useruid);
+	}
+	
+	@CustomerTransactional
+	public void CreateUserPost(User user) {		
+		this.userDao.createUserPost(user);
+	}
+	
+	@CustomerTransactional
+	public void DeleteUserPost(String useruid) {
+		this.userDao.deleteUserPost(useruid);		
+	}
+
+	
+	public List<User> getUserParent(String parentuid) {		
+		return this.userDao.getUserParent(parentuid);
 	}
 }

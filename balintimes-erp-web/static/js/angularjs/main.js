@@ -82,15 +82,17 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
         $scope.initAppCtrl = function () {
             var webuserPromise = AjaxRequest.get("/home/inituser"),
                 userappsPromise = AjaxRequest.get("/home/inituserapps"),
-                sysSettingPromise = AjaxRequest.get("/home/getsettings")
+                sysSettingPromise = AjaxRequest.get("/home/getsettings");
             $q.all({
                 user: webuserPromise,
                 apps: userappsPromise,
                 sys: sysSettingPromise
             }).then(function (results) {
-                app.webUser = results.user;
 
-                UserStgService.set(results.apps);
+                app.webUser = results.user;
+                UserStgService.setWebuser(results.user);
+
+                UserStgService.setApps(results.apps);
 
                 var apps = results.apps;
 
@@ -115,9 +117,9 @@ angular.module('app').controller('AppController', ['$scope', '$q', '$localStorag
         };
 
         $scope.switchApp = function (uid, toIndex) {
-            if(angular.isUndefined(toIndex)) toIndex = true;
+            if (angular.isUndefined(toIndex)) toIndex = true;
 
-            var apps = UserStgService.get();
+            var apps = UserStgService.getApps();
             var currentApp = {};
 
             angular.forEach(apps, function (a) {

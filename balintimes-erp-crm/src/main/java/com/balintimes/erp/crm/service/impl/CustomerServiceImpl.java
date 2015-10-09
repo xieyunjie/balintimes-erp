@@ -7,8 +7,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.balintimes.erp.crm.dao.CustomerDao;
+import com.balintimes.erp.crm.dao.CustomerFollowUpDao;
 import com.balintimes.erp.crm.dao.SalerCustomerDao;
 import com.balintimes.erp.crm.model.Customer;
+import com.balintimes.erp.crm.model.CustomerFollowUp;
 import com.balintimes.erp.crm.service.CustomerService;
 import com.balintimes.erp.util.tuples.TuplePage;
 
@@ -19,6 +21,8 @@ public class CustomerServiceImpl implements CustomerService {
 	private CustomerDao customerDao;
 	@Resource
 	private SalerCustomerDao salerCustomerDao;
+	@Resource
+	private CustomerFollowUpDao customerFollowUpDao;
 
 	public TuplePage<List<Customer>, Integer> getCustomerList(String name,
 			int currPage, int pageSize) {
@@ -34,5 +38,24 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 		return this.customerDao.getCustomer(uid);
 	}
-	
+
+	public CustomerFollowUp getCustomerFollowUp(int uid) {
+		return this.customerFollowUpDao.getCustomerFollowUp(uid);
+	}
+
+	public void updateCustomerFollowUp(CustomerFollowUp customerFollowUp) {
+		// TODO Auto-generated method stub
+		this.customerFollowUpDao.updateCustomerFollowUp(customerFollowUp);
+	}
+
+	public void createCustomerFollowUp(CustomerFollowUp customerFollowUp) {
+		// TODO Auto-generated method stub
+		this.customerFollowUpDao.createCustomerFollowUp(customerFollowUp);
+	}
+
+	public void updateCustomerFollowUpByDel(int uid) {
+		// TODO Auto-generated method stub
+		this.customerFollowUpDao.updateCustomerFollowUpByDel(uid);
+	}
+
 }

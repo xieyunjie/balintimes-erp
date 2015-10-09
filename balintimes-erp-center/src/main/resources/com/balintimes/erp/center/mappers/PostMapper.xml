@@ -13,6 +13,7 @@
 		<result property="editby" column="editby" />
 		<result property="edittime" column="edittime" />
 		<result property="postname" column="name" />
+		<result property="useruid" column="useruid" />
 	</resultMap>
 
 	<sql id="postColumns">
@@ -93,4 +94,12 @@
 	<delete id="DeleteUserPost" parameterType="String">
     	delete from userpost where postuid = #{uid} or FIND_IN_SET(postuid, fun_GetPostAllChildren(#{uid}))>0
 	</delete>
+	
+	<select id="GetOneUserPosts" parameterType="string" resultType="Post">
+       SELECT
+		a.*
+		FROM post a
+		INNER JOIN userpost b on a.uid=b.postuid
+		where b.useruid=#{useruid}
+	</select>
 </mapper>

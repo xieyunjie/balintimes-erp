@@ -38,6 +38,7 @@ public class User implements Serializable,Comparable
 	private String userpostuid;
 	private String organizationuid;
 	private String organizationname;
+	private boolean stillpass;
 	
 	public User()
 	{
@@ -326,7 +327,12 @@ public class User implements Serializable,Comparable
 		return organizationname;
 	}
 	
-	
+	public void setStillpass(boolean stillPass) {
+		this.stillpass = stillPass;
+	}
+	public boolean getStillpass() {
+		return this.stillpass;
+	}
 	
 	@Override
 	public String toString() {

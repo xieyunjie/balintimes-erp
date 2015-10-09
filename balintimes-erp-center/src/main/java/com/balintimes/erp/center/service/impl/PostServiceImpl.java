@@ -4,14 +4,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.balintimes.erp.center.model.Post;
-
 import org.springframework.stereotype.Service;
 
-import com.balintimes.erp.center.service.PostService;
-import com.balintimes.erp.center.tuples.TuplePage;
 import com.balintimes.erp.center.annotation.CustomerTransactional;
 import com.balintimes.erp.center.dao.PostDao;
+import com.balintimes.erp.center.model.Post;
+import com.balintimes.erp.center.service.PostService;
+import com.balintimes.erp.center.tuples.TuplePage;
 
 @Service("postService")
 public class PostServiceImpl implements PostService {
@@ -64,6 +63,13 @@ public class PostServiceImpl implements PostService {
 	public List<Post> GetPostParent(String postuid, String organizationuid) {
 		// TODO Auto-generated method stub
 		return this.postDao.GetPostParent(postuid, organizationuid);
+	}
+
+
+	
+	public List<Post> GetOneUserPosts(String useruid) {
+		// TODO Auto-generated method stub
+		return this.postDao.GetOneUserPosts(useruid);
 	}
 	
 	

@@ -15,7 +15,7 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 
 	var editState = {
 		name : 'org/user/edit',
-		url : '/org/user/edit/:uid/:parentuid/:parentname/:json',
+		url : '/org/user/edit/:uid/:parentuid/:parentname/:postuid',
 		templateUrl : balintimesConstant.rootpath + '/views/org/user/edit.html',
 		controller : 'userEditController',
 		resolve : {
@@ -29,64 +29,34 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 						}
 					}
 				} else {
-					return AjaxRequest.Get("/user/getoneuser/" + $stateParams.uid);
-				}
-
-			},
-			userParentData : function(AjaxRequest, $stateParams) {
-				if ($stateParams.uid == "0") {
-					return {
-						data : {
-							uid : 0,
-							parentuid : $stateParams.parentuid,
-							employeename : $stateParams.parentname
-						}
+					var params = {};
+					params = {
+						uid : $stateParams.uid,
+						postuid : $stateParams.postuid
 					}
-				} else {
-					return AjaxRequest.Get("/user/getoneuserparent/" + $stateParams.parentuid);
+					return AjaxRequest.Post("/user/getoneuser/", params);
 				}
+			},
+			userParentData : function(AjaxRequest, $stateParams) {				
+				return AjaxRequest.Get("/user/getoneuserparent/" + $stateParams.parentuid);
 			}
 		}
 	};
 
 	var editByPostState = {
 		name : 'org/post/editbypost',
-		url : '/org/post/editbypost/:postuid/:postname/:uid/:parentuid/:parentname/:json',
+		url : '/org/post/editbypost/:uid/:parentuid',
 		templateUrl : balintimesConstant.rootpath + '/views/org/post/editbypost.html',
 		controller : 'PostEditGroupController',
 		resolve : {
-			postGroupData : function(AjaxRequest, $stateParams) {
 
-				var uid = "0";
-				var name = "";
-				if ($stateParams.uid != undefined && $stateParams.uid != "")
-					uid = $stateParams.uid;
-				if ($stateParams.name != undefined && $stateParams.name != "")
-					name = $stateParams.name;
-				return AjaxRequest.Post("/post/getpostgroup", {
-					postuid : uid,
-					postname : name
-				});
-			}
 		}
 	};
 
-	var uploadByUserState = {
-		name : 'org/user/uploadbyuser',
-		url : '/org/user/uploadbyuser',
-		templateUrl : balintimesConstant.rootpath + '/views/org/user/uploadbyuser.html',
-		controller : 'userUploadController',
-		resolve : {
-			userData : function(AjaxRequest, $stateParams) {
-
-			}
-		}
-	};
-
-	app.config([ '$stateProvider', '$urlRouterProvider','$httpProvider', function($stateProvider, $urlRouterProvider,$httpProvider) {
+	app.config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {
 		$httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
-	    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-		$stateProvider.state(mainState).state(editState).state(editByPostState).state(uploadByUserState);
+		$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+		$stateProvider.state(mainState).state(editState).state(editByPostState);
 	} ]);
 
 	app.factory("userTypeData", function(AjaxRequest) {
@@ -101,7 +71,28 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 		return AjaxRequest.Get("/organization/tree");
 	});
 
-	app.controller("userListController", function($scope, $state, $location, AjaxRequest, DlgMsg, AlertMsg, ngTreetableParams, userTypeData, postData, orgData) {
+	app.factory("postTreeServices", function(AjaxRequest) {
+		return {
+			getCheckedChildren : function(root, ary) {
+				for (var k = 0; k < root.children.length; k++) {
+					var c = root.children[k];
+					var d = {
+						uid : "",
+						name : ""
+					};
+					
+					if (c.checked) {
+						d.uid = c.uid;
+						d.name = c.name;
+						ary.push(d);
+					}
+					this.getCheckedChildren(c, ary);
+				}
+			}
+		}
+	});
+
+	app.controller("userListController", function($scope, $state, $location, AjaxRequest, DlgMsg, AlertMsg, ngTreetableParams, userTypeData, postData, orgData, $modal, NgUtil) {
 
 		var treeData = [];
 		$scope.search_username = "";
@@ -120,9 +111,6 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 			return AjaxRequest.Post("/user/querytree", $scope.searchParams).then(function(rs) {
 				treeData = rs.data;
 				$scope.expanded_params.refresh();
-				// if (treeData !=null && treeData.length > 0) {
-				// $scope.expanded_params.refresh();
-				// }
 			});
 		}
 
@@ -148,20 +136,68 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 
 			});
 		};
-		$scope.Deleteuser = function(uid) {
-			DlgMsg.confirm("系统提示", "注意！！是否确认删除此员工？此员工删除后，其下属员工也会一拼删除。").result.then(function(btn) {
-				if (btn == "ok") {
-					AjaxRequest.Post("/user/delete", {
-						UID : uid
-					}).then(function() {
-						$scope.inituserTree();
-					})
-				}
-			})
-		}
-		$scope.updateTreeData = function() {
+		$scope.Deleteuser = function(users) {
+			if (users.length > 1) {
+				delConfirm("请选择要删除的员工", users).result.then(function(result) {
+					for (var i = 0; i < result.length; i++) {
+						if (result[i].checked != undefined && result[i].checked != null && result[i].checked == true) {
+
+							AjaxRequest.Post("/user/delete", {
+								UID : result[i].uid
+							}).then(function() {
+								$scope.inituserTree();
+							})
+						}
+					}
+
+				})
+			} else {
+				DlgMsg.confirm("系统提示", "注意！！是否确认删除此员工？").result.then(function(btn) {
+					if (btn == "ok") {
+						AjaxRequest.Post("/user/delete", {
+							UID : uid
+						}).then(function() {
+							$scope.inituserTree();
+						})
+					}
+				})
+			}
 
 		}
+
+		var delConfirm = function(title, content, size) {
+			var s = '';
+			if (size)
+				s = size;
+			return $modal.open({
+				animation : true,
+				size : s,
+				templateUrl : "delUserTpl",
+				controller : function($scope, $modalInstance, viewContent) {
+					$scope.viewContent = viewContent;
+					$scope.btnClick = function(btn) {
+						if (btn == "ok") {
+							$modalInstance.close($scope.viewContent.content);
+						} else {
+							$modalInstance.close({});
+						}
+
+					};
+					$scope.cancel = function() {
+						$modalInstance.dismiss('cancel');
+					}
+				},
+				resolve : {
+					viewContent : function() {
+						return {
+							title : title,
+							content : content
+						};
+					}
+				}
+			});
+		}
+
 		$scope.expanded_params = new ngTreetableParams({
 			getNodes : function(parent) {
 				return parent ? parent.children : treeData;
@@ -181,35 +217,101 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 		};
 
 		$scope.SelectTreeOrg = function(node) {
-			$scope.searchParams.orgnizationuid = node.uid;
+			$scope.searchParams.organizationuid = node.uid;
 			$scope.searchParams.orgnizationname = node.name;
 			$scope.orgDropDown = false;
 		}
-		$scope.inituserTree();
 
-	}).controller("userEditController", function($scope, $state, $location, AjaxRequest, TreeSelectModal, DlgMsg, userData, userParentData, userTypeData, $stateParams) {
-		$scope.go = function(uid, name) {
-			var userModel = {
-				uid : $stateParams.uid,
-				parentuid : $stateParams.parentuid,
-				parentname : $stateParams.parentname,
-				postuid : "",
-				postname : "",
-				employeename : $scope.user.employeename
-			}
-			if (userData.data != null && userData.data != undefined) {
-				userModel = userData.data;
-			}
-			$state.go("org/post/editbypost", {
-				postuid : uid,
-				postname : name,
-				uid : $stateParams.uid,
-				parentuid : $stateParams.parentuid,
-				parentname : $stateParams.parentname,
-				json : JSON.stringify(userModel)
+		$scope.resetForm = function() {
+			$scope.searchParams = NgUtil.initPageParams();
+			// return AjaxRequest.Post("/user/querytree",
+			// $scope.searchParams).then(function(rs) {
+			// treeData = rs.data;
+			// $scope.expanded_params.refresh();
+			// });
+		};
+		
+
+		
+		//-----------------------------------------------------------			
+		// 弹出用户组树窗口
+		$scope.SelectUserGroupTreeModal = function(useruid) {		
+			var userGroupTreeData = [];
+			var params = {
+					name : "",
+					useruid : useruid
+				};
+				var url = "/usergroup/getusergrouproletype";
+				AjaxRequest.Post(url, params).then(function(rs) {
+					if (rs.success == 'true') {						
+						userGroupTreeData=rs.data;
+						userGroupFun(userGroupTreeData,useruid).result.then(function(ary) {							
+							var url = "/usergroup/saveusergroupdetail";
+							var params = {
+								useruid : useruid,
+								json : JSON.stringify(ary)
+							};
+
+							AjaxRequest.Post(url, params).then(function(rs) {
+								if (rs.success == 'true') {
+									
+								}
+							});
+						});
+					}
+				});			
+			
+		};
+		
+		var userGroupFun = function(userGroupData) {				
+			return $modal.open({
+				animation : true,
+				templateUrl : "editByUserTpl",
+				controller : function($scope, AjaxRequest, $modalInstance, userGroupData) {							
+					$scope.userGroupTreeData = userGroupData;
+					
+					$scope.closeUserGroupWin = function() {
+						$modalInstance.dismiss('cancel');
+					}
+					$scope.saveUserGroupChoose = function() {						
+						var ary = new Array();
+						for (var i = 0; i < $scope.userGroupTreeData.length; i++) {
+							var g = $scope.userGroupTreeData[i];
+							var d = {
+								groupuid : g.uid,
+								roletypes : new Array()
+							};
+
+							for (var k = 0; k < g.children.length; k++) {
+								var c = g.children[k];
+								if (c.checked) {
+									d.roletypes.push(c.id);
+								}
+							}
+							ary.push(d);							
+						}
+						$modalInstance.close(ary);
+					}
+				},
+				resolve : {
+					userGroupData : function() {
+						return userGroupData;
+					}
+				}
 			});
 		}
+		
+		
+		$scope.inituserTree();
 
+	}).controller("userEditController", function($scope, $state, $location, AjaxRequest, TreeSelectModal, DlgMsg, userData, userParentData, userTypeData, $stateParams, $modal, postTreeServices) {
+		$scope.go = function(uid, name) {
+			$state.go("org/post/editbypost", {
+				uid : $stateParams.uid,
+				parentuid : $stateParams.parentuid
+			});
+		}
+				
 		$scope.userStatus = [ {
 			text : '启用',
 			value : 1
@@ -223,11 +325,6 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 		var originalUserParent = angular.copy($scope.userParent);
 
 		$scope.user = userData.data;
-		if ($stateParams.json != undefined && $stateParams.json != null && $stateParams.json != "") {
-			var t = JSON.parse($stateParams.json);
-			$scope.user.postuid = t.postuid;
-			$scope.user.postname = t.postname;
-		}
 
 		$scope.userDropDown = false;
 		$scope.treeData = [];
@@ -249,19 +346,32 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 		$scope.SaveUser = function() {
 			if ($scope.user.uid == "0") {
 				AjaxRequest.Post("/user/create", $scope.user).then(function(res) {
-					if (res.responseMsg == "保存成功") {						
+					if (res.responseMsg == "保存成功") {
 						$state.go("org/user");
 					} else
-						DlgMsg.alert("系统提示", res.responseMsg);
+						DlgMsg.confirm("系统提示", res.responseMsg + "是否继续保存？").result.then(function(btn) {
+							if (btn == "ok") {
+								$scope.user.stillpass = true;
+								AjaxRequest.Post("/user/create", $scope.user).then(function(res) {
+
+								})
+							}
+						});
 				})
 			} else {
-				AjaxRequest.Post("/user/update", $scope.user).then(function(res) {					
-					if (res.responseMsg == "修改成功") {								
+				AjaxRequest.Post("/user/update", $scope.user).then(function(res) {
+					if (res.responseMsg == "修改成功") {
 						$state.go("org/user");
+					} else {
+						DlgMsg.confirm("系统提示", res.responseMsg + "是否继续保存？").result.then(function(btn) {
+							if (btn == "ok") {
+								$scope.user.stillpass = true;
+								AjaxRequest.Post("/user/update", $scope.user).then(function(res) {
+
+								})
+							}
+						})
 					}
-					else{
-						DlgMsg.alert("系统提示", res.responseMsg);
-					}						
 				})
 			}
 		};
@@ -277,50 +387,125 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 					return;
 				}
 			}
+
 			$scope.userParent.uid = node.uid;
-			$scope.userParent.employeename = node.employeename;
+			if (node.users.length > 1) {
+				var tmpEmpName = "";
+				for (var i = 0; i < node.users.length; i++) {
+					tmpEmpName += node.users[i].employeename + ",";
+				}
+				$scope.userParent.employeename = tmpEmpName;
+			} else if (node.users.length == 1) {
+				$scope.userParent.employeename = node.users[0].employeename;
+			} else if (node.users.length <= 0) {
+				$scope.userParent.employeename = node.name;
+			}
 			$scope.userDropDown = false;
 		};
 
-		$scope.SelectTreePost = function(node) {
-			$scope.user.postuid = node.uid;
-			$scope.user.postname = node.name;
-			$scope.postDropDown = false;
-		};
-	})
-
-	app.controller('PostEditGroupController', function($scope, $state, $stateParams, AjaxRequest, DlgMsg, AlertMsg, postGroupData) {
-		$scope.postCheckTree = postGroupData.data;
-		$scope.postTreeData = [];
-		var postname = "";
-		postname = $stateParams.postname;
-
-		$scope.loadData = function() {
+		// 弹出职位树窗口
+		var postTreeGroupData = [];
+		if ($stateParams.uid == "0") {
+			AjaxRequest.Get("/post/tree").then(function(res) {
+				postTreeGroupData = res.data;
+			})
+		} else {
 			var params = {};
-			if (postname != null && postname != undefined) {
-				params = {
-					postname : postname,
-					postuid : $scope.postCheckTree.uid
-				};
-			}
+			params = {
+				useruid : $stateParams.uid,
+				postuid : $stateParams.postuid
+			};
 
 			var url = "/post/getpostgroup";
 			AjaxRequest.Post(url, params).then(function(rs) {
+				if (rs.success == 'true') {
+					postTreeGroupData = rs.data;
+				}
+			});
+		}
 
+		$scope.SelectTreePostModal = function() {
+			postFun(postTreeGroupData).result.then(function(t) {
+				$scope.user.postuid = t.postuid;
+				$scope.user.postname = t.postname;
+			});
+		};
+
+		var postFun = function(postData) {
+			
+			return $modal.open({
+				animation : true,
+				templateUrl : "postGroupTpl",
+				controller : function($scope, AjaxRequest, $modalInstance, postData) {
+					$scope.postTreeGroupData = postData;
+
+					$scope.closeWin = function() {
+						$modalInstance.dismiss('cancel');
+					}
+					$scope.saveChoose = function() {
+						var postname = "";
+						var postuid = "";
+						var checkedChildren = new Array();
+						for (var i = 0; i < $scope.postTreeGroupData.length; i++) {
+							var g = $scope.postTreeGroupData[i];
+							var d = {
+								uid : "",
+								name : ""
+							};
+
+							if (g.checked) {
+								d.uid = g.uid;
+								d.name = g.name;
+								checkedChildren.push(d);
+							}
+							postTreeServices.getCheckedChildren(g, checkedChildren);
+
+						}
+
+						for (var j = 0; j < checkedChildren.length; j++) {
+							postname = checkedChildren[j].name + "," + postname;
+							postuid = checkedChildren[j].uid + "," + postuid;
+						}
+						$modalInstance.close({
+							postname : postname,
+							postuid : postuid
+						});
+					}
+
+				},
+				resolve : {
+					postData : function() {
+						return postData;
+					}
+				}
+			});
+		}
+
+	})
+
+	app.controller('PostEditGroupController', function($scope, $state, $stateParams, AjaxRequest, DlgMsg, AlertMsg) {
+		$scope.postTreeData = [];
+		$scope.loadData = function() {
+			var params = {};
+			params = {
+				useruid : $stateParams.uid
+			};
+
+			var url = "/post/getpostgroup";
+			AjaxRequest.Post(url, params).then(function(rs) {
 				if (rs.success == 'true') {
 					$scope.postTreeData = rs.data;
+
 				}
 			});
 		};
 
 		$scope.back = function() {
-			var url = "";
-			if ($stateParams.url == 0) {
-				url = "org/user";
-			}
-			if (url != "") {
-				$state.go(url);
-			}
+
+			$state.go("org/user/edit", {
+				uid : $stateParams.uid,
+				parentuid : $stateParams.parentuid
+			});
 		}
 
 		$scope.save = function() {
@@ -342,30 +527,25 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 
 			var postname = "";
 			var postuid = "";
+
 			for (var j = 0; j < checkedChildren.length; j++) {
 				postname = checkedChildren[j].name + "," + postname;
 				postuid = checkedChildren[j].uid + "," + postuid;
 			}
 
-			var tempUser = JSON.parse($stateParams.json);
-			if (tempUser == null || tempUser == undefined) {
-				tempUser = {
-					postname : "",
-					postuid : "",
-					uid : $stateParams.uid,
-					parentuid : $stateParams.parentuid,
-					parentname : $stateParams.parentname
-				};
-			}
-			tempUser.postname = postname;
-			tempUser.postuid = postuid;
-
-			var userJson = JSON.stringify(tempUser);
-			$state.go("org/user/edit", {
-				uid : $stateParams.uid,
-				parentuid : $stateParams.parentuid,
-				parentname : $stateParams.parentname,
-				json : userJson
+			var params = {};
+			params = {
+				useruid : $stateParams.uid,
+				postuid : postuid
+			};
+			var url = "/user/updateuserpost";
+			AjaxRequest.Post(url, params).then(function(rs) {
+				if (rs.success == 'true') {
+					$state.go("org/user/edit", {
+						uid : $stateParams.uid,
+						parentuid : $stateParams.parentuid
+					});
+				}
 			});
 
 		};
@@ -389,55 +569,4 @@ define([ 'angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages',
 		$scope.loadData();
 	});
 
-	app.controller("userUploadController", function($scope, $state, $location, $stateParams, AjaxRequest, TreeSelectModal, DlgMsg, userData, $http, $q, $parse, $element) {
-
-		var getModelAsFormData = function(data) {
-			var dataAsFormData = new FormData();
-			angular.forEach(data, function(value, key) {
-				dataAsFormData.append(key, value);
-			});
-			return dataAsFormData;
-		};
-
-		$scope.saveTutorial = function(tutorial) {
-			var data = tutorial;
-			console.log(data);
-
-			var deferred = $q.defer();
-			$http({
-				url :  balintimesConstant.rootpath +"/user/upload",
-				method : "POST",
-				data : data,				
-				transformRequest : angular.identity,
-				headers : {
-					'Content-Type' : 'application/x-www-form-urlencoded'
-				}
-			}).success(function(result) {
-				deferred.resolve(result);
-			}).error(function(result, status) {
-				deferred.reject(status);
-			});
-			// return deferred.promise;
-
-		};
-
-	}).directive("akFileModel", [ "$parse", function($parse) {
-		return {
-			restrict : "A",
-			link : function(scope, element, attrs) {
-				var model = $parse(attrs.akFileModel);
-				var modelSetter = model.assign;
-				element.bind("change", function() {
-					scope.$apply(function() {
-						modelSetter(scope, element[0].files[0]);
-					});
-				});
-			}
-		};
-	} ]);
-
-	return {
-		mainState : mainState,
-		module : app
-	};
 })

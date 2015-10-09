@@ -6,19 +6,18 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
-import com.balintimes.erp.center.model.Post;
-import com.balintimes.erp.center.model.PostTree;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.balintimes.erp.center.base.BaseController;
+import com.balintimes.erp.center.model.Post;
+import com.balintimes.erp.center.model.PostTree;
 import com.balintimes.erp.center.service.OrganizationService;
 import com.balintimes.erp.center.service.PostService;
 import com.balintimes.erp.center.util.JsonUtil;
-import com.balintimes.erp.center.base.BaseController;
 
 @Controller
 @RequestMapping("post")
@@ -148,9 +147,27 @@ public class PostController extends BaseController {
 	
 	@RequestMapping(value = "getpostgroup", method = RequestMethod.POST)
 	@ResponseBody
-	public String GetPostGroupByTree(String postuid, String postname) {
-//		List<Post> list = this.postService.GetPostSet(postname);
+	public String GetPostGroupByTree(String useruid,String postuid) {
 		List<Post> list = this.postService.GetPostList();
+		if(!useruid.equalsIgnoreCase("") && !useruid.equalsIgnoreCase(null)){
+			List<Post> postUidAry = postService.GetOneUserPosts(useruid);			
+			for(Post post:list){
+				for (Post puid : postUidAry) {
+					if(post.getUid().equalsIgnoreCase(puid.getUid())){
+						post.setChecked(true);
+					}
+				}
+			}
+		}
+		else{
+			for(Post post:list){
+				if(post.getUid().equalsIgnoreCase(postuid)){
+					post.setChecked(true);
+				}
+			}
+		}
+		
+		
 		List<PostTree> trees = this.InitPostTree(list);
 		return JsonUtil.ResponseSuccessfulMessage(trees);
 	}

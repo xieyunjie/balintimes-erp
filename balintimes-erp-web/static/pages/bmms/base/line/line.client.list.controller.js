@@ -8,25 +8,30 @@ angular.module('BMMS_Line_List_Module', [])
         function ($scope, $timeout, NgTableUtil, BMMS_Line_Service, AlertMsg, DlgMsg) {
             var vm = $scope.vm = {
                 title: '线路列表',
-                tableParams: NgTableUtil.initNgTableParams(function (exparam, tbparam) {
+                tableParams: NgTableUtil.initNgTableParams(),
 
+                getData: function (exparam, tbparam) {
                     return BMMS_Line_Service.queryLine(exparam).then(function (res) {
                         tbparam.total(res.total);
                         return res.data;
                     })
-                })
+                }
+            };
+
+            $scope.initLineListCtrl = function () {
+
             };
 
             $scope.reloadFirstPage = function () {
 
                 var par = {query: "aaaa"};
 
+                NgTableUtil.setNgTableFn(vm.tableParams, vm.getData);
                 NgTableUtil.reloadNgTable(vm.tableParams, par, 1);
             };
             $scope.reloadOtherPage = function () {
 
                 var par = {query: "zzz"};
-
                 NgTableUtil.reloadNgTable(vm.tableParams, par, 1);
             };
             $scope.deleteLine = function (uid) {
@@ -49,5 +54,7 @@ angular.module('BMMS_Line_List_Module', [])
 
                 });
             };
+
+            // ui-select
 
         }]);

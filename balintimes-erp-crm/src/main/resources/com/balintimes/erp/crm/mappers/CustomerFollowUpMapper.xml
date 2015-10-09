@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.CustomerFollowUpMapper">
+	<resultMap type="CustomerFollowUp" id="customerFollowUpMap">
+		<id property="uid" column="uid" />
+		<result property="customerUid" column="customeruid" />
+		<result property="customerCategoryUid" column="customercategoryuid" />
+		<result property="customerCategoryName" column="customercategoryname" />
+		<result property="proxyCompany" column="proxycompany" />
+		<result property="brand" column="brand" />
+		<result property="state" column="state" />
+		<result property="stateName" column="stateName" />
+		<result property="userUid" column="useruid" />
+		<result property="forbidden" column="forbidden" />
+		<result property="isDeleted" column="isdeleted" />
+		<result property="createTime" column="createtime" />
+		<result property="regCustomerUid" column="regcustomeruid" />
+	</resultMap>
+
+	<select id="getCustomerFollowUp" statementType="PREPARED"
+		resultType="CustomerFollowUp" parameterType="int">
+		select * from
+		customerfollowup where
+		uid=#{uid}
+	</select>
+
+	<update id="updateCustomerFollowUp" statementType="PREPARED"
+		parameterType="CustomerFollowUp">
+		update
+		customerfollowup
+		set
+		customercategoryuid=#{customerCategoryUid},
+		customercategoryname=#{customerCategoryName},
+		proxycompany=#{proxyCompany},
+		brand=#{brand}
+		where
+		uid=#{uid}
+
+	</update>
+
+	<update id="updateCustomerFollowUpByDel" statementType="PREPARED"
+		parameterType="int">
+		update customerfollowup set isdeleted=1 where uid=#{uid}
+	</update>
+
+	<insert id="createCustomerFollowUp" statementType="PREPARED"
+		parameterType="CustomerFollowUp">
+		insert into customerfollowup(
+		customeruid,customercategoryuid,proxycompany,brand,state,
+		useruid,forbidden,isdeleted,createtime,regcustomeruid,customercategoryname
+		)values(
+		#{customerUid},#{customerCategoryUid},#{proxyCompany},#{brand},#{state},
+		#{userUid},0,0,now(),null,#{customerCategoryName}
+		)
+	</insert>
+
+</mapper>

@@ -1,0 +1,134 @@
+<div class="wrapper-md">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold"><i class="fa fa-pencil-square-o"></i> {{vm.title}}</div>
+            <div class="panel-body">
+                <form class=" form-horizontal" role="form" name="editForm" novalidate>
+
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="customer">客户</label>
+
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <ui-select ng-model="vm.seachCusotmer" theme="bootstrap"
+                                           ng-disabled="vm.isReadOnly || vm.isUpdate"
+                                           id="customer" name="customer" required="required">
+                                    <ui-select-match placeholder="选择客户.....">{{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="item as item in vm.customerList | filter: $select.search">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                        <small ng-bind-html="item.brand | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                  <button ng-click="vm.seachCusotmer = undefined" class="btn btn-default"
+                                          ng-disabled="vm.isReadOnly || vm.isUpdate">
+                                      <span class="glyphicon glyphicon-trash"></span>
+                                  </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="manneruid">跟进方式</label>
+
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <ui-select ng-model="vm.remarks.mannerUid" theme="bootstrap" ng-disabled="vm.isReadOnly"
+                                           id="manneruid" name="manneruid" required="required">
+                                    <ui-select-match placeholder="选择跟进方式.....">{{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="item.id as item in vm.mannerList | filter: $select.search">
+                                        {{item.name}}
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                  <button ng-click="vm.remarks.mannerUid = undefined" class="btn btn-default"
+                                          ng-disabled="vm.isReadOnly">
+                                      <span class="glyphicon glyphicon-trash"></span>
+                                  </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="contract">联系人</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="contract" id="contract"
+                                   ng-model="vm.remarks.contract" required="required" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="phone">联系方式</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="phone" id="phone"
+                                   ng-model="vm.remarks.phone" required="required" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="persons">同行人员</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="persons" id="persons"
+                                   ng-model="vm.remarks.persons" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="followupdate">跟进时间</label>
+
+                        <div class="col-md-4">
+                            <input type="date" class="form-control" name="followupdate" id="followupdate"
+                                   max="{{vm.maxDate}}"
+                                   ng-model="vm.remarks.followUpDateByDateTime" required="required"
+                                   ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="summary">摘要</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="summary" id="summary"
+                                   ng-model="vm.remarks.summary" required="required" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="remarks">日志</label>
+
+                        <div class="col-md-10">
+                            <textarea class="form-control" name="remarks" id="remarks" rows="12"
+                                      ng-model="vm.remarks.remarks" required="required"
+                                      ng-disabled="vm.isReadOnly"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-1 col-md-6">
+                            <button class="btn btn-primary" ng-click="saveRemarks()" ng-hide="vm.isReadOnly"><i
+                                    class="fa fa-floppy-o"></i> 保存
+                            </button>
+                            <button class="btn btn-primary" ui-sref="crm.saler.remarks_list"><i
+                                    class="fa fa-reply"></i> 返回
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

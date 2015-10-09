@@ -22,4 +22,6 @@ public interface PostService {
 	Post GetOnePost(String uid);
 	
 	List<Post> GetPostParent(String postuid, String organizationuid);
+	
+	List<Post> GetOneUserPosts(String useruid);
 }

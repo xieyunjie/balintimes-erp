@@ -3,25 +3,56 @@
  */
 'use strict';
 
-angular.module('BMMS_Line_Edit_Module', []).controller('BMMS_Line_Edit_Controller', ['$scope', '$state', 'BMMS_Line_Service', function ($scope, $state, BMMS_Line_Service) {
-    var vm = $scope.vm = {
-        title: 'Edit',
-        line: {}
-    };
+angular.module('BMMS_Line_Edit_Module', []).controller('BMMS_Line_Edit_Controller',
+    ['$scope', '$state', '$timeout', 'BMMS_Line_Service', 'CRM_BaseData_Service', function ($scope, $state, $timeout, BMMS_Line_Service, CRM_BaseData_Service) {
+        var vm = $scope.vm = {
+            title: 'Edit',
+            line: {},
+            availableColors: ['Red', 'Green', 'Blue', 'Yellow', 'Magenta', 'Maroon', 'Umbra', 'Turquoise'],
+            colors: [],
 
-    $scope.initEdit = function () {
-        if ($state.params.uid == "0") {
-            line.uid = "0"
-        }
-        else {
+            businesstypelist: [],
+            selectedTypes: [],
+            selectedType: ""
+        };
 
-            BMMS_Line_Service.getLine({uid: $state.params.uid}).then(function (res) {
-                vm.line = res.data;
+        $scope.initEdit = function () {
+            //if ($state.params.uid == "0") {
+            //    line.uid = "0"
+            //}
+            //else {
+            //
+            //    BMMS_Line_Service.getLine({uid: $state.params.uid}).then(function (res) {
+            //        vm.line = res.data;
+            //    });
+            //}
+            $timeout(function () {
+                vm.selectedType = "72cf48dc-55f3-11e5-999d-c86000a05d5f";
+                vm.selectedTypes = [{
+                    "uid": "72cf453f-55f3-11e5-999d-c86000a05d5f",
+                    "name": "饮料",
+                    "code": "1",
+                    "priority": 1,
+                    "comment": ""
+                }, {
+                    "uid": "72cf45c0-55f3-11e5-999d-c86000a05d5f",
+                    "name": "活动/会展类",
+                    "code": "1",
+                    "priority": 1,
+                    "comment": ""
+                }];
             });
-        }
-    };
-    $scope.saveLine = function () {
-        BMMS_Line_Service.saveLine(vm.line);
-    }
 
-}]);
+            CRM_BaseData_Service.businessTypeList().then(function (res) {
+
+                vm.businesstypelist = res.data;
+            });
+        };
+        $scope.saveLine = function () {
+            BMMS_Line_Service.saveLine(vm.line);
+        };
+        $scope.setBusiness = function () {
+            vm.selectedType = "72cf419e-55f3-11e5-999d-c86000a05d5f";
+        }
+
+    }]);

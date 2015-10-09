@@ -53,4 +53,10 @@ public interface UserService {
 	void UpdateHeadByUser(String uid, String url);
 	
 	User ExistsUserUid(String useruid);
+	
+	void CreateUserPost(User user);
+	
+	void DeleteUserPost(String useruid);
+	
+	List<User> getUserParent(String parentuid);
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.RemarksProcMapper">
+
+	<resultMap type="RemarksInfo" id="remarksinfomap">
+		<id property="id" column="id" />
+		<result property="uid" column="uid" />
+		<result property="followUpUid" column="followupuid" />
+		<result property="customerUid" column="customeruid" />
+		<result property="customerName" column="customername" />
+		<result property="userUid" column="useruid" />
+		<result property="contract" column="contract" />
+		<result property="mannerUid" column="manneruid" />
+		<result property="mannerName" column="mannername" />
+		<result property="phone" column="phone" />
+		<result property="remarks" column="remarks" />
+		<result property="followUpDate" column="followUpdate" />
+		<result property="summary" column="summary" />
+		<result property="persons" column="persons" />
+	</resultMap>
+
+	<select id="getRemarksByEmp" statementType="CALLABLE"
+		resultType="RemarksInfo" parameterType="Map">
+		call getremarksbyemp (
+		#{customerName,mode=IN,jdbcType=VARCHAR},
+		#{brand,mode=IN,jdbcType=VARCHAR},
+		#{userUids,mode=IN,jdbcType=VARCHAR},
+		#{mannerUid,mode=IN,jdbcType=INTEGER},
+		#{beginDate,mode=IN,javaType=DATE, jdbcType=VARCHAR},
+		#{endDate,mode=IN,javaType=DATE, jdbcType=VARCHAR},
+		#{pageSize,mode=IN,jdbcType=INTEGER},
+		#{currPage,mode=IN,jdbcType=INTEGER},
+		#{totalCount,mode=OUT,jdbcType=INTEGER}
+		)
+	</select>
+</mapper>

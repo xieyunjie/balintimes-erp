@@ -3,6 +3,7 @@ package com.balintimes.erp.center.mappers;
 import java.util.List;
 import java.util.Map;
 
+import com.balintimes.erp.center.model.Post;
 import com.balintimes.erp.center.model.User;
 
 public interface UserMapper {
@@ -61,4 +62,8 @@ public interface UserMapper {
     List<User> GetUserTreeListByCondition(Map<String, Object> params);
     
     void UpdateHeadByUser(Map<String, Object> map);
+    
+    Post GetOneUserPosts(String useruid);
+    
+    List<User> getUserParent(String partentuid);
 }

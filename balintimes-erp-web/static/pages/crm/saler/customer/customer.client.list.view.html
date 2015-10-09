@@ -22,7 +22,7 @@
                                 <div class="form-group">
                                     <label>行业</label>
                                     <select class="form-control input-sm w-sm inline m-r"
-                                            ng-model="vm.params.businessType">
+                                            ng-model="vm.params.businesstype">
                                         <option value=""></option>
                                         <option ng-repeat="item in vm.businessTypeList" value="{{item.uid}}">
                                             {{item.name}}
@@ -31,20 +31,21 @@
                                 </div>
                                 <div class="form-group">
                                     <label>类型</label>
-                                    <select class="form-control input-sm w-sm inline m-r" ng-model="vm.params.isReg">
+                                    <select class="form-control input-sm w-sm inline m-r" ng-model="vm.params.isreg">
                                         <option ng-repeat="item in vm.regTypeList" value="{{item.id}}">{{item.name}}
                                         </option>
                                     </select>
                                 </div>
                                 <div class="checkbox m-l m-r-xs">
                                     <label class="i-checks">
-                                        <input type="checkbox" ng-model="vm.params.isShowDown"><i></i> 查询下级
+                                        <input type="checkbox" ng-model="vm.params.isshowdown"><i></i> 查询下级
                                     </label>
                                 </div>
 
                                 <button type="button" class="btn btn-success" ng-click="reloadFirstPage()">查询</button>
 
-                                <button type="button" class="btn btn-primary" ui-sref="crm.customer.customer_edit"><i
+                                <button type="button" class="btn btn-primary"
+                                        ui-sref="crm.saler.customer_create_edit"><i
                                         class="fa fa-plus"></i> 添加
                                 </button>
                             </form>
@@ -52,20 +53,26 @@
                     </div>
                     <table ng-table="vm.tableParams" class="table table-hover table-striped">
                         <tr ng-repeat="row in $data">
-                            <td title="'#'" td-mouseover-toggle="" style="width: 100px">
-                                <div>
-                                    <a href="#" ui-sref="crm.customer.customer_edit({uid:row.uid,isReg:row.reg})"><i
+                            <td title="'#'" td-mouseover-toggle="" style="width: 200px">
+                                <div class="ng-hide" ng-show="vm.currUser.uid==row.userUid">
+                                    <a href="#" title="编辑"
+                                       ui-sref="crm.saler.customer_edit({uid:row.uid,followUid:row.followUid,isReg:row.reg})"><i
                                             class="fa fa-edit  fa-fw fa-lg"></i> </a>
-                                    <a><i class="fa fa-trash fa-fw fa-lg"></i> </a>
+                                    <a href="#" title="删除" ng-click="deleteCustomer(row.uid,row.followUid,row.reg)"><i
+                                            class="fa fa-trash fa-fw fa-lg"></i> </a>
+                                    <a href="#"
+                                       ui-sref="crm.saler.remarks_edit({customeruid:row.uid,followuid:row.followUid,isreg:row.reg})"
+                                       title="销售日志"><i
+                                            class="fa fa-comments fa-fw fa-lg"></i> </a>
                                 </div>
                             </td>
                             <!--<td title="'uid'" filter="{uid: 'text'}" sortable="'uid'">-->
                             <!--{{row.uid}}-->
                             <!--</td>-->
                             <td title="'销售员'">{{row.userName}}</td>
-                            <td title="'客户名称'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
+                            <td title="'客户名称'" filter="{name: 'text'}">{{row.name}}</td>
                             <td title="'行业'" filter="{businessTypeName: 'text'}">{{row.businessTypeName}}</td>
-                            <td title="'发布品牌'" filter="{brand: 'text'}" sortable="'brand'">{{row.brand}}</td>
+                            <td title="'发布品牌'" filter="{brand: 'text'}">{{row.brand}}</td>
                             <td title="'销售渠道'">{{row.customerCategoryName}}</td>
                             <td title="'代理公司'">{{row.proxyCompany}}</td>
                             <td title="'地区'">{{row.areaName}}</td>

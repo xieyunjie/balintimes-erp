@@ -1,0 +1,35 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
+        <!-- 连接数据的配置 -->
+        <property name="jdbcDriver" value="${activiti.driver}"></property>
+        <property name="jdbcUrl" value="${activiti.url}"></property>
+        <property name="jdbcUsername" value="${activiti.username}"></property>
+        <property name="jdbcPassword" value="${activiti.password}"></property>
+        <!-- 没有表创建表 -->
+        <property name="databaseSchemaUpdate" value="true"></property>
+        <property name="jobExecutorActivate" value="true"></property>
+    </bean>
+
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
+    </bean>
+
+    <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+    <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
+    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
+    <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
+    <bean id="formService" factory-bean="processEngine" factory-method="getFormService"/>
+
+    <bean id="activitiEng" class="com.balintimes.erp.workflow.activiti.impl.ActivitiEngImpl">
+        <property name="repositoryService" ref="repositoryService"/>
+        <property name="runtimeService" ref="runtimeService"/>
+        <property name="taskService" ref="taskService"/>
+        <property name="historyService" ref="historyService"/>
+        <property name="formService" ref="formService"/>
+    </bean>
+
+
+</beans>

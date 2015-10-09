@@ -12,12 +12,13 @@ angular.module('app', [
     'ui.load',
     //'ui.jq',
     'ui.validate',
-    'angular-lodash',
     'pascalprecht.translate',
     'ngSanitize',
     'ngTable',
     'blockUI',
-    'gc.toaster'
+    'gc.toaster',
+    'ui.select',
+    'ui.grid'
 ]).run(['$rootScope', '$state', '$stateParams', '$timeout', '$window',
     function ($rootScope, $state, $stateParams, $timeout, $window) {
         $rootScope.$state = $state;

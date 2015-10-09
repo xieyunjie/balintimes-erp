@@ -1,0 +1,101 @@
+<div>
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list"></i> {{vm.title}}
+            </div>
+
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="panel-body b-b b-light">
+                        <div class="btn-group">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <input id="filter_name" type="text" class="form-control input-sm w-sm inline m-r"
+                                           ng-model="vm.params.customername"
+                                           placeholder="客户名">
+                                </div>
+
+                                <div class="form-group">
+                                    <input id="filter_brand" type="text" class="form-control input-sm w-sm inline m-r"
+                                           ng-model="vm.params.brand"
+                                           placeholder="发布品牌">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>类型</label>
+                                    <select id="filter_manner" class="form-control input-sm w-sm inline m-r"
+                                            ng-model="vm.params.manneruid">
+                                        <option value="-1">全部</option>
+                                        <option ng-repeat="item in vm.mannerList" value="{{item.id}}">{{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>开始时间</label>
+                                    <input id="filter_begindate" type="date"
+                                           class="form-control input-sm w-sm inline m-r" ng-model="vm.params.begindate">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>结束时间</label>
+                                    <input id="filter_enddate" type="date"
+                                           class="form-control input-sm w-sm inline m-r" ng-model="vm.params.enddate">
+                                </div>
+
+                                <div class="checkbox m-l m-r-xs">
+                                    <label class="i-checks">
+                                        <input type="checkbox" ng-model="vm.params.isshowdown"><i></i> 查询下级
+                                    </label>
+                                </div>
+
+                                <button type="button" class="btn btn-success" ng-click="reloadFirstPage()">查询</button>
+
+                                <button type="button" class="btn btn-primary"
+                                        ui-sref="crm.saler.remarks_cu_edit({uid:-1,isreg:false,isreadonly:false})"><i
+                                        class="fa fa-plus"></i> 添加
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <table ng-table="vm.tableParams" class="table table-hover table-striped">
+                        <tr ng-repeat="row in $data" style="text-align: center">
+                            <td title="'#'" td-mouseover-toggle="" style="width: 150px">
+                                <div class="ng-hide" ng-show="vm.currUser.uid==row.userUid">
+                                    <a href="#" title="编辑"
+                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly :false})"><i
+                                            class="fa fa-edit  fa-fw fa-lg"></i> </a>
+                                    <a href="#" title="删除" ng-click="deleteRemark(row.uid,row.reg)"><i
+                                            class="fa fa-trash fa-fw fa-lg"></i> </a>
+
+                                    <a href="#" title="查询详细"
+                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly:true})"><i
+                                            class="fa fa-search  fa-fw fa-lg"></i> </a>
+                                </div>
+                                <div class="ng-hide" ng-show="vm.currUser.uid!=row.userUid">
+                                    <a href="#" title="查询详细"
+                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly:true})"><i
+                                            class="fa fa-search  fa-fw fa-lg"></i> </a>
+                                </div>
+                            </td>
+
+                            <td title="'销售员'">{{row.userName}}</td>
+                            <td title="'跟进日期'">{{row.followUpDate}}</td>
+                            <td title="'客户名称'" style="width: 200px;">{{row.customerName}}</td>
+                            <td title="'联系人'">{{row.contract}}</td>
+                            <td title="'跟进类型'">{{row.mannerName}}</td>
+                            <td title="'跟进方式'">{{row.phone}}</td>
+                            <td title="'同行人员'">{{row.persons}}</td>
+                            <td title="'摘要'" style="width: 350px;">{{row.summary}}</td>
+
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

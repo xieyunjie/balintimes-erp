@@ -60,4 +60,6 @@ public interface UserDao {
 	List<User> GetUserByEmpName(String empName);
 	
 	void UpdateHeadByUser(String uid, String url);
+	
+	List<User> getUserParent(String parentuid);
 }

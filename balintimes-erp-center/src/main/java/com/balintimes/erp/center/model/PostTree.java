@@ -7,6 +7,7 @@ import java.util.List;
 public class PostTree extends Post implements Serializable {
 	private List<PostTree> children;
 	private boolean checked;
+	private List<User> users;
 	
 	public PostTree(Post post)
 	{
@@ -21,8 +22,10 @@ public class PostTree extends Post implements Serializable {
 		this.setCreatetime(post.getCreatetime());
 		this.setEditby(post.getEditby());
 		this.setEdittime(post.getEdittime());
+		this.setChecked(post.getChecked());
 		
 		this.setChildren(new ArrayList<PostTree>());
+		this.setUsers(post.getUsers());
 	}
 	
 	public void setChildren(List<PostTree> value) {
@@ -39,5 +42,12 @@ public class PostTree extends Post implements Serializable {
 	
 	public boolean getChecked() {
 		return this.checked;
+	}
+	
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+	public List<User> getUsers() {
+		return users;
 	}
 }

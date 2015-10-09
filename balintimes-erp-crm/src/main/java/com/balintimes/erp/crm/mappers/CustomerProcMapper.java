@@ -7,4 +7,5 @@ import com.balintimes.erp.crm.model.EmpCustomer;
 
 public interface CustomerProcMapper {
 	List<EmpCustomer> getCustomerByEmp(Map<String, Object> map);
+
 }

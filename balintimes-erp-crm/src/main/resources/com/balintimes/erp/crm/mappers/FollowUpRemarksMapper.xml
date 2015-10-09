@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.FollowUpRemarksMapper">
+	<resultMap type="FollowUpRemarks" id="followUpRemarksMap">
+		<id property="uid" column="uid" />
+		<result property="followUpUid" column="followupuid" />
+		<result property="customerUid" column="customeruid" />
+		<result property="customerName" column="customername" />
+		<result property="userUid" column="useruid" />
+		<result property="contract" column="contract" />
+		<result property="mannerUid" column="manneruid" />
+		<result property="mannerName" column="mannername" />
+		<result property="phone" column="phone" />
+		<result property="remarks" column="remarks" />
+		<result property="followUpDate" column="followUpdate" />
+		<result property="summary" column="summary" />
+		<result property="persons" column="persons" />
+		<result property="isDeleted" column="isdeleted" />
+		<result property="createBy" column="createby" />
+		<result property="createTime" column="createtime" />
+		<result property="editBy" column="editby" />
+		<result property="editTime" column="edittime" />
+	</resultMap>
+
+	<select id="getFollowUpRemarks" statementType="PREPARED"
+		parameterType="int" resultType="FollowUpRemarks">
+		select
+		a.*,b.name as customername
+		,c.name as mannnername
+		from
+		followupremarks as a join customer as b on
+		a.customeruid=b.uid
+		join followmanner as c on a.manneruid=c.id
+		where
+		a.uid=#{uid} and b.isdeleted=0 and b.forbidden=0;
+	</select>
+
+	<insert id="createFollowUpRemarks" statementType="PREPARED"
+		parameterType="FollowUpRemarks">
+		insert into followupremarks(
+		followupuid,customeruid,useruid,contract,manneruid,
+		phone,remarks,followupdate,summary,persons,isdeleted,createtime,createby
+		)values(
+		#{followUpUid},#{customerUid},#{userUid},#{contract},#{mannerUid},
+		#{phone},#{remarks},#{followUpDate},#{summary},#{persons},0,now(),#{createBy}
+		)
+	</insert>
+
+	<update id="updateFollowUpRemarksByDel" statementType="PREPARED"
+		parameterType="int">
+		update followupremarks set isdeleted=1 where uid=#{uid}
+	</update>
+
+	<update id="updateFollowUpRemarks" statementType="PREPARED"
+		parameterType="FollowUpRemarks">
+		update
+		followupremarks
+		set
+		contract=#{contract},
+		manneruid=#{mannerUid},
+		phone=#{phone},
+		remarks=#{remarks},
+		followupdate=#{followUpDate},
+		summary=#{summary},
+		persons=#{persons},
+		edittime=now(),
+		editby=#{editBy}
+		where
+		uid=#{uid}
+	</update>
+
+</mapper>

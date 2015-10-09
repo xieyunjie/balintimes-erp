@@ -40,7 +40,7 @@
 		isdeleted,createby,createtime,businesstypename,customercategoryname
 		)values(
 		#{name},#{businessType},#{userUid},#{brand},#{customerCategory},#{proxyCompany},
-		#{areaUid},'#{areaCode},#{phone},#{companyAddress},#{postCode},#{parentUid},#{forbidden},
+		#{areaUid},#{areaCode},#{phone},#{companyAddress},#{postCode},#{parentUid},#{forbidden},
 		#{isDeleted},#{createBy},now(),#{businessTypeName},#{customerCategoryName}
 		)
 	</insert>
@@ -52,7 +52,6 @@
 		set
 		name=#{name},
 		businesstype=#{businessType},
-		useruid=#{userUid},
 		brand=#{brand},
 		customercategory=#{customerCategory},
 		proxycompany=#{proxyCompany},

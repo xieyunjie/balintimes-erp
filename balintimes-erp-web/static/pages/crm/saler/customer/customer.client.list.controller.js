@@ -3,41 +3,24 @@
  */
 'use strict';
 angular.module('CRM_Customer_List_Module', []).controller('CRM_Customer_List_Controller',
-    ['$scope', '$timeout', 'NgTableUtil', 'CRM_Customer_Service', 'CRM_BaseData_Service', 'AlertMsg', 'DlgMsg', 'NgTableParams',
-        function ($scope, $timeout, NgTableUtil, CRM_Customer_Service, CRM_BaseData_Service, AlertMsg, DlgMsg, NgTableParams) {
+    ['$scope', '$timeout', 'NgTableUtil', 'CRM_Customer_Service', 'CRM_BaseData_Service', 'AlertMsg', 'DlgMsg', 'NgTableParams', 'UserStgService',
+        function ($scope, $timeout, NgTableUtil, CRM_Customer_Service, CRM_BaseData_Service, AlertMsg, DlgMsg, NgTableParams, UserStgService) {
             var vm = $scope.vm = {
                 title: '客户列表',
                 params: {
                     name: "",
                     brand: "",
-                    userUids: "",
-                    isReg: -1,
-                    isShowDown: false,
-                    pageSize: 20,
-                    currPage: 1,
-                    businessType: ""
+                    isreg: -1,
+                    isshowdown: false,
+                    pagesize: 20,
+                    page: 1,
+                    businesstype: ""
                 },
-                tableParams: NgTableUtil.initNgTableParams(function (exparam, tbparam) {
-                    var par={
-                        name:angular.isUndefined(exparam.name) ? "" : exparam.name ,
-                        brand: angular.isUndefined(exparam.brand) ? "" : exparam.brand ,
-                        userUids: "",
-                        isReg: angular.isUndefined(exparam.isReg) ? -1 : exparam.isReg,
-                        isShowDown: angular.isUndefined(exparam.isReg) ? false : exparam.isShowDown,
-                        pageSize: exparam.pagesize,
-                        currPage: exparam.page,
-                        businessType: angular.isUndefined(exparam.businessType) ? "" : exparam.businessType
-                    };
-                    if (exparam.name) par.name = exparam.name;
-                    if (exparam.brand) par.brand = exparam.brand;
-                    if (exparam.userUids) par.userUids = exparam.userUids;
-                    if (exparam.isReg) par.isReg = exparam.isReg;
-                    if (exparam.isShowDown) par.isShowDown = exparam.isShowDown;
-                    if (exparam.businessType) par.businessType = exparam.businessType;
 
-                    var p = {json: JSON.stringify(par)};
-                    //console.log(p);
-                    return CRM_Customer_Service.listByEmp(p).then(function (res) {
+                currUser: {},
+
+                tableParams: NgTableUtil.initNgTableParams(function (exparam, tbparam) {
+                    return CRM_Customer_Service.listByEmp(exparam).then(function (res) {
                         tbparam.total(res.total);
                         return res.data;
                     })
@@ -72,17 +55,32 @@ angular.module('CRM_Customer_List_Module', []).controller('CRM_Customer_List_Con
                 })
             };
 
+            function setUser() {
+                vm.currUser = UserStgService.getWebuser();
+            }
+
             getBusinessTypeList();
             getCustomerCategoryList();
+            setUser();
 
             $scope.reloadFirstPage = function () {
                 NgTableUtil.reloadNgTable(vm.tableParams, vm.params, 1);
             };
 
             $scope.reloadOtherPage = function () {
-                console.log(vm.params.currPage);
-                NgTableUtil.reloadNgTable(vm.tableParams, vm.params, 1);
+                //console.log(vm.params.currPage);
+                NgTableUtil.reloadNgTable(vm.tableParams, vm.params, vm.page);
             };
+
+            $scope.deleteCustomer = function (uid, followUid, isReg) {
+                var params = {
+                    uid: isReg ? followUid : uid,
+                    isReg: isReg
+                };
+                CRM_Customer_Service.deleteCustomer(params).then(function (res) {
+                    $scope.reloadOtherPage();
+                })
+            }
 
         }])
 ;

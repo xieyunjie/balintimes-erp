@@ -31,8 +31,7 @@ public class FollowMannerController extends BaseController {
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	@ResponseBody
-	public AjaxResponse createManner(String json) {
-		FollowManner manner = JsonUtil.ToObject(json, FollowManner.class);
+	public AjaxResponse createManner(FollowManner manner) {
 		this.followMannerService.createManner(manner);
 		return ResponseMessage.successful("success");
 	}

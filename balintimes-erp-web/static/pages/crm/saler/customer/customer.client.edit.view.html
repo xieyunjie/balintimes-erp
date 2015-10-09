@@ -1,3 +1,142 @@
-<div>
-    <h1>{{vm.title}}</h1>
+<div class="wrapper-md">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold"><i class="fa fa-pencil-square-o"></i> 编辑客户</div>
+            <div class="panel-body">
+                <form class=" form-horizontal" role="form" name="editForm" novalidate>
+                    <!--<div class="form-group">-->
+                    <!--<label class="col-md-1 control-label" for="uid">UID</label>-->
+
+                    <!--<div class="col-md-4">-->
+                    <!--<input type="text" class="form-control" name="" id="uid" ng-model="vm.customer.uid">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="name">客户名称</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="name" id="name" ng-model="vm.customer.name"
+                                   ng-disabled="vm.isReg"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="brand">发布品牌</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="brand" id="brand" ng-model="vm.customer.brand"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="businessType">行业</label>
+
+                        <div class="col-md-4">
+                            <select type="text" class="form-control" name="businessType" id="businessType"
+                                    ng-model="vm.customer.businessTypeUid" ng-disabled="vm.isReg"
+                                    required>
+                                <option ng-repeat="item in vm.businessTypeList" value="{{item.uid}}">{{item.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="customerCategory">销售渠道</label>
+
+                        <div class="col-md-4">
+                            <select type="text" class="form-control" name="customerCategory" id="customerCategory"
+                                    ng-model="vm.customer.customerCategoryUid"
+                                    required>
+                                <option ng-repeat="item in vm.customerCategoryList" value="{{item.uid}}">{{item.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="proxyCompany">代理公司</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="proxyCompany" id="proxyCompany"
+                                   ng-model="vm.customer.proxyCompany">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="province">所在省份</label>
+
+                        <div class="col-md-4">
+                            <select type="text" class="form-control" name="province" id="province"
+                                    ng-model="vm.province" ng-change="getArea()" ng-disabled="vm.isReg">
+                                <option ng-repeat="item in vm.provinceList" value="{{item.uid}}">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="areaUid">所在城市</label>
+
+                        <div class="col-md-4">
+                            <select type="text" class="form-control" name="areaUid" id="areaUid"
+                                    ng-model="vm.customer.areaUid" ng-disabled="vm.isReg">
+                                <option ng-repeat="item in vm.areaList" value="{{item.uid}}">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="areaCode">区号</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="areaCode" id="areaCode"
+                                   ng-model="vm.customer.areaCode"
+                                   required ng-disabled="vm.isReg">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="phone">电话</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="phone" id="phone" ng-model="vm.customer.phone"
+                                   required ng-disabled="vm.isReg">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="companyAddress">公司地址</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="companyAddress" id="companyAddress"
+                                   ng-model="vm.customer.companyAddress" ng-disabled="vm.isReg"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="postCode">邮编</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="postCode" id="postCode"
+                                   ng-model="vm.customer.postCode" ng-disabled="vm.isReg"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-1 col-md-6">
+                            <button class="btn btn-primary" ng-click="saveCustomer()" ng-disabled="editForm.$invalid "><i class="fa fa-floppy-o"></i> 保存</button>
+                            <button class="btn btn-primary" ui-sref="crm.saler.customer_list"><i
+                                    class="fa fa-reply"></i> 返回
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

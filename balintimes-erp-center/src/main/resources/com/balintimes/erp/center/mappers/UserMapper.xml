@@ -123,6 +123,17 @@
         inner join usertype b on a.usertype = b.uid
         where a.uid = #{uid} and delflag = 0
 	</select>
+	
+	<select id="getUserParent" parameterType="string" resultType="User">
+        select
+		a.uid,a.username,a.password,a.isadmin,
+		a.employeename,a.isenable,a.delflag,a.usertype,
+		a.email,a.comment,a.createby,a.createtime,
+		a.editby,a.edittime,a.lastlogin
+        from user a
+        inner join userpost b on b.useruid=a.uid
+        where b.postuid = #{parentuid} and a.delflag = 0
+	</select>
 
 	<select id="CheckUserName" parameterType="String" resultType="String">
 		select uid from user where username =
@@ -234,18 +245,16 @@
 		<if test="username!=null and username!=''">and a.username like "%"#{username}"%"</if>
 		<if test="employeename!=null and employeename!=''">and a.employeename like "%"#{employeename}"%"</if>		
 		<if test="postuid!=null and postuid!=''">and c.uid=#{postuid}</if>	
-		<if test="organizationuid!=null and organizationuid!=''">and e.organizationuid=#{organizationuid}</if>			
+		<if test="organizationuid!=null and organizationuid!=''">and e.uid=#{organizationuid}</if>			
 	</select>
 
 	
 	<select id="GetOneUser" parameterType="string" resultType="User">
         select
-		<include refid="userTreeColumns"/>
-        from user a 
-        inner join userpost b on a.uid=b.useruid
-        inner join post c on c.uid=b.postuid	
-        inner join usertype d on d.uid = a.usertype
-        where a.uid = #{uid} and a.delflag = 0
+		<include refid="userColumns"/>
+        from user a
+        inner join usertype b on a.usertype = b.uid
+        where a.uid = #{uid} and delflag = 0
 	</select>
     
 	<select id="GetOneUserParent" parameterType="string" resultType="User">
@@ -273,7 +282,7 @@
 		LEFT JOIN userpost b on a.uid=b.useruid
 		LEFT JOIN post c ON c.uid=b.postuid
 		inner join usertype d on d.uid = a.usertype
-		where a.delflag = 0 and FIND_IN_SET(c.uid,fun_GetUserParent(#{username}))
+		where a.delflag = 0 and FIND_IN_SET(c.uid,fun_GetUserParent(#{username})) and a.username!=#{username}
 	</select>
 	
 	<select id="GetSubordinates" parameterType="string" resultType="User">
@@ -283,7 +292,7 @@
 		LEFT JOIN userpost b on a.uid=b.useruid
 		LEFT JOIN post c ON c.uid=b.postuid
 		inner join usertype d on d.uid = a.usertype
-		where a.delflag = 0 and FIND_IN_SET(c.uid,fun_GetUserChildren(#{username}))
+		where a.delflag = 0 and FIND_IN_SET(c.uid,fun_GetUserChildren(#{username})) and a.username!=#{username}
 	</select>
 	
 	<delete id="deleteUserPost" parameterType="string">
@@ -293,4 +302,6 @@
 	<update id="UpdateHeadByUser" parameterType="Map" statementType="PREPARED">
 		update user set avatarurl=#{url} where uid=#{uid}
 	</update>
+	
+
 </mapper>

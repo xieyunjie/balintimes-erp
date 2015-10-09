@@ -1,11 +1,23 @@
 package com.balintimes.crm.test;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+
 import com.balintimes.erp.model.crm.BusinessType;
 import com.balintimes.erp.util.json.JsonUtil;
 import com.balintimes.erp.util.json.ResponseMessage;
 import com.balintimes.erp.util.webapi.HttpApiUtil;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.http.client.ClientProtocolException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,15 +25,78 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.balintimes.erp.util.json.AjaxResponse;
+import com.balintimes.erp.util.json.JsonUtil;
+import com.balintimes.erp.util.webapi.HttpApiUtil;
+
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
+
 
 //import com.balintimes.erp.util.webapi.HttpApiUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 public class HttpApiTest {
+
+	
+	@Test
+	public void getTest(){
+		String url = "http://localhost:8080/balintimes-erp-center/ws/basedata/businesstypelist";
+		try {
+			String str =(new HttpApiUtil()).get(url);
+			System.out.println("----------------------------------------------------------------------------------------------------------------");
+			System.out.println(str);
+			List<BusinessType> bus=new ArrayList<BusinessType>();
+			AjaxResponse aj=JsonUtil.ToObject(str, AjaxResponse.class);
+			
+			List<LinkedHashMap<String, Object>> list=(List<LinkedHashMap<String, Object>>)aj.getData();
+			
+			for (LinkedHashMap<String, Object> item : list) {
+				Iterator<Entry<String, Object>> entries = item.entrySet()
+						.iterator();
+				BusinessType bt=new BusinessType();
+				while (entries.hasNext()) {
+					Map.Entry<String, Object> entry = (Map.Entry<String, Object>) entries
+							.next();
+					String key = entry.getKey();
+					Object value = entry.getValue();
+					//System.out.println(key+":"+value.toString());
+					
+					Field[] fields=bt.getClass().getDeclaredFields();
+					for (Field it : fields) {
+						it.setAccessible(true);
+						if(it.getName().equals(key)){
+							try {
+								it.set(bt, value);
+							} catch (IllegalArgumentException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IllegalAccessException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+				bus.add(bt);
+			}
+			
+			for (BusinessType b : bus) {
+				System.out.println(b.getName()+":"+b.getCode());
+			}
+			System.out.println("----------------------------------------------------------------------------------------------------------------");
+			
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 
     @Resource
     private HttpApiUtil ucenterWebApi;
@@ -64,4 +139,5 @@ public class HttpApiTest {
             e.printStackTrace();
         }
     }
+
 }

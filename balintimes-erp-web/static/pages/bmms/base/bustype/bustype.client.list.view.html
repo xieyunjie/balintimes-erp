@@ -1,0 +1,26 @@
+<div ng-init="initBusTypeCtrl()">
+    <!--<div class="bg-light lter b-b wrapper-md">-->
+    <!--<h5 class="m-n font-thin h3">{{vm.title}}</h5>-->
+    <!--</div>-->
+
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list"></i> {{vm.title}}
+            </div>
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="dataTables_wrapper form-inline dt-bootstrap">
+                        <div class="panel-body b-b b-light">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary" ng-click="consoleWebuser()"><i
+                                        class="fa fa-plus"></i> Webuser
+                                </button>
+                        </div>
+                    </div>
+                    <div ui-grid="gridOption" class="grid" ui-grid-selection></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

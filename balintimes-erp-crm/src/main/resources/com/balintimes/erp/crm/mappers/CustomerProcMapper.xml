@@ -25,7 +25,9 @@
 		<result property="stateName" column="statename" />
 		<result property="userUid" column="useruid" />
 		<result property="isReg" column="isreg" />
+		<result property="followUid" column="followuid" />
 	</resultMap>
+
 
 	<select id="getCustomerByEmp" statementType="CALLABLE"
 		resultType="EmpCustomer" parameterType="Map">
@@ -40,5 +42,5 @@
 		#{totalCount,mode=OUT,jdbcType=INTEGER}
 		)
 	</select>
-
+ 
 </mapper>

@@ -2,6 +2,7 @@ package com.balintimes.erp.center.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Post implements Serializable {
 
@@ -16,7 +17,9 @@ public class Post implements Serializable {
 	private Date createtime;
 	private String editby;
 	private Date edittime;
-
+	private boolean checked;
+	private List<User> users;
+	
 	public Post() {
 		//this.uid = "0";
 	}
@@ -108,5 +111,19 @@ public class Post implements Serializable {
 
 	public String getParentname() {
 		return this.parentname;
+	}
+	
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+	public boolean getChecked(){
+		return this.checked;
+	}
+	
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+	public List<User> getUsers() {
+		return users;
 	}
 }

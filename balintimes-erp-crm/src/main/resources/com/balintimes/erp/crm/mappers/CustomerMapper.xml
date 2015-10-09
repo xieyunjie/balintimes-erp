@@ -31,7 +31,7 @@
 			a.forbidden=0 and a.isdeleted=0
 			and (ifnull(#{name},'')='' or LOCATE(#{name},a.name)>0)
 		ORDER BY 
-			id DESC 
+			a.uid DESC 
 		LIMIT 
 			#{startIndex}, #{pageSize}
 	</select>
@@ -39,7 +39,7 @@
 	<select id="getCountCustomerByList" statementType="PREPARED"
 		resultType="int" parameterType="Map">
 		select
-			count(id) as datacount
+			count(a.uid) as datacount
 		from
 			customer as a join areainfo as b on a.areauid=b.uid
 		where

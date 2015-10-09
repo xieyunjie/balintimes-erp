@@ -21,7 +21,7 @@ public class AreaController extends BaseController {
 	@Resource
 	private AreaService areaInfoService;
 
-	@RequestMapping("gettopareas")
+	@RequestMapping("gettoppareas")
 	@ResponseBody
 	public AjaxResponse getAreaInfoByTop() {
 		return this.getAreaInfoByParent("00000000-0000-0000-0000-000000000000");

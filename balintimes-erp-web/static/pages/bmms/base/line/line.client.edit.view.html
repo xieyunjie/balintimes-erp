@@ -1,5 +1,3 @@
-
-
 <div class="wrapper-md" ng-init="initEdit()">
     <div class="row">
         <div class="panel panel-default">
@@ -31,8 +29,76 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="col-md-1 control-label" for="color">color</label>
+
+                        <div class="col-md-4">
+                            <ui-select multiple ng-model="vm.colors" theme="bootstrap" ng-disabled="disabled">
+                                <ui-select-match placeholder="Select colors...">{{$item}}</ui-select-match>
+                                <ui-select-choices repeat="color in vm.availableColors">
+                                    {{color}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span>Selected: {{vm.colors}}</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="businesstype">行业(单项)</label>
+
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <ui-select ng-model="vm.selectedType" theme="bootstrap" ng-disabled="disabled">
+                                    <!--<ui-select-match placeholder="选择行业类型.....">{{$item.name}}</ui-select-match>-->
+                                    <ui-select-match placeholder="选择行业类型.....">{{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="businesstype.uid as businesstype in vm.businesstypelist | filter: $select.search">
+                                        {{businesstype.name}}
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                  <button ng-click="vm.selectedType = undefined" class="btn btn-default">
+                                      <span class="glyphicon glyphicon-trash"></span>
+                                  </button>
+                                </span>
+                            </div>
+                        </div>
+                        <span>Selected: {{vm.selectedType}}</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="businesstype">行业(多选)</label>
+
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <ui-select multiple ng-model="vm.selectedTypes"
+                                           ng-disabled="disabled" close-on-select="false">
+                                    <ui-select-match placeholder="选择行业类型.....">{{$item.name}} &lt;{{$item.uid}}&gt;
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="businesstype as businesstype in vm.businesstypelist | propsFilter: {name: $select.search, uid: $select.search}">
+                                        <div ng-bind-html="businesstype.name | highlight: $select.search"></div>
+                                        <small ng-bind-html="businesstype.uid | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            <span class="input-group-btn">
+                            <button ng-click="vm.selectedTypes = undefined" class="btn btn-default">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                            </span>
+                            </div>
+                        </div>
+                        <span>Selected: {{vm.selectedTypes}}</span>
+                    </div>
+
+
+                    <div class="form-group">
                         <div class="col-md-offset-1 col-md-6">
-                            <button class="btn btn-primary" ng-click="saveLine()"><i class="fa fa-floppy-o"></i> 保存</button>
+                            <button class="btn btn-primary" ng-click="saveLine()"><i class="fa fa-floppy-o"></i> 保存
+                            </button>
+                            <button class="btn btn-success" ng-click="setBusiness()">Set</button>
                         </div>
                     </div>
                 </form>

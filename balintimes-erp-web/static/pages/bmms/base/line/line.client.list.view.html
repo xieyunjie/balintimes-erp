@@ -1,4 +1,4 @@
-<div>
+<div ng-init="initLineListCtrl()">
     <!--<div class="bg-light lter b-b wrapper-md">-->
     <!--<h5 class="m-n font-thin h3">{{vm.title}}</h5>-->
     <!--</div>-->
@@ -15,19 +15,21 @@
                             <button type="button" class="btn btn-primary" ng-click="reloadFirstPage()"><i
                                     class="fa fa-plus"></i> 添加
                             </button>
-                            <button type="button" class="btn btn-success" ng-click="reloadOtherPage()"><i
+                            <button type="button" class="btn btn-success" has-permissions="crm:media:add" ng-click="reloadOtherPage()"><i
                                     class="fa fa-refresh"></i> 刷新
                             </button>
                             <button type="button" class="btn btn-danger"
-                                    ng-click="deleteLine('424e0549-a07e-4f0b-8974-e75c14c87188')"><i
+                                    ng-click="deleteLine('424e0549-a07e-4f0b-8974-e75c14c87188')" has-permissions="crm:aa:qq"><i
                                     class="fa fa-trash"></i> 删除
                             </button>
-                            <button type="button" class="btn btn-danger" ng-click="showload()"><i
+                            <button type="button" class="btn btn-danger"
+                                    ng-click="showload()"><i
                                     class="fa fa-trash"></i> loading
                             </button>
                         </div>
                     </div>
-                    <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" show-filter="true">
+                    <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped"
+                           show-filter="true">
                         <tr ng-repeat="row in $data">
                             <td data-title="'#'" td-mouseover-toggle="" style="width: 100px">
                                 <div>
@@ -40,7 +42,7 @@
                                 {{row.uid}}
                             </td>
                             <td data-title="'名称'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
-                            <td data-title="'创建时间'" sortable="'createtime'">
+                            <td data-title="'创建时间'">
                                 {{row.createtime}}
                             </td>
 

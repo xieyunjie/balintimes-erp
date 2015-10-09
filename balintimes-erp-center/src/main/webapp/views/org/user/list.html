@@ -8,25 +8,83 @@
 	<link rel="stylesheet" href="/oaucenter/resources/css/jquery.treetable.css">
 	<link rel="stylesheet" href="/oaucenter/resources/css/jquery.treetable.theme.default.css">
 
+	<script type="text/ng-template" id='editByUserTpl'>
+	<div class="panel-body" >
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-ol"></i> 设置用户组
+			</div>
+		</div>
+		
+		<ul class="tree">
+			<nodepost-tree children="userGroupTreeData" text="name" expanded="true" checkchildren="false">
+			</nodepost-tree>
+		</ul>
+		<div class="col-sm-4 col-sm-offset-4">
+			<button class="btn btn-primary" ng-click="saveUserGroupChoose()">
+				<i class="fa fa-check"></i>保存
+			</button>
+			<button class="btn btn-warning" ng-click="closeUserGroupWin()">
+				<i class="fa fa-times"></i>关闭
+			</button>
+			
+		</div>
+	</div>
+	</script>
+
+	<script type="text/ng-template" id='delUserTpl'>
+	<div class="panel-body" >
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-ol"></i> 设置职位组
+			</div>
+		</div>
+		
+		<ul class="tree">
+			<nodepost-tree children="postTreeGroupData" text="name" expanded="true" checkchildren="false">
+			</nodepost-tree>
+		</ul>
+		<div class="col-sm-4 col-sm-offset-4">
+			<button class="btn btn-primary" ng-click="saveChoose()">
+				<i class="fa fa-check"></i>保存
+			</button>
+			<button class="btn btn-warning" ng-click="closeWin()">
+				<i class="fa fa-times"></i>关闭
+			</button>
+			
+		</div>
+	</div>
+	</script>
+
 	<script type="text/ng-template" id="tree_node">
-        <tr tr-mouseover-toggle="4" tt-node is-branch="node.children.length > 0" ng-class="{warning:node.status == 0}">
-            <td style="width: 300px;text-align: left"><a href="#"
-                   ui-sref="org/user/edit({uid:node.uid,parentuid:node.parentuid,parentname:node.parentname})"><span
-                    ng-bind="node.employeename"></span></a></td>
-            <td style="width: 100px;text-align: center" ng-bind="node.username"></td>
-           
-            <td style="width: 100px;text-align: center" ng-bind="node.postname"></td>
-            <td style="width: 80px;text-align: center" ng-bind="node.usertypename"></td>
+        <tr tr-mouseover-toggle="3" tt-node is-branch="node.children.length > 0" ng-class="{warning:node.users[0].status == 0}">			
+            <td style="width: 300px;text-align: left" >   
+				   <a href="#" ui-sref="org/user/edit({uid:x.uid,parentuid:node.parentuid,parentname:x.parentname,postuid:x.uid})" ng-if="node.users.length>1" ng-repeat="x in node.users">					
+					<span>{{ x.employeename+"," }}</span>
+				   </a>	
+                				  	
+				   <a href="#" ui-sref="org/user/edit({uid:node.users[0].uid,parentuid:node.parentuid,parentname:node.parentname,postuid:node.uid})" ng-if="node.users.length==1">
+					<span ng-bind="node.users[0].employeename"></span></a>	  
+            	   <a href="#" ui-sref="org/user/edit({uid:node.users[0].uid,parentuid:node.parentuid,parentname:node.parentname,postuid:node.uid})" ng-if="node.users.length<=0">
+					<span ng-bind="node.name"></span></a>
+			</td>			
+                      
+            <td style="width: 100px;text-align: center" ng-bind="node.users[0].postname"></td>
+            <td style="width: 80px;text-align: center" ng-bind="node.users[0].usertypename"></td>
             <td>
                 <div>
-                    <a href="#" ui-sref="org/user/edit({uid:'0',parentuid:node.uid,parentname:node.employeename})"> <i
-                            class="fa fa-angle-double-down"></i> 添加下级员工</a>
+                    <a href="#" ui-sref="org/user/edit({uid:'0',parentuid:node.uid,parentname:node.users[0].employeename})"> <i
+                            class="fa fa-angle-double-down"></i> 添加下级员工</a>					
                     |
-                    <a href="#" ng-click="Deleteuser(node.uid)"><i class="fa fa-trash-o fa-fw text-danger"></i> 删除</a>
+                    <a href="#"  ng-if="node.users.length>1"ng-click="Deleteuser(node.users)">
+						<i class="fa fa-trash-o fa-fw text-danger" ></i> 删除</a>
+					<a href="#" ng-click="Deleteuser(node.users)" ng-if="node.users.length==1"><i class="fa fa-trash-o fa-fw text-danger"></i> 删除</a>
+					|<a href="#" ng-click="SelectUserGroupTreeModal(node.users[0].uid)" tooltip="设置用户组"><i class="fa fa-trash-o fa-fw fa-group"></i>设置用户组</a>																		
                 </div>
             </td>
         </tr>
     </script>
+
 
 	<form name="searchForm" class="form-horizontal" role="form" novalidate>
 		<div class="form-group">
@@ -57,7 +115,7 @@
 						<treecontrol class="tree-light treecontrolfont" tree-model="post2" expanded-nodes="expandedNodes" on-selection="SelectTreePost2(node)"> {{node.name}} </treecontrol>
 					</div>
 				</div>
-				
+
 				<label for="orgnizationname" class="col-md-1 control-label">机构:</label>
 
 				<div class="col-md-2 dropdown combo-select">
@@ -72,8 +130,8 @@
 						<treecontrol class="tree-light treecontrolfont" tree-model="org" expanded-nodes="expandedNodes" on-selection="SelectTreeOrg(node)"> {{node.name}} </treecontrol>
 					</div>
 				</div>
-			</div>			
-			
+			</div>
+
 			<div class="form-group">
 				<div class=" col-sm-4 col-sm-offset-5">
 					<button class="btn btn-primary" ng-click="queryUserTree()">
@@ -82,7 +140,7 @@
 					<button class="btn btn-info" ng-click="resetForm()">
 						<i class="fa fa-undo"></i> 重置
 					</button>
-					
+
 				</div>
 			</div>
 	</form>
@@ -94,24 +152,25 @@
 			</div>
 			<div class="box-tools">
 				<div class="input-group" style="width: 150px;">
-					<input class="form-control input-sm pull-right" type="text" name="table_search" ng-model="search_orgname">
+					<!-- 					<input class="form-control input-sm pull-right" type="text" name="table_search" ng-model="search_orgname"> -->
 
-					<div class="input-group-btn">
-						<button class="btn btn-sm btn-default" ng-click="inituserTree(search_orgname)">
-							<i class="fa fa-search"></i> 查找
-						</button>
-					</div>
+					<!-- 					<div class="input-group-btn"> -->
+					<!-- 						<button class="btn btn-sm btn-default" ng-click="inituserTree(search_orgname)"> -->
+					<!-- 							<i class="fa fa-search"></i> 查找 -->
+					<!-- 						</button> -->
+					<!-- 					</div> -->
 				</div>
 			</div>
 
 		</div>
+
 
 		<div class="box-body box-body table-responsive no-padding">
 			<table class="table table-bordered table-striped table-hover" tt-table tt-params="expanded_params">
 				<thead>
 					<tr>
 						<th>员工</th>
-						<th>用户名</th>
+
 						<th>职位</th>
 						<th>类型</th>
 						<th style="width: 200px; text-align: center"></th>
