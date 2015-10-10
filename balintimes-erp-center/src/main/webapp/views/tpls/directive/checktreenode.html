@@ -1,8 +1,11 @@
-<li><span ng-click="toggleVisibility(node)"> 
-<!-- <i ng-class="{'fa fa-caret-right fa-lg':node.childrenVisibility==false,'fa fa-caret-down fa-lg' : node.childrenVisibility==true }"></i>-->
-<!---->		<i class="fa fa-caret-right fa-lg ng-hide" ng-show="(node.childrenVisibility==false || node.children.length==0)"></i>
-		<i class="fa fa-caret-down fa-lg ng-hide" ng-show="node.childrenVisibility==true && node.children.length>0"></i> 
-		
+<li><span ng-click="toggleVisibility(node)"> <!-- <i ng-class="{'fa fa-caret-right fa-lg':node.childrenVisibility==false,'fa fa-caret-down fa-lg' : node.childrenVisibility==true }"></i>-->
+		<!----> <i class="fa fa-caret-right fa-lg ng-hide"
+		ng-show="(node.childrenVisibility==false && node.children.length!=0)"></i>
+		<i class="fa fa-minus fa-lg ng-hide"
+		ng-show="(node.children.length==0)"></i> <i
+		class="fa fa-caret-down fa-lg ng-hide"
+		ng-show="node.childrenVisibility==true && node.children.length>0"></i>
+
 </span> <span ng-click="checkNode(this,node)"> <i
 		ng-class="{'fa fa-square-o fa-lg':node.checkType==-1,'fa fa-minus-square-o fa-lg':node.checkType==0, 'fa fa-check-square-o fa-lg':node.checkType==1}"></i>
 </span> <span ng-bind="bindText"> </span></li>

@@ -1,12 +1,7 @@
 package com.balintimes.erp.center.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,16 +9,20 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.balintimes.erp.center.base.BaseController;
 import com.balintimes.erp.center.model.Post;
@@ -32,6 +31,8 @@ import com.balintimes.erp.center.model.User;
 import com.balintimes.erp.center.service.PostService;
 import com.balintimes.erp.center.service.UserService;
 import com.balintimes.erp.center.util.JsonUtil;
+import com.balintimes.erp.util.common.FileDetail;
+import com.balintimes.erp.util.common.IoUtil;
 
 @Controller
 @RequestMapping("user")
@@ -73,14 +74,18 @@ public class UserController extends BaseController {
 
 	@RequestMapping("listbypage")
 	@ResponseBody
-	public String UserListforPage(String username, String employeename, String usertype, String isenable, int page, int pageSize) {
+	public String UserListforPage(String username, String employeename,
+			String usertype, String isenable, int page, int pageSize) {
 		if (isenable != null) {
 			isenable = isenable.equals("-1") ? "" : isenable;
 		}
 
-		com.balintimes.erp.center.tuples.TuplePage<List<User>, Integer> result = this.userService.GetUserList(username, employeename, usertype, isenable, page, pageSize);
+		com.balintimes.erp.center.tuples.TuplePage<List<User>, Integer> result = this.userService
+				.GetUserList(username, employeename, usertype, isenable, page,
+						pageSize);
 
-		return JsonUtil.ResponseSuccessfulMessage(result.objectList, result.objectTotalCount);
+		return JsonUtil.ResponseSuccessfulMessage(result.objectList,
+				result.objectTotalCount);
 	}
 
 	@RequestMapping("getuser/{uid}")
@@ -114,7 +119,7 @@ public class UserController extends BaseController {
 				return JsonUtil.ResponseFailureMessage("已经存在相同用户名!");
 			}
 		}
-		
+
 		user.setUid(UUID.randomUUID().toString());
 		user.setCreateby(webUsrUtil.CurrentUser().getEmployeeName());
 		user.setCreatetime(new Date());
@@ -132,12 +137,14 @@ public class UserController extends BaseController {
 		if (user.getStillpass() == false) {
 			if (!userFromDB.getUsername().equalsIgnoreCase(user.getUsername())) {
 				// 相同用户名
-				if (this.userService.ExistsUserName(user.getUsername(), user.getUid()) == true) {
+				if (this.userService.ExistsUserName(user.getUsername(),
+						user.getUid()) == true) {
 					return JsonUtil.ResponseFailureMessage("已经存在相同用户名!");
 				}
 			}
 
-			if (!userFromDB.getEmployeename().equalsIgnoreCase(user.getEmployeename())) {
+			if (!userFromDB.getEmployeename().equalsIgnoreCase(
+					user.getEmployeename())) {
 				// 相同员工名
 				if (this.userService.ExistsEmployeeName(user.getEmployeename()) == true) {
 					return JsonUtil.ResponseFailureMessage("已经存在相同员工名!");
@@ -165,13 +172,15 @@ public class UserController extends BaseController {
 	public String UpdateUserPassword(String oldpassword, String newpassword) {
 
 		try {
-			String username = this.userService.UpdatePassword(webUsrUtil.CurrentUser().getUid(), oldpassword, newpassword);
+			String username = this.userService.UpdatePassword(webUsrUtil
+					.CurrentUser().getUid(), oldpassword, newpassword);
 			if (username.equals("")) {
 				return JsonUtil.ResponseFailureMessage("修改密码错误！");
 			}
 			com.balintimes.erp.center.shiro.Utils.logout();
 			Subject subject = SecurityUtils.getSubject();
-			UsernamePasswordToken token = new UsernamePasswordToken(username, newpassword);
+			UsernamePasswordToken token = new UsernamePasswordToken(username,
+					newpassword);
 			subject.login(token);
 
 			return JsonUtil.ResponseSuccessfulMessage("修改密码成功！");
@@ -187,7 +196,8 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public String deleteUser(String UID) {
 		System.out.println("*******" + UID);
-		this.userService.deleteUser(UID, webUsrUtil.CurrentUser().getEmployeeName());
+		this.userService.deleteUser(UID, webUsrUtil.CurrentUser()
+				.getEmployeeName());
 
 		return JsonUtil.ResponseSuccessfulMessage("删除成功");
 	}
@@ -243,12 +253,19 @@ public class UserController extends BaseController {
 
 	@RequestMapping(value = "querytree", method = RequestMethod.POST)
 	@ResponseBody
-	public String GetUserTreeListByCondition(String username, String employeename, String postuid, String postname, String organizationuid, String orgnizationname) {
-		if ((username == null || username.equalsIgnoreCase("")) && (employeename == null || employeename.equalsIgnoreCase("")) && (postuid == null || postuid.equalsIgnoreCase("")) && (organizationuid == null || organizationuid.equalsIgnoreCase("")))
+	public String GetUserTreeListByCondition(String username,
+			String employeename, String postuid, String postname,
+			String organizationuid, String orgnizationname) {
+		if ((username == null || username.equalsIgnoreCase(""))
+				&& (employeename == null || employeename.equalsIgnoreCase(""))
+				&& (postuid == null || postuid.equalsIgnoreCase(""))
+				&& (organizationuid == null || organizationuid
+						.equalsIgnoreCase("")))
 			return this.GetUserTreeList();
 
 		List<PostTree> trees = new ArrayList<PostTree>(1000);
-		List<User> listUsers = userService.GetUserTreeListByCondition(username, employeename, postuid, organizationuid);// 符合条件的User
+		List<User> listUsers = userService.GetUserTreeListByCondition(username,
+				employeename, postuid, organizationuid);// 符合条件的User
 
 		List<User> allUsers = userService.GetUserTreeList();
 		List<Post> posts = new ArrayList<Post>();
@@ -290,7 +307,10 @@ public class UserController extends BaseController {
 				for (User user : item.getUsers()) {
 					for (User listUserItem : listUsers) {
 						// 职位、ID和筛选结果相同的，才添加
-						if (listUserItem.getPostuid().equalsIgnoreCase(user.getPostuid()) && listUserItem.getUid().equalsIgnoreCase(user.getUid())) {
+						if (listUserItem.getPostuid().equalsIgnoreCase(
+								user.getPostuid())
+								&& listUserItem.getUid().equalsIgnoreCase(
+										user.getUid())) {
 							restUsers.add(user);
 						}
 					}
@@ -309,7 +329,8 @@ public class UserController extends BaseController {
 	}
 
 	// ----------------------------------------------------------------------------------------------------
-	private List<Post> FillPostListWithUsers(List<Post> postList, List<User> userList) {
+	private List<Post> FillPostListWithUsers(List<Post> postList,
+			List<User> userList) {
 		List<Post> resultPosts = new ArrayList<Post>();
 		for (Post post : postList) {
 			List<User> tmpUsers = new ArrayList<User>();
@@ -340,7 +361,8 @@ public class UserController extends BaseController {
 		for (Post Post : list) {
 			if (Post.getUid().equalsIgnoreCase(rootUID)) {
 				rootPost = new PostTree(Post);
-				rootPost.setChildren(this.GetPostChildren(list, rootPost.getUid(), rootPost.getName()));
+				rootPost.setChildren(this.GetPostChildren(list,
+						rootPost.getUid(), rootPost.getName()));
 				trees.add(rootPost);
 				break;
 			}
@@ -349,7 +371,8 @@ public class UserController extends BaseController {
 		return trees;
 	}
 
-	private List<PostTree> GetPostChildren(List<Post> list, String parentUID, String parentname) {
+	private List<PostTree> GetPostChildren(List<Post> list, String parentUID,
+			String parentname) {
 
 		List<PostTree> tree = new ArrayList<PostTree>();
 
@@ -358,7 +381,8 @@ public class UserController extends BaseController {
 
 				PostTree node = new PostTree(post);
 				node.setParentname(parentname);
-				node.setChildren(this.GetPostChildren(list, post.getUid(), node.getName()));
+				node.setChildren(this.GetPostChildren(list, post.getUid(),
+						node.getName()));
 				tree.add(node);
 			}
 		}
@@ -408,7 +432,8 @@ public class UserController extends BaseController {
 			}
 			tmpUserUid = tmpUserUid.substring(0, tmpUserUid.length() - 1);
 			tmpUserName = tmpUserName.substring(0, tmpUserName.length() - 1);
-			tmpEmployeeName = tmpEmployeeName.substring(0, tmpEmployeeName.length() - 1);
+			tmpEmployeeName = tmpEmployeeName.substring(0,
+					tmpEmployeeName.length() - 1);
 			resultUser.setUid(tmpUserUid);
 			resultUser.setUsername(tmpUserName);
 			resultUser.setEmployeename(tmpEmployeeName);
@@ -423,7 +448,57 @@ public class UserController extends BaseController {
 		return JsonUtil.ResponseSuccessfulMessage(resultUser);
 	}
 
+	// @RequestMapping(value = "upload", method = RequestMethod.POST)
+	// @ResponseBody
+	// public String UploadFile(UserUpload userUpload){
+	//
+	// @SuppressWarnings("unused")
+	// UserUpload aUpload=userUpload;
+	// return JsonUtil.ResponseSuccessfulMessage("上传成功");
+	// }
 
+	@RequestMapping(value = "upload")
+	public String upload(
+			@RequestParam(value = "file", required = false) MultipartFile file,
+			HttpServletRequest request, ModelMap model) {
+
+		System.out.println("开始");
+		String path = request.getSession().getServletContext()
+				.getRealPath("upload");
+		// String fileName = file.getOriginalFilename();
+		// System.out.println(path);
+		// File targetFile = new File(path, fileName);
+		// if (!targetFile.exists()) {
+		// targetFile.mkdirs();
+		// }
+
+		// // 保存
+		// try {
+		// file.transferTo(targetFile);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// com.balintimes.erp.center.model.addAttribute("fileUrl",
+		// request.getContextPath() + "/upload/" +
+		// fileName);
+
+		return "result";
+	}
+
+	@RequestMapping(value = "userheadupload", method = RequestMethod.POST)
+	@ResponseBody
+	public String uploadImg(HttpServletRequest request,
+			HttpServletResponse response) throws IllegalStateException,
+			IOException {
+
+		List<String> filenames = new ArrayList<String>();
+		List<FileDetail> fds = IoUtil.upload(request, response, tempavatarsurl,
+				this.webUsrUtil.CurrentUser().getUid());
+		for (FileDetail item : fds) {
+			filenames.add(item.getFileFullName());
+		}
+		return JsonUtil.ResponseSuccessfulMessage(filenames);
+	}
 
 	@RequestMapping(value = "updatehead", method = RequestMethod.POST)
 	@ResponseBody
@@ -432,89 +507,29 @@ public class UserController extends BaseController {
 			return JsonUtil.ResponseFailureMessage("请上传图片");
 		}
 
-		String url = request.getSession().getServletContext().getRealPath(this.avatarsurl);
+		String url = request.getSession().getServletContext()
+				.getRealPath(this.avatarsurl);
 
-		String oldUrl = request.getSession().getServletContext().getRealPath(this.tempavatarsurl);
+		String oldUrl = request.getSession().getServletContext()
+				.getRealPath(this.tempavatarsurl);
 
-		File file = new File(oldUrl, headurl);
+		String oldFile = oldUrl + "/" + headurl;
 
-		File headDir = new File(url, headurl);
-
-		File u = new File(url);
-		if (!u.exists()) {
-			u.mkdir();
-		}
-
-		if (!headDir.exists()) {
-			try {
-				headDir.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
-				return JsonUtil.ResponseFailureMessage(e.getMessage());
-			}
-		} else {
-			headDir.delete();
-			try {
-				headDir.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				return JsonUtil.ResponseFailureMessage(e.getMessage());
-			}
-		}
-
-		InputStream fileInputStream = null;
 		try {
-			fileInputStream = new FileInputStream(file);
+			IoUtil.cut(oldFile, headurl, url);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			// e.printStackTrace();
 			return JsonUtil.ResponseFailureMessage(e.getMessage());
-		}
-		OutputStream fileOutputStream = null;
-		try {
-			fileOutputStream = new FileOutputStream(headDir, true);
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			return JsonUtil.ResponseFailureMessage(e.getMessage());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			return JsonUtil.ResponseFailureMessage(e.getMessage());
 		}
 
-		if (fileInputStream != null && fileOutputStream != null) {
-			int temp = 0;
-			try {
-				while ((temp = fileInputStream.read()) != -1) {
-					fileOutputStream.write(temp);
-				}
-				System.out.println("复制完成");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
-				System.out.println("复制失败");
-				return JsonUtil.ResponseFailureMessage(e.getMessage());
-			} finally {
-				try {
-					fileInputStream.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					// e.printStackTrace();
-					return JsonUtil.ResponseFailureMessage(e.getMessage());
-				}
-				try {
-					fileOutputStream.flush();
-					fileOutputStream.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					// e.printStackTrace();
-					return JsonUtil.ResponseFailureMessage(e.getMessage());
-				}
-			}
-
-		}
-
-		file.delete();
-
-		this.userService.UpdateHeadByUser(this.webUsrUtil.CurrentUser().getUid(), headurl);
+		this.userService.UpdateHeadByUser(this.webUsrUtil.CurrentUser()
+				.getUid(), headurl);
 		return JsonUtil.ResponseSuccessfulMessage("保存成功");
 	}
 
