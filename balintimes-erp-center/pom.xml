@@ -12,9 +12,10 @@
     <artifactId>balintimes-erp-center</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
     <properties>
         <spring.version>4.2.0.RELEASE</spring.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
@@ -28,6 +29,19 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.balintimes</groupId>
+            <artifactId>balintimes-erp-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.balintimes</groupId>
+            <artifactId>balintimes-erp-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>

@@ -3,15 +3,21 @@
  */
 module.exports = {
 
+    serverurl: {
+        bmms: "http://www.balintimes-web.net:9090/bmms",
+        crm: "http://localhost:8080/balintimes-erp-crm",
+        //ucenter: "http://172.16.0.250:8080/oaucenter"
+        ucenter: "http://localhost:8080/oaucenter"
+    },
     server: {
         bmms: {
             url: "http://www.balintimes-web.net:9090/bmms"
         },
         crm: {
-            url: "http://www.balintimes-web.net:9090/crm"
+            url: "http://localhost:8080/balintimes-erp-crm"
         },
         ucenter: {
-            url: "http://www.balintimes-web.net:9090/oaucenter",
+            url: "http://localhost:8080/oaucenter",
             authurl: "/ws/authority/userauthentication",
             userapps: "/ws/authority/userapps"
         }

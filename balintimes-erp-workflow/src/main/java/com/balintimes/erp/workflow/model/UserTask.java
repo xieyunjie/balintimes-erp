@@ -1,7 +1,9 @@
 package com.balintimes.erp.workflow.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by AlexXie on 2015/10/9.
@@ -23,6 +25,12 @@ public class UserTask implements Serializable {
     private String owner;
     private String assignee;
     private Date createTime;
+
+    private List<TaskUserLink> taskUserLinkList;
+
+    public UserTask() {
+        this.taskUserLinkList = new ArrayList<TaskUserLink>();
+    }
 
     public String getTaskId() {
         return taskId;
@@ -80,6 +88,7 @@ public class UserTask implements Serializable {
         this.executionInstId = executionInstId;
     }
 
+    @Deprecated
     public String getOwner() {
         return owner;
     }
@@ -88,6 +97,7 @@ public class UserTask implements Serializable {
         this.owner = owner;
     }
 
+    @Deprecated
     public String getAssignee() {
         return assignee;
     }
@@ -102,6 +112,21 @@ public class UserTask implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public List<TaskUserLink> getTaskUserLinkList() {
+        return taskUserLinkList;
+    }
+
+    public void setTaskUserLinkList(List<TaskUserLink> taskUserLinkList) {
+        this.taskUserLinkList = taskUserLinkList;
+    }
+
+    public void addUserLink(TaskUserLink link) {
+
+        if (this.taskUserLinkList == null) this.taskUserLinkList = new ArrayList<TaskUserLink>();
+
+        this.taskUserLinkList.add(link);
     }
 
     @Override

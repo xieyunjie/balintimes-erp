@@ -16,4 +16,6 @@ public interface AreaService {
 	void updateAreaInfo(Area areaInfo);
 
 	void deleteAreaInfo(String uid);
+
+	void updateAndaudit();
 }

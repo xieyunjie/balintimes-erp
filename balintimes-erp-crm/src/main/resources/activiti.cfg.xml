@@ -1,14 +1,31 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    
-    <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
-        <!-- 连接数据的配置 -->
-        <property name="jdbcDriver" value="${activiti.driver}"></property>
-        <property name="jdbcUrl" value="${activiti.url}"></property>
-        <property name="jdbcUsername" value="${activiti.username}"></property>
-        <property name="jdbcPassword" value="${activiti.password}"></property>
-        <!-- 没有表创建表 -->
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		                    http://www.springframework.org/schema/beans/spring-beans.xsd
+		                    http://www.springframework.org/schema/tx
+		                    http://www.springframework.org/schema/tx/spring-tx.xsd
+		                    http://www.springframework.org/schema/aop
+		                    http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="activitiDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${activiti.driver}"/>
+        <property name="url" value="${activiti.url}"/>
+        <property name="username" value="${activiti.username}"/>
+        <property name="password" value="${activiti.password}"/>
+        <property name="maxWait" value="60000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+    </bean>
+
+    <bean id="activitiTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="activitiDataSource"/>
+    </bean>
+
+    <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+        <property name="dataSource" ref="activitiDataSource"/>
+        <property name="transactionManager" ref="activitiTransactionManager"/>
         <property name="databaseSchemaUpdate" value="true"></property>
         <property name="jobExecutorActivate" value="true"></property>
     </bean>
@@ -24,6 +41,7 @@
     <bean id="formService" factory-bean="processEngine" factory-method="getFormService"/>
 
     <bean id="activitiEng" class="com.balintimes.erp.workflow.activiti.impl.ActivitiEngImpl">
+        <constructor-arg name="erpType" value="crm"/>
         <property name="repositoryService" ref="repositoryService"/>
         <property name="runtimeService" ref="runtimeService"/>
         <property name="taskService" ref="taskService"/>
@@ -31,5 +49,28 @@
         <property name="formService" ref="formService"/>
     </bean>
 
+
+    <tx:advice id="activitiTxAdvice" transaction-manager="activitiTransactionManager">
+        <tx:attributes>
+            <tx:method name="deploy*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="delete*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="disable*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="enable*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="start*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="suspend*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="activate*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="fire*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="complete*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut expression="execution(* com.balintimes.erp.workflow.activiti.impl..*.*(..))" id="aopPointcut"/>
+        <aop:advisor advice-ref="activitiTxAdvice" pointcut-ref="aopPointcut"/>
+    </aop:config>
+
+
+    <bean id="auditProcessListener" class="com.balintimes.erp.crm.workflow.listeners.AuditProcessListener"/>
 
 </beans>

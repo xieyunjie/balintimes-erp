@@ -6,7 +6,60 @@ var express = require('express'),
 var crmServer = require("../../config/settings").server.crm,
     AuthCtrl = require('../authentication/authentication.server.controller'),
     requestUtil = require("../util/requestUtil"),
+    formidable = require('formidable'),
+    fs = require('fs'),
+    util = require('util'),
+    rest = require('restler'),
     logger = require("../util/log4jsUtil").logReq();
+
+
+router.post("/contract/uploadcard", AuthCtrl.IsAuth, function (req, res, next) {
+
+    var files = [], fields = [], filePaths = [];
+    var url = crmServer.url + req.url;
+
+    var form = new formidable.IncomingForm();   //创建上传表单
+    form.encoding = 'utf-8';		//设置编辑
+    form.uploadDir = 'tempupload';	 //设置上传目录
+    form.keepExtensions = true;	 //保留后缀
+    form.maxFieldsSize = 2 * 1024 * 1024;   //文件大小
+
+    if (!fs.existsSync(form.uploadDir)) {
+        fs.mkdirSync(form.uploadDir);
+    }
+
+    form
+        .on('field', function (field, value) {
+            //console.log(field, value);
+            fields.push([field, value]);
+        })
+        .on('file', function (field, file) {
+            //console.log(field, file);
+            files.push([field, file]);
+            filePaths.push(file.path);
+        })
+        .on('end', function () {
+            var d = {};
+            for (var i = 0; i < files.length; i++) {
+                d[i] = rest.file(filePaths[i]);
+            }
+
+            rest.post(url, {
+                multipart: true,
+                data: d,
+            }).on('complete', function (data) {
+                //console.log('-> upload done');
+                files = [];
+                fields = [];
+                filePaths = [];
+
+                res.writeHead(200, {'content-type': 'text/plain'});
+                res.write(JSON.stringify(data));
+                res.end();
+            });
+        });
+    form.parse(req);
+})
 
 router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
 

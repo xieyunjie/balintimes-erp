@@ -45,6 +45,7 @@
     "oclazyload": "~1.0.4",
     "screenfull": "~2.0.0",
     "simple-line-icons": "~2.0.0",
-    "ui-select": "angular-ui-select#~0.12.1"
+    "ui-select": "angular-ui-select#~0.12.1",
+    "angular-file-upload":"2.1.4"
   }
 }
