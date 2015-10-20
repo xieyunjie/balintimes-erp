@@ -1,0 +1,178 @@
+<div class="wrapper-md">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold"><i class="fa fa-pencil-square-o"></i> {{vm.title}}</div>
+            <div class="panel-body">
+                <form class=" form-horizontal" role="form" name="editForm" method="post" enctype="multipart/form-data"
+                      novalidate>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="customername">客户名称</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="customername" id="customername"
+                                   ng-model="vm.customer.name"
+                                   disabled="true">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="name">姓名</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="name" id="name" ng-model="vm.contract.name"
+                                   required="required">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="sex">性别</label>
+
+                        <div class="col-md-4">
+                            <select class="form-control" name="sex" id="sex" ng-model="vm.contract.sex"
+                                    required="required">
+                                <option ng-repeat="item in vm.sexs" value="{{item.value}}">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="phone">联系电话</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="phone" id="phone" ng-model="vm.contract.phone"
+                                   required="required">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="address">联系地址</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="address" id="address"
+                                   ng-model="vm.contract.address" required="required">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="qq">QQ</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="qq" id="qq" ng-model="vm.contract.qq">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="email">Email</label>
+
+                        <div class="col-md-4">
+                            <input type="email" class="form-control" name="email" id="email"
+                                   ng-model="vm.contract.email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="birthday">生日</label>
+
+                        <div class="col-md-4">
+                            <input type="date" class="form-control" name="birthday" id="birthday"
+                                   ng-model="vm.contract.birthdayByDateTime">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="socialurl">社交联系方式</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="socialurl" id="socialurl"
+                                   ng-model="vm.contract.socialUrl">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="remarks">备注</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="remarks" id="remarks"
+                                   ng-model="vm.contract.remarks">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="cardurl">上传图片</label>
+
+                        <div class="col-md-4">
+                            <input type="file"
+                                   name="cardurl" id="cardurl" class="form-control" nv-file-select
+                                   uploader="uploader"
+                                   accept="image/gif, image/jpeg, image/jpg, image/png"/>
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th width="300px">名称</th>
+                            <th width="150px" ng-show="uploader.isHTML5">大小</th>
+                            <th width="150px" ng-show="uploader.isHTML5">进度</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in uploader.queue">
+                            <td><strong>{{ item.file.name }}</strong></td>
+                            <td ng-show="uploader.isHTML5" nowrap>{{
+                                item.file.size/1024/1024|number:2 }} MB
+                            </td>
+                            <td ng-show="uploader.isHTML5">
+                                <div class="progress" style="margin-bottom: 0;">
+                                    <div class="progress-bar" role="progressbar"
+                                         ng-style="{ 'width': item.progress + '%' }"></div>
+                                </div>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-success btn-xs"
+                                        ng-click="item.upload()"
+                                        ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                    <span class="fa fa-upload"></span> Upload
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs"
+                                        ng-click="removeImg(item)">
+                                    <span class="fa fa-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div>
+                        <div>
+                            <div class="progress" style="">
+                                <div class="progress-bar" role="progressbar"
+                                     ng-style="{ 'width': uploader.progress + '%' }"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <img alt="" ng-src="{{currImgUrl}}"
+                             style="width: 400px; height: 150px;">
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-1 col-md-6">
+                            <button class="btn btn-primary" ng-click="saveContract()"><i
+                                    class="fa fa-floppy-o"></i> 保存
+                            </button>
+                            <button class="btn btn-primary" ui-sref="crm.saler.customer_list"><i
+                                    class="fa fa-reply"></i> 返回
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

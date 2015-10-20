@@ -1,0 +1,67 @@
+<div>
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list"></i> {{vm.title}}
+            </div>
+
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="panel-body b-b b-light">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary"
+                                    ui-sref="crm.saler.contract_edit_edit({uid:-1,isreg:vm.isReg,isreadonly :false,customeruid:vm.customerUid,followupuid:vm.followUpUid})">
+                                <i class="fa fa-plus"></i> 添加
+                            </button>
+
+                            <button class="btn btn-danger" ui-sref="crm.saler.customer_list"><i
+                                    class="fa fa-reply"></i> 返回
+                            </button>
+                        </div>
+
+                        <br><br>
+
+                        <table class="table table-responsive table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>客户</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>电话</th>
+                                <th>QQ</th>
+                                <th>Email</th>
+                                <th>地址</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in vm.contractList">
+                                <td>
+                                    <a href="#" title="查询详细"
+                                       ui-sref="crm.saler.contract_edit_edit({uid:item.uid,isreg:item.reg,isreadonly:true})"><i
+                                            class="fa fa-search  fa-fw fa-lg"></i> </a>
+
+                                    <a href="#" title="编辑"
+                                       ui-sref="crm.saler.contract_edit_edit({uid:item.uid,isreg:item.reg,isreadonly :false})"><i
+                                            class="fa fa-edit  fa-fw fa-lg"></i> </a>
+
+                                    <a href="#" title="删除" ng-click="deleteContract(item.uid,item.reg)"><i
+                                            class="fa fa-trash fa-fw fa-lg"></i> </a>
+                                </td>
+                                <td>{{item.customerName}}</td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.sex?"男":"女"}}</td>
+                                <td>{{item.phone}}</td>
+                                <td>{{item.qq}}</td>
+                                <td>{{item.email}}</td>
+                                <td>{{item.address}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,48 +1,56 @@
 <ol class="breadcrumb">
-    <li><a href="#">首页</a></li>
-    <li><a href="#">集团基础数据</a></li>
-    <li class="active">线路编辑</li>
+	<li><a href="#">首页</a></li>
+	<li><a href="#">集团基础数据</a></li>
+	<li class="active">线路编辑</li>
 </ol>
 <form name="editForm" class="form-horizontal " role="form" novalidate>
-    <div class="form-group">
-        <label for="linename" class="col-sm-1 control-label">线路名称:</label>
+	<div class="form-group">
+		<label class="control-label col-sm-1">城市:</label>
+		<div class="controls col-sm-2">
+			<select class="form-control" ng-model="line.cityuid" ng-options="city.uid as city.name for city in cities">
+				<option value="">-- 请选择城市 --</option>
+			</select>
+		</div>		
+	</div>
 
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name='linename' ng-model="line.name"
-                   required="required" ng-maxlength="10" ng-minlength='2'/>
+	<div class="form-group">
+		<label for="linename" class="col-sm-1 control-label">线路名称:</label>
 
-            <div ng-if="editForm.linename.$dirty">
-                <div ng-messages="editForm.employeename.$error" class="errormsg" role="alert">
-                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html'/>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="col-sm-4">
+			<input type="text" class="form-control" name='linename' ng-model="line.name" required="required" ng-maxlength="10" ng-minlength='2' />
 
-
-    <div class="form-group">
-        <label for="comment" class="col-sm-1 control-label">备注:</label>
-
-        <div class="col-sm-4">
-            <textarea name="comment" class="form-control" ng-model="line.comment"></textarea>
-        </div>
-
-    </div>
+			<div ng-if="editForm.linename.$dirty">
+				<div ng-messages="editForm.employeename.$error" class="errormsg" role="alert">
+					<div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+				</div>
+			</div>
+		</div>
+	</div>
 
 
+	<div class="form-group">
+		<label for="comment" class="col-sm-1 control-label">备注:</label>
 
-    <div class="form-group">
-        <div class="col-sm-offset-1 col-sm-6">
-            <button class="btn btn-primary" ng-click="saveline()" ng-disabled="editForm.$invalid">
-                <i class="fa fa-check"></i>保存
-            </button>
-            <button class="btn btn-info" ng-click="revert()">
-                <i class="fa fa-undo"></i> 重置
-            </button>
-            <a ui-sref="auth/line" class="btn btn-warning">
-                <i class="fa fa-times"></i>取消并返回</a>
+		<div class="col-sm-4">
+			<textarea name="comment" class="form-control" ng-model="line.comment"></textarea>
+		</div>
+
+	</div>
 
 
-        </div>
-    </div>
+
+	<div class="form-group">
+		<div class="col-sm-offset-1 col-sm-6">
+			<button class="btn btn-primary" ng-click="saveline()" ng-disabled="editForm.$invalid">
+				<i class="fa fa-check"></i>保存
+			</button>
+			<button class="btn btn-info" ng-click="revert()">
+				<i class="fa fa-undo"></i> 重置
+			</button>
+			<a ui-sref="auth/line" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+			</a>
+
+
+		</div>
+	</div>
 </form>

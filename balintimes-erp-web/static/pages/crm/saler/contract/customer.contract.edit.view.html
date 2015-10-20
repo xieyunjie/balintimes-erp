@@ -1,0 +1,209 @@
+<div class="wrapper-md">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold"><i class="fa fa-pencil-square-o"></i> {{vm.title}}</div>
+            <div class="panel-body">
+                <form class=" form-horizontal" role="form" name="editForm" method="post" enctype="multipart/form-data"
+                      novalidate>
+
+                    <!--<div class="form-group">-->
+                    <!--<label class="col-md-1 control-label" for="customername">客户名称</label>-->
+
+                    <!--<div class="col-md-4">-->
+                    <!--<input type="text" class="form-control" name="customername" id="customername"-->
+                    <!--ng-model="vm.customer.name"-->
+                    <!--disabled="true">-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="customer">客户</label>
+
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <ui-select ng-model="vm.customer" theme="bootstrap"
+                                           ng-disabled="vm.isReadOnly || vm.isUpdate"
+                                           id="customer" name="customer" required="required">
+                                    <ui-select-match placeholder="选择客户.....">{{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="item as item in vm.customerList | filter: $select.search">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                        <small ng-bind-html="item.brand | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                  <button ng-click="vm.customer = undefined" class="btn btn-default"
+                                          ng-disabled="vm.isReadOnly || vm.isUpdate">
+                                      <span class="glyphicon glyphicon-trash"></span>
+                                  </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="name">姓名</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="name" id="name" ng-model="vm.contract.name"
+                                   required="required" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="sex">性别</label>
+
+                        <div class="col-md-4">
+                            <select class="form-control" name="sex" id="sex" ng-model="vm.contract.sex"
+                                    required="required" ng-disabled="vm.isReadOnly">
+                                <option ng-repeat="item in vm.sexs" value="{{item.value}}"
+                                        ng-selected="vm.contract.sex==item.value">{{item.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="phone">联系电话</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="phone" id="phone" ng-model="vm.contract.phone"
+                                   required="required" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="address">联系地址</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="address" id="address"
+                                   ng-model="vm.contract.address" required="required" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="qq">QQ</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="qq" id="qq" ng-model="vm.contract.qq"
+                                   ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="email">Email</label>
+
+                        <div class="col-md-4">
+                            <input type="email" class="form-control" name="email" id="email"
+                                   ng-model="vm.contract.email" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="birthday">生日</label>
+
+                        <div class="col-md-4">
+                            <input type="date" class="form-control" name="birthday" id="birthday"
+                                   ng-model="vm.contract.birthdayByDateTime" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="socialurl">社交联系方式</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="socialurl" id="socialurl"
+                                   ng-model="vm.contract.socialUrl" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="remarks">备注</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="remarks" id="remarks"
+                                   ng-model="vm.contract.remarks" ng-disabled="vm.isReadOnly">
+                        </div>
+                    </div>
+
+                    <div class="form-group ng-hide" ng-show="!vm.isReadOnly">
+                        <label class="col-md-1 control-label" for="cardurl">上传图片</label>
+
+                        <div class="col-md-4">
+                            <input type="file"
+                                   name="cardurl" id="cardurl" class="form-control" nv-file-select
+                                   uploader="uploader"
+                                   accept="image/gif, image/jpeg, image/jpg, image/png"/>
+                        </div>
+                    </div>
+
+                    <table class="table ng-hide" ng-show="!vm.isReadOnly">
+                        <thead>
+                        <tr>
+                            <th width="300px">名称</th>
+                            <th width="150px" ng-show="uploader.isHTML5">大小</th>
+                            <th width="150px" ng-show="uploader.isHTML5">进度</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in uploader.queue">
+                            <td><strong>{{ item.file.name }}</strong></td>
+                            <td ng-show="uploader.isHTML5" nowrap>{{
+                                item.file.size/1024/1024|number:2 }} MB
+                            </td>
+                            <td ng-show="uploader.isHTML5">
+                                <div class="progress" style="margin-bottom: 0;">
+                                    <div class="progress-bar" role="progressbar"
+                                         ng-style="{ 'width': item.progress + '%' }"></div>
+                                </div>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-success btn-xs"
+                                        ng-click="item.upload()"
+                                        ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                    <span class="fa fa-upload"></span> Upload
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs"
+                                        ng-click="removeImg(item)">
+                                    <span class="fa fa-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div>
+                        <div>
+                            <div class="progress ng-hide" ng-show="!vm.isReadOnly" style="">
+                                <div class="progress-bar" role="progressbar"
+                                     ng-style="{ 'width': uploader.progress + '%' }"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <img alt="" ng-src="{{currImgUrl}}"
+                             style="width: 400px; height: 150px;">
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-1 col-md-6">
+                            <button class="btn btn-primary ng-hide" ng-show="!vm.isReadOnly" ng-click="saveContract()">
+                                <i class="fa fa-floppy-o"></i> 保存
+                            </button>
+                            <button class="btn btn-primary"
+                                    ui-sref="crm.saler.contract_list({customeruid:vm.customer.uid,followupuid:vm.customer.followUid,isreg:vm.customer.reg})">
+                                <i class="fa fa-reply"></i> 返回
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,6 +4,7 @@
 package com.balintimes.erp.center.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -58,9 +59,9 @@ public class LineServiceImpl implements LineService {
 	}
 
 	
-	public List<Line> GetLineListByCondition(String name) {
+	public List<Line> GetLineListByCondition(Map<String, Object> parameters) {
 		// TODO Auto-generated method stub
-		return this.lineDao.GetLineListByCondition(name);
+		return this.lineDao.GetLineListByCondition(parameters);
 	}
 	
 	public Line GetOneLine(String uid) {

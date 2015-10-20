@@ -10,6 +10,16 @@ public class FileDetail implements Serializable {
 	private String fileName;
 	private String prx;
 	private String fileFullName;
+	
+	private String baseUrl;
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
 
 	public String getFileFullName() {
 		return fileFullName;

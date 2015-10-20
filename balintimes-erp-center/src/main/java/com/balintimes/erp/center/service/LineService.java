@@ -1,6 +1,7 @@
 package com.balintimes.erp.center.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.balintimes.erp.center.model.Line;
 
@@ -13,7 +14,7 @@ public interface LineService {
 
 	boolean CreateLine(Line Line);
 	
-	List<Line> GetLineListByCondition(String name);
+	List<Line> GetLineListByCondition(Map<String, Object> parameters);
 	
 	Line GetOneLine(String uid);
 }

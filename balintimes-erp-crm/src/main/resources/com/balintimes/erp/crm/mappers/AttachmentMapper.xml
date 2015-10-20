@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.AttachmentMapper">
+	<resultMap type="Attachment" id="attachmentMap">
+		<id property="uid" column="uid" />
+		<result property="followUpUid" column="followupuid" />
+		<result property="customerUid" column="customeruid" />
+		<result property="customerName" column="customername" />
+		<result property="remarks" column="remarks" />
+		<result property="url" column="url" />
+		<result property="createBy" column="createby" />
+		<result property="createTime" column="createtime" />
+		<result property="fileName" column="filename"/>
+	</resultMap>
+
+	<select id="getAttachmentByCustomer" statementType="PREPARED"
+		resultType="Attachment" parameterType="int">
+		select
+		a.*,c.name as customername
+		as c.useruid
+		from
+		attachment as a join customerfollowup as b on
+		a.followupuid=b.uid
+		join customer as c on b.customeruid=c.uid
+		where
+		b.forbidden=0 and b.isdeleted=0
+		and c.isdeleted=0 and c.forbidden=0
+		and
+		a.followupuid=#{followUpUid}
+	</select>
+
+	<select id="getAttachment" statementType="PREPARED" resultType="Attachment"
+		parameterType="int">
+		select
+		a.*,c.name as customername as c.useruid
+		from
+		attachment as a join customerfollowup as b on a.followupuid=b.uid
+		join
+		customer as c on b.customeruid=c.uid
+		where
+		b.forbidden=0 and
+		b.isdeleted=0
+		and c.isdeleted=0 and c.forbidden=0
+		and a.uid=#{uid}
+	</select>
+
+	<insert id="createAttachment" statementType="PREPARED"
+		parameterType="Attachment">
+		insert into attachment(
+		followupuid,customeruid,remarks,url,createby,createtime,filename
+		)values(
+		#{followUpUid},#{customerUid},#{remarks},#{url},#{createBy},now(),#{fileName}
+		)
+	</insert>
+
+	<delete id="deleteAttachment" statementType="PREPARED"
+		parameterType="int">
+		delete from attachment where uid=#{uid}
+	</delete>
+
+</mapper>

@@ -59,7 +59,61 @@ router.post("/contract/uploadcard", AuthCtrl.IsAuth, function (req, res, next) {
             });
         });
     form.parse(req);
-})
+});
+
+router.post("/attachment/uploadatts", AuthCtrl.IsAuth, function (req, res, next) {
+
+    var files = [], fields = [], filePaths = [];
+    var url = crmServer.url + req.url;
+
+    var form = new formidable.IncomingForm();   //创建上传表单
+    form.encoding = 'utf-8';		//设置编辑
+    form.uploadDir = 'tempupload';	 //设置上传目录
+    form.keepExtensions = true;	 //保留后缀
+    form.maxFieldsSize = 5 * 1024 * 1024;   //文件大小
+
+    if (!fs.existsSync(form.uploadDir)) {
+        fs.mkdirSync(form.uploadDir);
+    }
+
+    form
+        .on('field', function (field, value) {
+            //console.log(field, value);
+            fields.push([field, value]);
+        })
+        .on('file', function (field, file) {
+            //console.log(field, file);
+            var f = {
+                filename: file.name,
+                path: file.path
+            };
+            files.push([field, file]);
+            filePaths.push(f);
+        })
+        .on('end', function () {
+            var d = {};
+            var n = {};
+            for (var i = 0; i < files.length; i++) {
+                n[i] = filePaths[i].filename;
+                d[i] = rest.file(filePaths[i].path);
+            }
+
+            rest.post(url, {
+                multipart: true,
+                data: d,
+            }).on('complete', function (data) {
+                //console.log('-> upload done');
+                files = [];
+                fields = [];
+                filePaths = [];
+
+                res.writeHead(200, {'content-type': 'text/plain'});
+                res.write(JSON.stringify(data));
+                res.end();
+            });
+        });
+    form.parse(req);
+});
 
 router.all("*", AuthCtrl.IsAuth, function (req, res, next) {
 

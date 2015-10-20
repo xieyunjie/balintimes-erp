@@ -17,7 +17,7 @@ angular.module('app')
         };
         return responseInterceptor;
     }])
-    .factory("AjaxRequest", ["$http", "AlertMsg", "AppUtil", function ($http, AlertMsg, AppUtil) {
+    .factory("AjaxRequest", ["$http", "AlertMsg", "Upload", "AppUtil", function ($http, AlertMsg, Upload, AppUtil) {
 
         return {
             post: function (url, params, alertmsg) {
@@ -107,6 +107,40 @@ angular.module('app')
             },
             options: function (url, params) {
 
+            },
+            upload: function (url, data, alertmsg, progressFn, xhrFn) {
+                if (angular.isFunction(alertmsg)) {
+                    xhrFn = progressFn;
+                    progressFn = alertmsg;
+                    alertmsg = true;
+                }
+                var uploadFn = Upload.upload({
+                    url: url,
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    },
+                    data: data
+                });
+
+                uploadFn.xhr(function (xhr) {
+                    if (xhrFn) xhrFn(xhr);
+                });
+
+                return uploadFn.then(function (response) {
+                    if (response.data.responseMsg != "") {
+                        if (response.data.success == "true") {
+                            if (!(alertmsg == false)) {
+                                AlertMsg.success(response.data.responseMsg);
+                            }
+                        }
+                        else {
+                            AlertMsg.warning(response.data.responseMsg);
+                        }
+                    }
+                    return response.data;
+                }, null, function (evt) {
+                    if (progressFn) progressFn(evt);
+                });
             }
         }
     }])

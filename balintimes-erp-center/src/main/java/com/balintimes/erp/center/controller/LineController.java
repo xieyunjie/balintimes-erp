@@ -1,7 +1,9 @@
 package com.balintimes.erp.center.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -31,10 +33,15 @@ public class LineController extends BaseController{
 	
 	@RequestMapping(value="listbypage",method=RequestMethod.POST)
 	@ResponseBody
-	public String GetLineListByCondition(String name){		
+	public String GetLineListByCondition(String name,String cityuid){		
+		Map<String, Object> parameters = new HashMap<String, Object>(2);
 		if(name==null)
 			name="";
-		List<Line> lines =this.lineService.GetLineListByCondition(name);
+		if(cityuid==null)
+			cityuid="";
+		parameters.put("name", name);
+		parameters.put("cityuid", cityuid);
+		List<Line> lines =this.lineService.GetLineListByCondition(parameters);
 		return JsonUtil.ResponseSuccessfulMessage(lines);
 	}
 	

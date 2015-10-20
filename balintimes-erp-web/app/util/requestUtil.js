@@ -5,7 +5,10 @@
 "use strict";
 var request = require("superagent"),
     agent = require("agentkeepalive"),
-    settings = require("../../config/settings");
+    settings = require("../../config/settings"),
+    formidable = require('formidable'),
+    lodash = require('lodash-node'),
+    fs = require("fs");
 var cloneFn = require('lodash-node/modern/lang/clone');
 var logger = require("./log4jsUtil").logReq();
 
@@ -34,6 +37,7 @@ var clientRequest = function (config) {
     var logMsg = [config.method, config.url, config.redisToken, JSON.stringify(config.params)];
 
     var call = {};
+    var deleteFiles = [];
     switch (config.method) {
         case "GET":
             call = request.get(config.url);
@@ -53,6 +57,16 @@ var clientRequest = function (config) {
         case "OPTIONS":
             call = request.options(config.url);
             break;
+        case "multipart":
+            call = request.post(config.url).set(settings.requestHeader.multipartContentType.text, settings.requestHeader.multipartContentType.value);
+            lodash.forEach(config.fields, function (value, key) {
+                call.field(key, value);
+            });
+            lodash.forEach(config.files, function (file, key) {
+                call.attach(key, file.path, file.name);
+                deleteFiles.push(file.path);
+            });
+            break;
     }
     if (config.headers) call.set(config.headers);
     if (config.redisToken)  call.set(settings.redisKey.redisToken, config.redisToken);
@@ -62,6 +76,12 @@ var clientRequest = function (config) {
         //.set("Accept","application/json")
         .agent(keepaliveAgent)// keyalive貌似没什么作用
         .end(function (err, response) {
+
+            if (lodash.isEmpty(deleteFiles) && settings.fileupload.deleteFileAfterComplete == 1) {
+                lodash.forEach(deleteFiles, function (f) {
+                    fs.unlinkSync(f)
+                });
+            }
             if (err) {
                 logMsg.splice(0, 0, err.status);
                 logMsg.push(err);
@@ -78,13 +98,41 @@ var clientRequest = function (config) {
 
 Util.transmit = function (config) {
 
-    clientRequest({
-        method: config.req.method,
-        redisToken: config.req.session.redisToken,
-        url: config.baseUrl + config.req.url,
-        params: config.req.body,
-        callback: config.callback
-    });
+    var req = config.req;
+
+    if ( lodash.isEmpty(req.header("content-type")) == false && req.header("content-type").indexOf("multipart/form-data") >= 0) {
+        var form = new formidable.IncomingForm();
+
+        form.encoding = "utf-8";
+        form.uploadDir = settings.fileupload.folder;
+        form.keepExtensions = true;
+        form.maxFieldsSize = settings.fileupload.fieldsSize;
+
+        if (!fs.existsSync(settings.fileupload.folder)) {
+            fs.mkdirSync(settings.fileupload.folder);
+        }
+
+        form.parse(req, function (err, fields, files) {
+            clientRequest({
+                method: "multipart",
+                redisToken: req.session.redisToken,
+                url: config.baseUrl + req.url,
+                //params: req.body,
+                fields: fields,
+                files: files,
+                callback: config.callback
+            });
+        });
+    }
+    else {
+        clientRequest({
+            method: req.method,
+            redisToken: req.session.redisToken,
+            url: config.baseUrl + req.url,
+            params: req.body,
+            callback: config.callback
+        });
+    }
 };
 
 Util.request = function (method, url, params, callback, redisToken) {

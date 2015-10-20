@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.RegContractMapper">
+	<resultMap type="RegContract" id="regContractMap">
+		<id property="uid" column="uid" />
+		<result property="customerUid" column="customeruid" />
+		<result property="customerName" column="customername" />
+		<result property="name" column="name" />
+		<result property="sex" column="sex" />
+		<result property="phone" column="phone" />
+		<result property="qq" column="qq" />
+		<result property="email" column="email" />
+		<result property="address" column="address" />
+		<result property="cardUrl" column="cardurl" />
+		<result property="isDeleted" column="isdeleted" />
+		<result property="birthday" column="birthday" />
+		<result property="socialUrl" column="socialurl" />
+		<result property="remarks" column="remarks" />
+		<result property="createBy" column="createby" />
+		<result property="createTime" column="createtime" />
+		<result property="editBy" column="editby" />
+		<result property="editTime" column="edittime" />
+		<result property="userUid" column="useruid" />
+	</resultMap>
+
+	<select id="getRegContractByCustomer" statementType="PREPARED"
+		resultType="RegContract" parameterType="int">
+		select
+		a.*,b.name as
+		customername,b.useruid
+		from
+		regcontract as a join salercustomer as b on
+		a.customeruid=b.uid
+		where
+		a.isdeleted=0 and b.isdeleted=0 and
+		b.forbidden=0 and a.customeruid=#{customerUid}
+	</select>
+
+	<select id="getRegContract" statementType="PREPARED" resultType="RegContract"
+		parameterType="int">
+		select
+		a.*,b.name as customername,b.useruid
+		from
+		regcontract as a join salercustomer as b on a.customeruid=b.uid
+		where
+		a.isdeleted=0 and b.isdeleted=0 and b.forbidden=0 and a.uid=#{uid}
+	</select>
+
+	<insert id="createRegContract" statementType="PREPARED"
+		parameterType="RegContract">
+		insert into regcontract(
+		customeruid,name,sex,phone,qq,email,address,cardurl,isdeleted,createby,createtime,birthday,socialurl,remarks
+		)values(
+		#{customerUid},#{name},#{sex},#{phone},#{qq},#{email},#{address},#{cardUrl},0,#{createBy},now(),#{birthday},#{socialUrl},#{remarks}
+		)
+	</insert>
+
+	<update id="updateRegContractByDel" statementType="PREPARED"
+		parameterType="int">
+		update
+		regcontract
+		set
+		isdeleted=1
+		where
+		uid=#{uid}
+	</update>
+
+	<update id="updateRegContract" statementType="PREPARED"
+		parameterType="RegContract">
+		update
+		regcontract
+		set
+		name=#{name},
+		sex=#{sex},
+		phone=#{phone},
+		qq=#{qq},
+		email=#{email},
+		address=#{address},
+		cardurl=#{cardUrl},
+		edittime=now(),
+		editby=#{editBy},
+		birthday=#{birthday},
+		socialurl=#{socialUrl},
+		remarks=#{remarks}
+		where
+		uid=#{uid}
+	</update>
+
+</mapper>

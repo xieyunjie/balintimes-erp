@@ -43,9 +43,9 @@ public class LineDaoImpl implements LineDao {
 	}
 
 	
-	public List<Line> GetLineListByCondition(String name) {
+	public List<Line> GetLineListByCondition(Map<String, Object> parameters) {
 		Map<String, Object> params = new HashMap<String, Object>(1);
-		params.put("name", name);
+		params=parameters;
 		return this.lineMapper.GetLineListByCondition(params);
 	}
 

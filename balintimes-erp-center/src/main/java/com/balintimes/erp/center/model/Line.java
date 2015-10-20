@@ -24,6 +24,8 @@ public class Line implements Serializable{
 	private String creatorid;
 	private Boolean isusebymediapool;
 	private int priorityno;
+	private String cityuid;
+	private String cityname;
 	
 	public String getUid() {
 		return uid;
@@ -137,4 +139,17 @@ public class Line implements Serializable{
 		this.priorityno = priorityno;
 	}
 
+	public String getCityuid() {
+		return cityuid;
+	}
+	public void setCityuid(String cityuid) {
+		this.cityuid = cityuid;
+	}
+	
+	public String getCityname() {
+		return cityname;
+	}
+	public void setCityname(String cityname) {
+		this.cityname = cityname;
+	}
 }

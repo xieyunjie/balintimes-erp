@@ -48,7 +48,7 @@ angular.module('CRM_Customer_Remarks_Edit_Module', []).controller('CRM_Customer_
                 maxDate: new Date().format("yyyy-MM-dd")
             };
 
-            $scope.saveRemarks = function () {
+            $scope.saveRemarks = function (picFile,xlsFile) {
                 vm.remarks.reg = vm.isReg;
                 vm.remarks.followUpUid = vm.followUid;
                 vm.remarks.customerUid = vm.customerUid;
@@ -56,7 +56,7 @@ angular.module('CRM_Customer_Remarks_Edit_Module', []).controller('CRM_Customer_
                 CRM_Follow_Remarks_Service.createRemarks(vm.remarks).then(function (res) {
                     $state.go("crm.saler.customer_list");
                 });
-            }
+            };
 
             $scope.openmanner = function () {
 

@@ -34,6 +34,15 @@ angular.module('app')
             }, {
                 name: 'CRM_Follow_Remarks_Service',
                 files: ["/pages/crm/saler/remarks/customer.remarks.service.js"]
+            }, {
+                name: 'CRM_Contract_Service',
+                files: ["/pages/crm/saler/contract/customer.contract.service.js"]
+            }, {
+                name: "angular-file-upload",
+                files: ["/bower_components/angular-file-upload/dist/angular-file-upload.min.js"]
+            }, {
+                name: "CRM_Attachment_Service",
+                files: ["/pages/crm/saler/attachment/customer.attachment.service.js"]
             }];
 
             var modules = plugins.concat(bmmsServices, crmServices);

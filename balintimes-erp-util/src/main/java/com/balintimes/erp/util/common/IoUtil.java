@@ -82,7 +82,7 @@ public class IoUtil {
 		OutputStream fileOutputStream = null;
 		try {
 
-			String newUrl = newPath + newFileName;
+			String newUrl = newPath + "/" + newFileName;
 
 			File file = new File(oldPath);
 			File newDir = new File(newUrl);

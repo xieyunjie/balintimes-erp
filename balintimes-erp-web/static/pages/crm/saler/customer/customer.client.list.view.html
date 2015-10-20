@@ -64,7 +64,28 @@
                                        ui-sref="crm.saler.remarks_edit({customeruid:row.uid,followuid:row.followUid,isreg:row.reg})"
                                        title="销售日志"><i
                                             class="fa fa-comments fa-fw fa-lg"></i> </a>
+
+                                    <a href="#"
+                                       ui-sref="crm.saler.contract_create_edit({customeruid:row.uid,followupuid:row.followUid,isreg:row.reg})"
+                                       title="新增联系人"><i
+                                            class="fa fa-user-plus fa-fw fa-lg"></i> </a>
+
+                                    <a href="#"
+                                       ui-sref="crm.saler.attachment_create_edit({customeruid:row.uid,followupuid:row.followUid,isreg:row.reg})"
+                                       title="附件上传"><i
+                                            class="fa fa-file-excel-o fa-fw fa-lg"></i> </a>
+
+                                    <a href="#" title="查看详细"
+                                       ui-sref="crm.saler.contract_list({customeruid:row.uid,followupuid:row.followUid,isreg:row.reg})"><i
+                                            class="fa fa-sort-amount-asc  fa-fw fa-lg"></i> </a>
                                 </div>
+
+                                <div class="ng-hide" ng-show="vm.currUser.uid!=row.userUid">
+                                    <a href="#" title="查看详细"
+                                       ui-sref="crm.saler.contract_list({customeruid:row.uid,followupuid:row.followUid,isreg:row.reg})"><i
+                                            class="fa fa-sort-amount-asc  fa-fw fa-lg"></i> </a>
+                                </div>
+
                             </td>
                             <!--<td title="'uid'" filter="{uid: 'text'}" sortable="'uid'">-->
                             <!--{{row.uid}}-->

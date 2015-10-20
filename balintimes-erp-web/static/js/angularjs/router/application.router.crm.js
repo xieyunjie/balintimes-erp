@@ -100,12 +100,63 @@ angular.module('app').constant("CRMROUTER", {
         url: '/remarks/cuedit',
         controllername: 'CRM_Customer_Remarks_CU_Edit_Controller',
         filepath: 'crm/saler/remarks/customer.remarks.cuedit',
-        params: ["uid","isreg", "isreadonly"],
+        params: ["uid", "isreg", "isreadonly"],
         script: [
             "CRM_Follow_Remarks_Service",
             "CRM_BaseData_Service",
             "CRM_Customer_Service",
             "CRM_base_Service"
         ]
-    }
+    },
+
+    crm_contract_create_edit: {
+        state: 'crm.saler.contract_create_edit',
+        url: '/contract/create',
+        controllername: 'CRM_Contract_Create_Controller',
+        filepath: 'crm/saler/contract/customer.contract.create',
+        params: ["customeruid", "followupuid", "isreg"],
+        script: [
+            "CRM_Customer_Service",
+            "CRM_Contract_Service",
+            "angular-file-upload"
+        ]
+    },
+
+    crm_contract_list: {
+        state: 'crm.saler.contract_list',
+        url: '/contract/list',
+        controllername: 'CRM_Contract_List_Controller',
+        filepath: 'crm/saler/contract/customer.contract.list',
+        params: ["customeruid", "followupuid", "isreg"],
+        script: [
+            "CRM_Contract_Service"
+        ]
+    },
+
+    crm_contract_edit_edit: {
+        state: 'crm.saler.contract_edit_edit',
+        url: '/contract/edit',
+        controllername: 'CRM_Contract_Edit_Controller',
+        filepath: 'crm/saler/contract/customer.contract.edit',
+        params: ["uid", "isreg", "isreadonly", "customeruid", "followupuid"],
+        script: [
+            "CRM_Customer_Service",
+            "CRM_Contract_Service",
+            "angular-file-upload"
+        ]
+    },
+
+    crm_attachment_create_edit: {
+        state: 'crm.saler.attachment_create_edit',
+        url: '/attachment/create',
+        controllername: 'CRM_Attachment_Create_Controller',
+        filepath: 'crm/saler/attachment/customer.attachment.create',
+        params: ["customeruid", "followupuid", "isreg"],
+        script: [
+            "CRM_Customer_Service",
+            "CRM_Attachment_Service",
+            "angular-file-upload"
+        ]
+    },
+
 });

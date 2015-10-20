@@ -45,13 +45,20 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
         }
 
     });
+    
+    app.factory("cityServices",function(AjaxRequest){
+    	return{
+    		cityData:function(){
+    			return AjaxRequest.Post("/city/list");
+    		}
+    	}
+    });
 
-    app.controller("lineListController", function ($scope, $state, AjaxRequest, DlgMsg, NgUtil,  lineServices,$location) {    	
+    app.controller("lineListController", function ($scope, $state, AjaxRequest, DlgMsg, NgUtil,  lineServices,$location,cityServices) {    	
         $scope.lines = {};
         $scope.lineTypes = [];
         $scope.searchParams = "";
-        var params={ name:"" };
-        //$scope.searchParams = "";
+        var params={ cityuid:"",name:"" };    
         $scope.totalItems = 1;
 
         $scope.resetForm = function () {
@@ -59,7 +66,7 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
                 $scope.lines = rsBody.data;
             });
         };
-        $scope.init = function () {
+        $scope.init = function () {        	
             $scope.resetForm();
         };
         $scope.init();
@@ -72,10 +79,8 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
         };
 
         $scope.searchline = function () {
-            $scope.searchParams.page = 1;
             lineServices.listlineByPage($scope.searchParams).then(function (rsBody) {
                 $scope.lines = rsBody.data;
-                $scope.searchParams.total = rsBody.total;
             })
         };
 
@@ -91,37 +96,44 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
 			});
 		};
 
-        // $scope.go=function(uid){
-        // var url="org/linegroup/editbyline/"+uid+"/0";
-        // $location.path(url);
-        // }
+        cityServices.cityData().then(function(rs){          	
+            $scope.cities=rs.data;                                  
+        });
+		
 
-    }).controller("lineEditController", function ($scope, $state, lineData,  AjaxRequest, TreeSelectModal) {
-        $scope.line = lineData.data;
-        var original = angular.copy(lineData.data);
+				
 
-        $scope.saveline = function () {
-            var url = "/line/update"
-            if (angular.isUndefined($scope.line.uid) == true || $scope.line.uid == "0") {
-                url = "/line/create"
-            }
+    }).controller("lineEditController", function ($scope, $state, lineData,  AjaxRequest, TreeSelectModal,cityServices) {
+            $scope.line = lineData.data;
+            var original = angular.copy(lineData.data);
 
-            AjaxRequest.Post(url, $scope.line).then(function (rsBody) {
-                if (rsBody.success == 'true') {
-                    $state.go('org/line');
+            $scope.saveline = function () {
+                var url = "/line/update"
+                if (angular.isUndefined($scope.line.uid) == true || $scope.line.uid == "0") {
+                    url = "/line/create"
                 }
-            })
-        };
-        $scope.revert = function () {
-            $scope.line = angular.copy(original);
-            $scope.editForm.$setPristine();
-        };
-        $scope.ShowTreeModal = function () {
-            TreeSelectModal.show().result.then(function (node) {
-                console.info(node);
-            });
 
-        }
+                AjaxRequest.Post(url, $scope.line).then(function (rsBody) {
+                    if (rsBody.success == 'true') {
+                        $state.go('org/line');
+                    }
+                })
+            };
+            $scope.revert = function () {
+                $scope.line = angular.copy(original);
+                $scope.editForm.$setPristine();
+            };
+            $scope.ShowTreeModal = function () {
+                TreeSelectModal.show().result.then(function (node) {
+                    console.info(node);
+                });
+
+            };
+        
+        cityServices.cityData().then(function(rs){          	
+            $scope.cities=rs.data;                                  
+        });
+        
     });
 
 

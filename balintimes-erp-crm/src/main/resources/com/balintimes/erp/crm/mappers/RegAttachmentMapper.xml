@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.RegAttachmentMapper">
+	<resultMap type="RegAttachment" id="regAttachmentMap">
+		<id property="uid" column="uid" />
+		<result property="customerUid" column="customeruid" />
+		<result property="customerName" column="customername" />
+		<result property="remarks" column="remarks" />
+		<result property="createBy" column="createby" />
+		<result property="createTime" column="createtime" />
+		<result property="userUid" column="useruid" />
+		<result property="fileName" column="filename" />
+	</resultMap>
+
+	<select id="getRegAttachmentByCustomer" statementType="PREPARED"
+		resultType="RegAttachment" parameterType="int">
+		select
+		a.*,b.name as customername,b.useruid
+		from
+		regattachment as a join salercustomer as b on a.customeruid=b.uid
+		where
+		b.isdeleted=0 and b.forbidden=0 and a.customeruid=#{customerUid};
+	</select>
+
+	<select id="getRegAttachment" statementType="PREPARED"
+		resultType="RegAttachment" parameterType="int">
+		select
+		a.*,b.name as customername,b.useruid
+		from
+		regattachment as a join salercustomer as b on a.customeruid=b.uid
+		where
+		b.isdeleted=0 and b.forbidden=0 and a.uid=#{uid};
+	</select>
+
+	<insert id="createRegAttachment" statementType="PREPARED"
+		parameterType="RegAttachment">
+		insert into regattachment(
+		customeruid,remarks,url,createby,createtime,filename
+		)values(
+		#{customerUid},#{remarks},#{url},#{createBy},now(),#{fileName}
+		)
+	</insert>
+
+	<delete id="deleteRegAttachment" statementType="PREPARED"
+		parameterType="int">
+		delete from regattachment where uid=#{uid}
+	</delete>
+
+</mapper>

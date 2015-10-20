@@ -18,15 +18,20 @@
 		<result property="creatorid" column="creatorid"/>
 		<result property="isusebymediapool" column="isusebymediapool"/>
 		<result property="priorityno" column="priorityno"/>
+		<result property="cityuid" column="cityuid"/>
 	</resultMap>
 	
 	<select id="GetLineList" statementType="PREPARED" resultType="Line">
         SELECT  * FROM line where deleted=0
 	</select>
 	
-	<select id="GetLineListByCondition" statementType="PREPARED" resultType="Line">
-        SELECT  * FROM line where deleted=0
-        <if test="name!=null and name!=''">and name like "%"#{name}"%"</if>
+	<select id="GetLineListByCondition" statementType="PREPARED" parameterType="Map" resultType="Line">
+        select  a.*,b.name as cityname from line a
+        inner join city b on a.cityuid=b.uid
+        where a.deleted=0
+        <if test="name!=null and name!=''">and a.name like "%"#{name}"%"</if>
+        <if test="cityuid!=null and cityuid!=''">and a.cityuid =#{cityuid}</if>
+        order by a.cityuid
 	</select>
 	
 	<select id="GetOneLine" statementType="PREPARED" resultType="Line">
@@ -38,7 +43,9 @@
 	</select>
 	
 	<update id="UpdateLine" parameterType="Map">
-        update line set name=#{name} where uid = #{uid}
+        update line set name=#{name}
+        ,cityuid=#{cityuid}
+         where uid = #{uid}
 	</update>
     
 	<update id="DeleteLine" parameterType="string"  >
@@ -47,9 +54,9 @@
 
 	<insert id="CreateLine" statementType="PREPARED" parameterType="Line" keyProperty="uid" keyColumn="uid">
     	INSERT INTO line (uid,  kid, name, startstationuid, endstationuid, deleted, comment, edittime, editorname, editorid, createtime, 
-    	creatorname, creatorid, isusebymediapool, priorityno) VALUES        
+    	creatorname, creatorid, isusebymediapool, priorityno,cityuid) VALUES        
         (#{uid},#{kid},#{name},#{startstationuid},#{endstationuid},#{deleted},#{comment},#{edittime},#{editorname},#{editorid},#{createtime}, 
-    	#{creatorname},#{creatorid},#{isusebymediapool},#{priorityno})
+    	#{creatorname},#{creatorid},#{isusebymediapool},#{priorityno},#{cityuid})
 	</insert>
     
 </mapper>

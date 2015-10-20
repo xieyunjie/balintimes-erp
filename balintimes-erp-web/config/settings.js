@@ -2,22 +2,15 @@
  * Created by AlexXie on 2015/9/1.
  */
 module.exports = {
-
-    serverurl: {
-        bmms: "http://www.balintimes-web.net:9090/bmms",
-        crm: "http://localhost:8080/balintimes-erp-crm",
-        //ucenter: "http://172.16.0.250:8080/oaucenter"
-        ucenter: "http://localhost:8080/oaucenter"
-    },
     server: {
         bmms: {
             url: "http://www.balintimes-web.net:9090/bmms"
         },
         crm: {
-            url: "http://localhost:8080/balintimes-erp-crm"
+            url: "http://www.balintimes-web.net:9090/crm"
         },
         ucenter: {
-            url: "http://localhost:8080/oaucenter",
+            url: "http://172.16.0.250:8080/oaucenter",
             authurl: "/ws/authority/userauthentication",
             userapps: "/ws/authority/userapps"
         }
@@ -50,7 +43,17 @@ module.exports = {
         appToken: {
             text: "applicationToken",
             value: "_iloP^2nql8~"
+        },
+        multipartContentType: {
+            text: "Content-Type",
+            value: "multipart/form-data"
         }
+    },
+
+    fileupload: {
+        folder: "tempupload",
+        fieldsSize: 2 * 1024 * 1024,
+        deleteFileAfterComplete: 1
     }
 
 };

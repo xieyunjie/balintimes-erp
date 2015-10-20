@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.crm.mappers.ContractMapper">
+	<resultMap type="Contract" id="contractMap">
+		<id property="uid" column="uid" />
+		<result property="followUpUid" column="followupuid" />
+		<result property="customerUid" column="customeruid" />
+		<result property="customerName" column="customername" />
+		<result property="name" column="name" />
+		<result property="sex" column="sex" />
+		<result property="phone" column="phone" />
+		<result property="qq" column="qq" />
+		<result property="email" column="email" />
+		<result property="address" column="address" />
+		<result property="cardUrl" column="cardurl" />
+		<result property="isDeleted" column="isdeleted" />
+		<result property="birthday" column="birthday" />
+		<result property="socialUrl" column="socialurl" />
+		<result property="remarks" column="remarks" />
+		<result property="createBy" column="createby" />
+		<result property="createTime" column="createtime" />
+		<result property="editBy" column="editby" />
+		<result property="editTime" column="edittime" />
+		<result property="userUid" column="useruid" />
+	</resultMap>
+
+	<select id="getContractByFollowUp" statementType="PREPARED"
+		parameterType="int" resultType="Contract">
+		select
+		a.*,c.name as
+		customername,b.useruid
+		from
+		contract as a join customerfollowup as b on
+		a.followupuid=b.uid
+		join customer as c on b.customeruid=c.uid
+		where
+		a.isdeleted=0 and b.isdeleted=0
+		and b.forbidden=0 and c.isdeleted=0 and
+		c.forbidden=0
+		and a.followupuid=#{followUpUid}
+	</select>
+
+	<select id="getContract" statementType="PREPARED" parameterType="int"
+		resultType="Contract">
+		select
+		a.*,c.name as customername,b.useruid
+		from
+		contract as a
+		join customerfollowup as b on a.followupuid=b.uid
+		join customer as c on
+		b.customeruid=c.uid
+		where
+		a.isdeleted=0 and b.isdeleted=0
+		and
+		b.forbidden=0 and c.isdeleted=0 and c.forbidden=0
+		and a.uid=#{uid}
+	</select>
+
+	<insert id="createContract" statementType="PREPARED"
+		parameterType="Contract">
+		insert into contract(
+		followupuid,customeruid,name,sex,phone,qq,email,address,cardurl,isdeleted,createby,createtime,birthday,socialurl,remarks
+		)values(
+		#{followUpUid},#{customerUid},#{name},#{sex},#{phone},#{qq},#{email},#{address},#{cardUrl},0,#{createBy},now(),#{birthday},#{socialUrl},#{remarks}
+		)
+	</insert>
+
+	<update id="updateContractByDel" statementType="PREPARED"
+		parameterType="int">
+		update contract set isdeleted=1 where uid=#{uid}
+	</update>
+
+	<update id="updateContract" statementType="PREPARED"
+		parameterType="Contract">
+		update
+		contract
+		set
+		name=#{name},
+		sex=#{sex},
+		phone=#{phone},
+		qq=#{qq},
+		email=#{email},
+		address=#{address},
+		cardurl=#{cardUrl},
+		edittime=now(),
+		editby=#{editBy},
+		birthday=#{birthday},
+		socialurl=#{socialUrl},
+		remarks=#{remarks}
+		where
+		uid=#{uid}
+	</update>
+
+</mapper>
