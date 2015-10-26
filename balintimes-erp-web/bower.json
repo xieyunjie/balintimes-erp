@@ -46,7 +46,9 @@
     "screenfull": "~2.0.0",
     "simple-line-icons": "~2.0.0",
     "ui-select": "angular-ui-select#~0.12.1",
-    "angular-file-upload": "2.1.4",
-    "ng-file-upload": "~9.0.13"
+    "angular-file-upload":"2.1.4",
+    "ngModal":"1.2.2",
+    "ng-file-upload": "~9.0.13",
+    "DateJS": "datejs#~1.0.0-rc3"
   }
 }

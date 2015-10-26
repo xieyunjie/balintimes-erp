@@ -28,7 +28,7 @@ angular.module('CRM_Customer_Remarks_CU_Edit_Module', []).controller('CRM_Custom
                 remarks: {},
                 customerList: [],
                 mannerList: [],
-
+                ic: $state.params.ic,
                 seachCusotmer: {},
                 maxDate: new Date().format("yyyy-MM-dd"),
                 isUpdate: $state.params.uid == -1 ? false : true
@@ -49,6 +49,18 @@ angular.module('CRM_Customer_Remarks_CU_Edit_Module', []).controller('CRM_Custom
                     CRM_Follow_Remarks_Service.updateRemark(vm.remarks).then(function (res) {
                         $state.go("crm.saler.remarks_list");
                     })
+                }
+            }
+
+            $scope.go = function () {
+                if (vm.ic == "1") {
+                    $state.go("crm.saler.remarks_list");
+                } else {
+                    $state.go("crm.saler.remarks_customerlist", {
+                        customeruid: vm.remarks.customerUid,
+                        followupuid: vm.remarks.followUpUid,
+                        isreg: vm.remarks.reg
+                    });
                 }
             }
 

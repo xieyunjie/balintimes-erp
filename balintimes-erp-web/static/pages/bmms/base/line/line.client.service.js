@@ -21,6 +21,11 @@ angular.module("app").factory('BMMS_Line_Service', ['AjaxRequest', function (Aja
                 return req;
             });
         },
+        uploadLine: function (data) {
+            return AjaxRequest.upload("/crm/line/upload", data).then(function (req) {
+                return req;
+            });
+        },
         deleteLine:function(params){
             return AjaxRequest.delete("/crm/line/delete",params).then(function(req){
                 return req;

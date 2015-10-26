@@ -5,25 +5,6 @@ angular.module('CRM_Customer_Remarks_Edit_Module', []).controller('CRM_Customer_
         function ($scope, $timeout, NgTableUtil, CRM_Follow_Remarks_Service, CRM_Customer_Service, CRM_BaseData_Service,
                   CRM_base_Service, AlertMsg, DlgMsg, NgTableParams, UserStgService, $state, $modal) {
 
-            Date.prototype.format = function(fmt)
-            {
-                var o = {
-                    "M+" : this.getMonth()+1,                 //月份
-                    "d+" : this.getDate(),                    //日
-                    "h+" : this.getHours(),                   //小时
-                    "m+" : this.getMinutes(),                 //分
-                    "s+" : this.getSeconds(),                 //秒
-                    "q+" : Math.floor((this.getMonth()+3)/3), //季度
-                    "S"  : this.getMilliseconds()             //毫秒
-                };
-                if(/(y+)/.test(fmt))
-                    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-                for(var k in o)
-                    if(new RegExp("("+ k +")").test(fmt))
-                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-                return fmt;
-            }
-
             var vm = $scope.vm = {
                 title: '跟进列表',
                 remarks: {
@@ -48,11 +29,11 @@ angular.module('CRM_Customer_Remarks_Edit_Module', []).controller('CRM_Customer_
                 maxDate: new Date().format("yyyy-MM-dd")
             };
 
-            $scope.saveRemarks = function (picFile,xlsFile) {
+            $scope.saveRemarks = function () {
                 vm.remarks.reg = vm.isReg;
                 vm.remarks.followUpUid = vm.followUid;
                 vm.remarks.customerUid = vm.customerUid;
-                vm.remarks.followUpDate = vm.remarks.followUpDateByDateTime.toLocaleDateString() + " 00:00:00 ";
+                vm.remarks.followUpDate = vm.remarks.followUpDateByDateTime.toString("yyyy-MM-dd 00:00:00");
                 CRM_Follow_Remarks_Service.createRemarks(vm.remarks).then(function (res) {
                     $state.go("crm.saler.customer_list");
                 });

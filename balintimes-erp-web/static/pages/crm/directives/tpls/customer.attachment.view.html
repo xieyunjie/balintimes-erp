@@ -1,0 +1,163 @@
+<div class="wrapper-md">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-list"></i> {{vm.title}}
+        </div>
+
+        <div class="table-responsive">
+            <div class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="panel-body b-b b-light">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary"  data-toggle="modal"
+                                data-target="#attEditModel">
+                            <i class="fa fa-plus"></i> 添加
+                        </button>
+                    </div>
+
+                    <br><br>
+
+                    <table class="table table-responsive table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>客户</th>
+                            <th>文件名</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in vm.attachmentList">
+                            <td>
+                                <a href="#" title="删除" ng-click="deleteAtt(item.uid,item.reg)"><i
+                                        class="fa fa-trash fa-fw fa-lg"></i> </a>
+                            </td>
+                            <td>{{item.customerName}}</td>
+                            <td>{{item.fileName}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="modal fade" id="attEditModel" tabindex="-1" role="dialog"-->
+        <!--aria-labelledby="myModalLabel" aria-hidden="true">-->
+
+
+    </div>
+    <div tabindex="-1" role="dialog" class="modal"
+         uib-modal-animation-class="fade"
+
+         modal-in-class="in" id="attEditModel">
+
+        <div class="modal-dialog">
+            <div class="modal-content" uib-modal-transclude>
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        新增附件
+                    </h4>
+                </div>
+                <form class=" form-horizontal" role="form" name="editForm" method="post"
+                      enctype="multipart/form-data"
+                      novalidate>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="customer">客户</label>
+
+                            <div class="col-md-6">
+
+                                <input type="text" class="form-control" name="customer" id="customer"
+                                       ng-model="vm.customer.name"
+                                       disabled="true">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="attachment">上传附件</label>
+
+                            <div class="col-md-6">
+                                <input type="file"
+                                       name="attachment" id="attachment" class="form-control" nv-file-select
+                                       uploader="uploader" multiple/>
+                            </div>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th width="300px">名称</th>
+                                <th width="150px" ng-show="uploader.isHTML5">大小</th>
+                                <th width="150px" ng-show="uploader.isHTML5">进度</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in uploader.queue">
+                                <td><strong>{{ item.file.name }}</strong></td>
+                                <td ng-show="uploader.isHTML5" nowrap>{{
+                                    item.file.size/1024/1024|number:2 }} MB
+                                </td>
+                                <td ng-show="uploader.isHTML5">
+                                    <div class="progress" style="margin-bottom: 0;">
+                                        <div class="progress-bar" role="progressbar"
+                                             ng-style="{ 'width': item.progress + '%' }"></div>
+                                    </div>
+                                </td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-success btn-xs"
+                                            ng-click="item.upload()"
+                                            ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                        <span class="fa fa-upload"></span> 上传
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs"
+                                            ng-click="removeAtt(item)">
+                                        <span class="fa fa-trash"></span> 删除
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div>
+                            <div>
+                                <div class="progress" style="">
+                                    <div class="progress-bar" role="progressbar"
+                                         ng-style="{ 'width': uploader.progress + '%' }"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()"
+                                    ng-disabled="!uploader.getNotUploadedItems().length">
+                                <span class="glyphicon glyphicon-upload"></span> 上传所有
+                            </button>
+                            <button type="button" class="btn btn-danger btn-s" ng-click="removeAll()"
+                                    ng-disabled="!uploader.queue.length">
+                                <span class="glyphicon glyphicon-trash"></span> 删除所有
+                            </button>
+
+
+                            <button class="btn btn-primary " ng-click="saveAtt()">
+                                <i class="fa fa-floppy-o"></i> 保存
+                            </button>
+
+                            <button class="btn btn-danger" ng-click="logClose()"><i
+                                    class="fa fa-reply"></i> 关闭
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+

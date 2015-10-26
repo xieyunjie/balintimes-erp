@@ -101,6 +101,15 @@ public class FollowUpRemarksController extends BaseController {
 		return ResponseMessage.successful(remarks);
 	}
 
+	@RequestMapping("getlistbycustomer/{objuid}/{isreg}")
+	@ResponseBody
+	public AjaxResponse getRemarksInfoListByCustomer(@PathVariable int objuid,
+			@PathVariable boolean isreg) {
+		List<RemarksInfo> list = this.followUpRemarksService
+				.getRemarksInfoByCustomer(objuid, isreg);
+		return ResponseMessage.successful(list);
+	}
+
 	@RequestMapping(value = "delete", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxResponse deleteRemark(int uid, boolean isreg) {

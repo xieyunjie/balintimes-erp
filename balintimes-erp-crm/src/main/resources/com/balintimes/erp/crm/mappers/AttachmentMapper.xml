@@ -10,16 +10,17 @@
 		<result property="url" column="url" />
 		<result property="createBy" column="createby" />
 		<result property="createTime" column="createtime" />
-		<result property="fileName" column="filename"/>
+		<result property="fileName" column="filename" />
 	</resultMap>
 
 	<select id="getAttachmentByCustomer" statementType="PREPARED"
 		resultType="Attachment" parameterType="int">
 		select
-		a.*,c.name as customername
-		as c.useruid
+		a.*,c.name as
+		customername, b.useruid
 		from
-		attachment as a join customerfollowup as b on
+		attachment as a join customerfollowup as b
+		on
 		a.followupuid=b.uid
 		join customer as c on b.customeruid=c.uid
 		where
@@ -32,7 +33,7 @@
 	<select id="getAttachment" statementType="PREPARED" resultType="Attachment"
 		parameterType="int">
 		select
-		a.*,c.name as customername as c.useruid
+		a.*,c.name as customername , b.useruid
 		from
 		attachment as a join customerfollowup as b on a.followupuid=b.uid
 		join

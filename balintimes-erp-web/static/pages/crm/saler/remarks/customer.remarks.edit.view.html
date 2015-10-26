@@ -97,40 +97,18 @@
                         <label class="col-md-1 control-label" for="followupdate">跟进时间</label>
 
                         <div class="col-md-4">
-                            <input type="date" class="form-control" name="followupdate" id="followupdate"
-                                   max="{{vm.maxDate}}"
+                            <input type="date" class="form-control" name="followupdate" id="followupdate" max="{{vm.maxDate}}"
                                    ng-model="vm.remarks.followUpDateByDateTime" required="required">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-1 control-label" for="summary">摘要</label>
-
                         <div class="col-md-4">
                             <input type="text" class="form-control" name="summary" id="summary"
                                    ng-model="vm.remarks.summary" required="required">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-1 control-label" for="file1">附件1</label>
-
-                        <div class="col-md-10">
-                            <input type="file" class="form-control" name="file1" id="file1" rows="12"
-                                   ngf-select="" ng-model="picFile" accept="image/*" required="required">
-                        </div>
-                        <img ngf-src="picFile" style="width: 100px;height: 100px;float: none;position: relative;top: 7px;">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-1 control-label" for="file2">附件2</label>
-
-                        <div class="col-md-10">
-                            <input type="file" class="form-control" name="file2" id="file2" rows="12"
-                                   ngf-select="" ng-model="xlsFile" accept="image/*" required="required">
-                        </div>
-                        <img ngf-src="xlsFile" style="width: 100px;height: 100px;float: none;position: relative;top: 7px;">
-                    </div>
-
 
                     <div class="form-group">
                         <label class="col-md-1 control-label" for="remarks">日志</label>
@@ -143,7 +121,7 @@
 
                     <div class="form-group">
                         <div class="col-md-offset-1 col-md-6">
-                            <button class="btn btn-primary" ng-click="saveRemarks([picFile,xlsFile])"><i
+                            <button class="btn btn-primary" ng-click="saveRemarks()"><i
                                     class="fa fa-floppy-o"></i> 保存
                             </button>
                             <button class="btn btn-primary" ui-sref="crm.saler.customer_list"><i

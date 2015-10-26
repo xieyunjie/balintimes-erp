@@ -41,6 +41,23 @@ angular.module('app').constant("CRMROUTER", {
             "CRM_BaseData_Service"
         ]
     },
+
+    crm_customer_detail: {
+        state: 'crm.saler.customer_detail',
+        url: '/customer/detail',
+        controllername: 'CRM_Customer_Detail_Controller',
+        filepath: 'crm/saler/customer/customer.client.readonly',
+        params: ["customeruid", "followupuid", "isreg"],
+        script: [
+            "CRM_Customer_Service",
+            "CRM_BaseData_Service",
+            "attachment_directive",
+            "customerdetail_directive",
+            "remarks_directive",
+            "contracts_directive"
+        ]
+    },
+
     crm_customer_edit: {
         state: 'crm.saler.customer_edit',
         url: '/customer/edit',
@@ -81,6 +98,19 @@ angular.module('app').constant("CRMROUTER", {
         ]
     },
 
+    crm_remarks_customerlist: {
+        state: 'crm.saler.remarks_customerlist',
+        url: '/remarks/customerlist',
+        controllername: 'CRM_Customer_Remarks_CustomerList_Controller',
+        filepath: 'crm/saler/remarks/customer.remarks.cuslist',
+        params: ["customeruid", "followupuid", "isreg"],
+        script: [
+            "CRM_Follow_Remarks_Service",
+            "CRM_BaseData_Service",
+            "CRM_base_Service"
+        ]
+    },
+
     crm_remarks_edit: {
         state: 'crm.saler.remarks_edit',
         url: '/remarks/edit',
@@ -100,7 +130,7 @@ angular.module('app').constant("CRMROUTER", {
         url: '/remarks/cuedit',
         controllername: 'CRM_Customer_Remarks_CU_Edit_Controller',
         filepath: 'crm/saler/remarks/customer.remarks.cuedit',
-        params: ["uid", "isreg", "isreadonly"],
+        params: ["uid", "isreg", "isreadonly", "ic"],
         script: [
             "CRM_Follow_Remarks_Service",
             "CRM_BaseData_Service",
@@ -151,12 +181,23 @@ angular.module('app').constant("CRMROUTER", {
         url: '/attachment/create',
         controllername: 'CRM_Attachment_Create_Controller',
         filepath: 'crm/saler/attachment/customer.attachment.create',
-        params: ["customeruid", "followupuid", "isreg"],
+        params: ["customeruid", "followupuid", "isreg", "ic"],//ic 是否从客户界面进入1:是，0：列表
         script: [
             "CRM_Customer_Service",
             "CRM_Attachment_Service",
             "angular-file-upload"
         ]
     },
+
+    crm_attachment_list: {
+        state: 'crm.saler.attachment_list',
+        url: '/attachment/list',
+        controllername: 'CRM_Attachment_List_Controller',
+        filepath: 'crm/saler/attachment/customer.attachment.list',
+        params: ["customeruid", "followupuid", "isreg"],
+        script: [
+            "CRM_Attachment_Service"
+        ]
+    }
 
 });

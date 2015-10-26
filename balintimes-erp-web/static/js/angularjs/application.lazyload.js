@@ -43,7 +43,45 @@ angular.module('app')
             }, {
                 name: "CRM_Attachment_Service",
                 files: ["/pages/crm/saler/attachment/customer.attachment.service.js"]
-            }];
+            }, {
+                name: "attachment_directive",
+                files: [
+                    "/pages/crm/saler/customer/customer.client.service.js",
+                    "/bower_components/angular-file-upload/dist/angular-file-upload.min.js",
+                    "/pages/crm/saler/attachment/customer.attachment.service.js",
+                    "/pages/crm/directives/customer.attachment.directive.js"
+                ]
+            }, {
+                name: "customerdetail_directive",
+                files: [
+                    "/pages/crm/saler/customer/customer.client.service.js",
+                    "/pages/crm/directives/customer.detail.edit.directive.js",
+                    "/pages/crm/base/services/customer.basedata.service.js",
+                    "/pages/crm/base/services/customer.crmbase.service.js"
+                ]
+            }, {
+                name: "remarks_directive",
+                files: [
+                    "/pages/crm/saler/customer/customer.client.service.js",
+                    "/pages/crm/saler/remarks/customer.remarks.service.js",
+                    "/pages/crm/directives/customer.remarks.directive.js",
+                    "/pages/crm/base/services/customer.basedata.service.js",
+                    "/pages/crm/base/services/customer.crmbase.service.js"
+                ]
+            }, {
+                name: "contracts_directive",
+                files: [
+                    "/pages/crm/saler/customer/customer.client.service.js",
+                    "/pages/crm/saler/contract/customer.contract.service.js",
+                    "/pages/crm/directives/customer.contracts.directive.js",
+                    "/pages/crm/base/services/customer.basedata.service.js",
+                    "/pages/crm/base/services/customer.crmbase.service.js"
+                ]
+            }]
+            //}, {
+            //    name: "angular-ui-router-tabs",
+            //    files: ["/bower_components/angular-ui-router-tabs/src/ui-router-tabs.js"]
+            //}];
 
             var modules = plugins.concat(bmmsServices, crmServices);
 

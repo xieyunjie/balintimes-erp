@@ -26,17 +26,19 @@
 	</select>
 	
 	<select id="GetStationListByCondition" statementType="PREPARED" parameterType="Map" resultType="Station">
-        select  a.*,c.name as linename,c.uid as lineuid from station a
+        select  a.*,c.name as linename,c.uid as lineuid,c.cityuid,b.stationorder from station a
         inner join linestation b on a.uid=b.stationuid
         inner join line c on c.uid=b.lineuid
         where a.deleted=0
         <if test="name!=null and name!=''">and a.name like "%"#{name}"%"</if>
-        <if test="lineuid!=null and lineuid!=''">and c.lineuid =#{lineuid}</if>
+        <if test="lineuid!=null and lineuid!=''">and c.uid =#{lineuid}</if>
         order by b.stationorder
 	</select>
 	
 	<select id="GetOneStation" statementType="PREPARED" resultType="Station">
-         SELECT  * FROM station where deleted=0 and uid=#{uid}   
+         SELECT  a.*,b.stationorder FROM station a
+         inner join linestation b on a.uid=b.stationuid
+         where a.deleted=0 and a.uid=#{uid}
 	</select>
 	
 	<select id="GetMaxKid" statementType="PREPARED" resultType="String">
@@ -59,20 +61,18 @@
          where lineuid = #{lineuid} and stationuid=#{stationuid}
 	</delete>
 	
-	<insert id="InsertLineStation" statementType="PREPARED" parameterType="Station" keyProperty="uid" keyColumn="uid">
+	<insert id="InsertLineStation" statementType="PREPARED" parameterType="LineStation" keyProperty="uid" keyColumn="uid">
 	INSERT INTO linestation
-           (uid,stationorder,comment,creatorID,creatorName,createtime
+           (uid,stationorder,comment,creatorid,creatorName,createtime
            ,editorid,editorname,edittime,lineuid,stationuid)
      VALUES
-           (#{uid},#{stationorder},#{comment},#{creatorID},#{creatorName},#{createtime}
+           (#{uid},#{stationorder},#{comment},#{creatorid},#{creatorname},#{createtime}
            ,#{editorid},#{editorname},#{edittime},#{lineuid},#{uid})
 	</insert>
 	
 	<insert id="CreateStation" statementType="PREPARED" parameterType="Station" keyProperty="uid" keyColumn="uid">
-    	INSERT INTO station (uid,  kid, name, leveluid, transit, deleted, comment, edittime, editorname, editorid, createtime, 
-    	creatorname, creatorid, isusebymediapool, priorityno) VALUES        
-        (#{uid},#{kid},#{name},#{leveluid},#{transit},#{deleted},#{comment},#{edittime},#{editorname},#{editorid},#{createtime}, 
-    	#{creatorname},#{creatorid})
+    	INSERT INTO station (uid,  kid, name, leveluid, transit, deleted, comment, creatorid,creatorname, createtime, editorid,editorname, edittime) VALUES
+        (#{uid},#{kid},#{name},#{leveluid},#{transit},#{deleted},#{comment},#{creatorid},#{creatorname},#{createtime},#{editorid},#{editorname}, #{edittime})
 	</insert>
     
 </mapper>

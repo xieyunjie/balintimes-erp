@@ -20,8 +20,9 @@ public class Station implements Serializable{
     private Date edittime;
     private String lineuid;
     private int stationorder;
-    
-    public String getUid() {
+    private String cityuid;
+
+	public String getUid() {
 		return uid;
 	}
     public void setUid(String uid) {
@@ -55,62 +56,65 @@ public class Station implements Serializable{
     public void setLeveluid(String leveluid) {
 		this.leveluid = leveluid;
 	}
-    
+
 	public boolean isTransit() {
 		return transit;
 	}
+
 	public void setTransit(boolean transit) {
 		this.transit = transit;
 	}
+
 	public boolean isDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
+
 	public String getComment() {
 		return comment;
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
+
 	public String getCreatorid() {
 		return creatorid;
 	}
 	public void setCreatorid(String creatorid) {
 		this.creatorid = creatorid;
 	}
-	
+
 	public String getCreatorname() {
 		return creatorname;
 	}
 	public void setCreatorname(String creatorname) {
 		this.creatorname = creatorname;
 	}
-	
+
 	public Date getCreatetime() {
 		return createtime;
 	}
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
-	
+
 	public String getEditorid() {
 		return editorid;
 	}
 	public void setEditorid(String editorid) {
 		this.editorid = editorid;
 	}
-	
+
 	public String getEditorname() {
 		return editorname;
 	}
 	public void setEditorname(String editorname) {
 		this.editorname = editorname;
 	}
-	
+
 	public Date getEdittime() {
 		return edittime;
 	}
@@ -128,6 +132,12 @@ public class Station implements Serializable{
 	}
 	public void setStationorder(int stationorder) {
 		this.stationorder = stationorder;
+	}
+	public String getCityuid() {
+		return cityuid;
+	}
+	public void setCityuid(String cityuid) {
+		this.cityuid = cityuid;
 	}
     
     

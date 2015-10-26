@@ -52,7 +52,7 @@ module.exports = {
 
     fileupload: {
         folder: "tempupload",
-        fieldsSize: 2 * 1024 * 1024,
+        fieldsSize:  2 * 1024 * 1024,
         deleteFileAfterComplete: 1
     }
 

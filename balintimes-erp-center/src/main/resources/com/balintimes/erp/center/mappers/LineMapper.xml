@@ -26,9 +26,11 @@
 	</select>
 	
 	<select id="GetLineListByCondition" statementType="PREPARED" parameterType="Map" resultType="Line">
-        select  a.*,b.name as cityname from line a
+        select  a.*,b.name as cityname,c.name as startstationname,d.name as endstationname from line a
         inner join city b on a.cityuid=b.uid
-        where a.deleted=0
+		left join station c on a.startstationuid=c.uid
+		left join station d on a.endstationuid=d.uid
+		where a.deleted=0
         <if test="name!=null and name!=''">and a.name like "%"#{name}"%"</if>
         <if test="cityuid!=null and cityuid!=''">and a.cityuid =#{cityuid}</if>
         order by a.cityuid
@@ -44,7 +46,7 @@
 	
 	<update id="UpdateLine" parameterType="Map">
         update line set name=#{name}
-        ,cityuid=#{cityuid}
+        ,cityuid=#{cityuid},startstationuid=#{startstationuid},endstationuid=#{endstationuid}
          where uid = #{uid}
 	</update>
     

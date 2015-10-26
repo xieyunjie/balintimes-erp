@@ -21,6 +21,17 @@
 		<result property="editTime" column="edittime" />
 	</resultMap>
 
+	<select id="getRegRemarksByCustomer" statementType="PREPARED"
+		resultType="RegRemarks" parameterType="int">
+		select
+		a.*,b.name as mannername,c.name as customername
+		from
+		regremarks as a join followmanner as b on a.manneruid=b.id
+		join salercustomer as c on a.customeruid=c.uid
+		where
+		a.customeruid =#{customerUid} and c.isdeleted=0 and c.forbidden=0
+	</select>
+
 	<select id="getRegRemarks" statementType="PREPARED" resultType="RegRemarks"
 		parameterType="int">
 		select a.*,b.name as mannername,c.name as customername

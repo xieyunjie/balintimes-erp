@@ -21,6 +21,9 @@ module.exports = function (err, req, res, next) {
             else if (err.status == 70001) {
                 res.status(err.status).send(requestUtil.Error70001Msg(err.message));
             }
+            else if (err.status == 9990) {
+                res.status(err.status).send(requestUtil.ErrorMsg("上传文件异常，请联系管理员！！"));
+            }
             else {
                 res.status(err.status).send(requestUtil.ErrorMsg());
             }

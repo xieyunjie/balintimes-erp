@@ -1,8 +1,12 @@
 package com.balintimes.erp.crm.dao;
 
+import java.util.List;
+
 import com.balintimes.erp.crm.model.RegRemarks;
 
 public interface RegRemarksDao {
+	List<RegRemarks> getRegRemarksByCustomer(int customerUid);
+	
 	RegRemarks getRegRemarks(int uid);
 
 	void createRegRemarks(RegRemarks regRemarks);

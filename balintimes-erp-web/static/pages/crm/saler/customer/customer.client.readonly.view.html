@@ -1,0 +1,58 @@
+<div class="wrapper-md">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold"><i class="fa fa-pencil-square-o"></i> {{vm.title}}</div>
+            <div class="panel-body">
+
+                <div class="panel-body b-b b-light">
+                    <div class="btn-group">
+                        <button class="btn btn-danger" ui-sref="crm.saler.customer_list"><i
+                                class="fa fa-reply"></i> 返回
+                        </button>
+                    </div>
+                </div>
+                <br><br>
+                <tabset class="tab-container">
+                    <tab>
+                        <tab-heading>
+                            基本信息 <span class="badge badge-sm m-l-xs"></span>
+                        </tab-heading>
+                        <div>
+                            <customerdetailview data="vm.data"></customerdetailview>
+                        </div>
+                    </tab>
+
+                    <tab>
+                        <tab-heading>
+                            联系人列表 <span class="badge badge-sm m-l-xs"></span>
+                        </tab-heading>
+                        <div>
+                            <contractslists data="vm.data"></contractslists>
+                        </div>
+                    </tab>
+
+                    <tab>
+                        <tab-heading>
+                            销售日志 <span class="badge badge-sm m-l-xs"></span>
+                        </tab-heading>
+                        <div>
+                            <remarkslist data="vm.data"></remarkslist>
+                        </div>
+                    </tab>
+
+                    <tab>
+                        <tab-heading>
+                            附件列表 <span class="badge badge-sm m-l-xs"></span>
+                        </tab-heading>
+                        <div>
+                            <attachmentlist data="vm.data"></attachmentlist>
+                        </div>
+                    </tab>
+                </tabset>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>

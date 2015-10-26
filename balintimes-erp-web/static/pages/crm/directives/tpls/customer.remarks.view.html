@@ -1,0 +1,159 @@
+<div class="wrapper-md">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-list"></i> {{vm.title}}
+        </div>
+
+        <div class="table-responsive">
+            <div class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="panel-body b-b b-light">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" ng-click="openWin()">
+                            <i class="fa fa-plus"></i> 添加
+                        </button>
+                    </div>
+
+                    <br><br>
+
+                    <table class="table table-responsive table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>跟进日期</th>
+                            <th style="width: 200px;">客户名称</th>
+                            <th>联系人</th>
+                            <th>跟进类型</th>
+                            <th>跟进方式</th>
+                            <th>同行人员</th>
+                            <th style="width: 350px;">摘要</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in vm.remarksList">
+                            <td>
+                                <a href="#" title="编辑" ng-click="getRemarks(item.uid,item.reg,false)"><i
+                                        class="fa fa-edit  fa-fw fa-lg"></i> </a>
+                                <a href="#" title="删除" ng-click="deleteRemark(item.uid,item.reg)"><i
+                                        class="fa fa-trash fa-fw fa-lg"></i> </a>
+                                <a href="#" title="查询详细" ng-click="getRemarks(item.uid,item.reg,true)"><i
+                                        class="fa fa-search  fa-fw fa-lg"></i> </a>
+                            </td>
+                            <td>{{item.followUpDate}}</td>
+                            <td style="width: 200px;">{{item.customerName}}</td>
+                            <td>{{item.contract}}</td>
+                            <td>{{item.mannerName}}</td>
+                            <td>{{item.phone}}</td>
+                            <td>{{item.persons}}</td>
+                            <td style="width: 350px;">{{item.summary}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <!--<modal-dialog show='vm.modalShown' height='90%' width='50%' dialog-title='日志信息' ng-close='logClose()'>-->
+                <!--<form class=" form-horizontal" role="form" name="editForm" novalidate>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 control-label" for="name">客户名称</label>-->
+
+                        <!--<div class="col-md-6">-->
+                            <!--<input type="text" class="form-control" name="name" id="name" ng-model="vm.customer.name"-->
+                                   <!--disabled="true">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 control-label" for="manneruid">跟进方式</label>-->
+
+                        <!--<div class="col-md-6">-->
+
+                            <!--<select class="form-control" name="manneruid" id="manneruid"-->
+                                    <!--ng-model="vm.remarks.mannerUid" ng-disabled="vm.ir"-->
+                                    <!--required="required">-->
+                                <!--<option ng-repeat="item in vm.mannerList" value="{{item.id}}"-->
+                                        <!--ng-selected="item.id==vm.remarks.mannerUid">{{item.name}}-->
+                                <!--</option>-->
+                            <!--</select>-->
+
+                        <!--</div>s-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 control-label" for="contract">联系人</label>-->
+
+                        <!--<div class="col-md-6">-->
+                            <!--<input type="text" class="form-control" name="contract" id="contract"-->
+                                   <!--ng-model="vm.remarks.contract" required="required" ng-disabled="vm.ir">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 control-label" for="phone">联系方式</label>-->
+
+                        <!--<div class="col-md-6">-->
+                            <!--<input type="text" class="form-control" name="phone" id="phone" ng-disabled="vm.ir"-->
+                                   <!--ng-model="vm.remarks.phone" required="required">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 control-label" for="persons">同行人员</label>-->
+
+                        <!--<div class="col-md-6">-->
+                            <!--<input type="text" class="form-control" name="persons" id="persons"-->
+                                   <!--ng-disabled="vm.ir"-->
+                                   <!--ng-model="vm.remarks.persons">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 control-label" for="followupdate">跟进时间</label>-->
+
+                        <!--<div class="col-md-6">-->
+                            <!--<input type="date" class="form-control" name="followupdate" id="followupdate"-->
+                                   <!--max="{{vm.maxDate}}" ng-disabled="vm.ir"-->
+                                   <!--ng-model="vm.remarks.followUpDateByDateTime" required="required">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 control-label" for="summary">摘要</label>-->
+
+                        <!--<div class="col-md-6">-->
+                            <!--<input type="text" class="form-control" name="summary" id="summary"-->
+                                   <!--ng-disabled="vm.ir"-->
+                                   <!--ng-model="vm.remarks.summary" required="required">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 control-label" for="remarks">日志</label>-->
+
+                        <!--<div class="col-md-10">-->
+                            <!--<textarea class="form-control" name="remarks" id="remarks" rows="10"-->
+                                      <!--ng-disabled="vm.ir"-->
+                                      <!--ng-model="vm.remarks.remarks" required="required"></textarea>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<div class="col-md-offset-2 col-md-6">-->
+                            <!--<button class="btn btn-primary ng-hide" ng-show="!vm.ir" ng-click=""><i-->
+                                    <!--class="fa fa-floppy-o"></i> 保存-->
+                            <!--</button>-->
+
+                            <!--<button class="btn btn-danger" ng-click="logClose()"><i-->
+                                    <!--class="fa fa-reply"></i> 关闭-->
+                            <!--</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</form>-->
+            <!--</modal-dialog>-->
+        </div>
+
+    </div>
+</div>

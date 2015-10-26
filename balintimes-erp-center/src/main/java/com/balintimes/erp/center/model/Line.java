@@ -26,7 +26,33 @@ public class Line implements Serializable{
 	private int priorityno;
 	private String cityuid;
 	private String cityname;
-	
+	private String startstationname;
+	private String endstationname;
+
+	public String getEditorname() {
+		return editorname;
+	}
+
+	public void setEditorname(String editorname) {
+		this.editorname = editorname;
+	}
+
+	public String getStartstationname() {
+		return startstationname;
+	}
+
+	public void setStartstationname(String startstationname) {
+		this.startstationname = startstationname;
+	}
+
+	public String getEndstationname() {
+		return endstationname;
+	}
+
+	public void setEndstationname(String endstationname) {
+		this.endstationname = endstationname;
+	}
+
 	public String getUid() {
 		return uid;
 	}

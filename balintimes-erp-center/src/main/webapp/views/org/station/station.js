@@ -7,18 +7,18 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
    
     var mainState = {
         name: 'org/station',
-        url: '/org/station',
+        url: '/org/station/:uid/:cityuid/:lineuid',
         templateUrl: balintimesConstant.rootpath + '/views/org/station/list.html',
         controller: 'stationListController'
     };
     var editState = {
         name: 'org/station/edit',
-        url: '/org/station/edit/:uid',
+        url: '/org/station/edit/:uid/:cityuid/:lineuid',
         templateUrl: balintimesConstant.rootpath + '/views/org/station/edit.html',
         controller: 'stationEditController',
         resolve: {
             stationData: function (AjaxRequest, $stateParams) {
-                //return AjaxRequest.Post("/station/getonestation",{uid :$stateParams.uid});
+                return AjaxRequest.Post("/station/getonestation",{uid :$stateParams.uid});
             }
         }
     };
@@ -27,9 +27,9 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
 		$stateProvider.state(mainState).state(editState);
 	} ]);
 
-    app.factory("stationServices", function (AjaxRequest) {
+    app.factory("stationServices", function (AjaxRequest, $stateParams) {
         return {
-            listStationByPage: function (params) {
+            listStationByPage: function (params) {            	
                 return AjaxRequest.Post("/station/listbypage",params);
             },
             deletestation: function (UID) {
@@ -39,7 +39,7 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
 
     });
 
-    app.controller("stationListController",function($scope,$state,AjaxRequest,DlgMsg, NgUtil,stationServices,TreeSelectModal){    	              
+    app.controller("stationListController",function($scope,$state,AjaxRequest,DlgMsg, NgUtil,stationServices,TreeSelectModal, $stateParams){        		
             $scope.resetForm=function(params){
                 stationServices.listStationByPage(params).then(function(rs){
                     $scope.stations=rs.data;
@@ -47,64 +47,82 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
             };
 
             $scope.init= function () {
-                $scope.resetForm($scope.searchParams);
+            	
+            	var params={
+            			lineuid:$stateParams.uid
+            	};
+                $scope.resetForm(params);
             }
 
             $scope.init();
 
-//            $scope.savestation = function () {
-//                var url = "/station/update"
-//                if (angular.isUndefined($scope.station.uid) == true || $scope.station.uid == "0") {
-//                    url = "/station/create"
-//                }
-//
-//                AjaxRequest.Post(url, $scope.station).then(function (rsBody) {
-//                    if (rsBody.success == 'true') {
-//                        $state.go('org/station');
-//                    }
-//                })
-//            };
-//            $scope.revert = function () {
-//                $scope.station = angular.copy(original);
-//                $scope.editForm.$setPristine();
-//            };
-//            $scope.ShowTreeModal = function () {
-//                TreeSelectModal.show().result.then(function (node) {
-//                    console.info(node);
-//                });
-//
-//            };
+            $scope.savestation = function () {
+                var url = "/station/update"
+                if (angular.isUndefined($scope.station.uid) == true || $scope.station.uid == "0") {
+                    url = "/station/create"
+                }
+
+                AjaxRequest.Post(url, $scope.station).then(function (rsBody) {
+                    if (rsBody.success == 'true') {
+                        $state.go('org/station');
+                    }
+                })
+            };
+            $scope.revert = function () {
+                $scope.station = angular.copy(original);
+                $scope.editForm.$setPristine();
+            };
+
+
+            $scope.deletestation= function (uid,name) {
+                DlgMsg.confirm("警告","是否删除该站点"+name+"?").result.then(function(btn){
+                    if(btn=="ok"){
+                        stationServices.deletestation(uid).then(function(rs){
+                            if (rs.success == 'true') {
+                                $scope.init();
+                            }
+                        })
+                    }
+                })
+            };
+
         }
-    ).controller("stationEditController",function($scope,$state,AjaxRequest,DlgMsg,NgUtil,stationData){
-//            $scope.station = stationData.data;
-//            var original = angular.copy(stationData.data);
-//
-//            $scope.savestation = function () {
-//                var url = "/station/update"
-//                if (angular.isUndefined($scope.station.uid) == true || $scope.station.uid == "0") {
-//                    url = "/station/create"
-//                }
-//
-//                AjaxRequest.Post(url, $scope.station).then(function (rsBody) {
-//                    if (rsBody.success == 'true') {
-//                        $state.go('org/station');
-//                    }
-//                })
-//            };
-//            $scope.revert = function () {
-//                $scope.station = angular.copy(original);
-//                $scope.editForm.$setPristine();
-//            };
-//            $scope.ShowTreeModal = function () {
-//                TreeSelectModal.show().result.then(function (node) {
-//                    console.info(node);
-//                });
-//
-//            };
-//
-//            cityServices.cityData().then(function(rs){
-//                $scope.cities=rs.data;
-//            });
+    ).controller("stationEditController",function($scope,$state,AjaxRequest,DlgMsg,NgUtil,stationData, $stateParams){
+            $scope.station = stationData.data;
+            var original = angular.copy(stationData.data);
+            var params={ cityuid:"",name:"" };
+
+            $scope.savestation = function () {
+                var url = "/station/update"
+                if (angular.isUndefined($scope.station.uid) == true || $scope.station.uid == "0") {
+                    url = "/station/create"
+                }
+
+                AjaxRequest.Post(url, $scope.station).then(function (rsBody) {
+                    if (rsBody.success == 'true') {
+                        $state.go('org/station');
+                    }
+                })
+            };
+            $scope.revert = function () {
+                $scope.station = angular.copy(original);
+                $scope.editForm.$setPristine();
+            };
+            $scope.ShowTreeModal = function () {
+                TreeSelectModal.show().result.then(function (node) {
+                    console.info(node);
+                });
+
+            };
+
+            params.cityuid=$stateParams.cityuid;
+            AjaxRequest.Post('/line/listbypage', params).then(function (rsBody) {
+                if (rsBody.success == 'true') {
+                    $scope.lines=rsBody.data;
+                    $scope.lines[0].uid=$stateParams.lineuid;
+                }
+            })
+
         }
     );
 

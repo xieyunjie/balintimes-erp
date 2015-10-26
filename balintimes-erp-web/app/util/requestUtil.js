@@ -77,7 +77,7 @@ var clientRequest = function (config) {
         .agent(keepaliveAgent)// keyalive貌似没什么作用
         .end(function (err, response) {
 
-            if (lodash.isEmpty(deleteFiles) && settings.fileupload.deleteFileAfterComplete == 1) {
+            if (lodash.isEmpty(deleteFiles) == false && settings.fileupload.deleteFileAfterComplete == 1) {
                 lodash.forEach(deleteFiles, function (f) {
                     fs.unlinkSync(f)
                 });
@@ -100,12 +100,13 @@ Util.transmit = function (config) {
 
     var req = config.req;
 
-    if ( lodash.isEmpty(req.header("content-type")) == false && req.header("content-type").indexOf("multipart/form-data") >= 0) {
+    if (lodash.isEmpty(req.header("content-type")) == false && req.header("content-type").indexOf("multipart/form-data") >= 0) {
         var form = new formidable.IncomingForm();
 
         form.encoding = "utf-8";
         form.uploadDir = settings.fileupload.folder;
         form.keepExtensions = true;
+        // 只表示单个表单域能够申请到的最大内存值，不是限定文件的大小
         form.maxFieldsSize = settings.fileupload.fieldsSize;
 
         if (!fs.existsSync(settings.fileupload.folder)) {
@@ -113,15 +114,22 @@ Util.transmit = function (config) {
         }
 
         form.parse(req, function (err, fields, files) {
-            clientRequest({
-                method: "multipart",
-                redisToken: req.session.redisToken,
-                url: config.baseUrl + req.url,
-                //params: req.body,
-                fields: fields,
-                files: files,
-                callback: config.callback
-            });
+
+            if (err) {
+                err.status = 9990;
+                config.callback(err, null);
+            }
+            else {
+                clientRequest({
+                    method: "multipart",
+                    redisToken: req.session.redisToken,
+                    url: config.baseUrl + req.url,
+                    //params: req.body,
+                    fields: fields,
+                    files: files,
+                    callback: config.callback
+                });
+            }
         });
     }
     else {

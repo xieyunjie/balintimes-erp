@@ -66,18 +66,18 @@
                             <td title="'#'" td-mouseover-toggle="" style="width: 150px">
                                 <div class="ng-hide" ng-show="vm.currUser.uid==row.userUid">
                                     <a href="#" title="编辑"
-                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly :false})"><i
+                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly :false,ic:1})"><i
                                             class="fa fa-edit  fa-fw fa-lg"></i> </a>
                                     <a href="#" title="删除" ng-click="deleteRemark(row.uid,row.reg)"><i
                                             class="fa fa-trash fa-fw fa-lg"></i> </a>
 
                                     <a href="#" title="查询详细"
-                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly:true})"><i
+                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly:true,ic:1})"><i
                                             class="fa fa-search  fa-fw fa-lg"></i> </a>
                                 </div>
                                 <div class="ng-hide" ng-show="vm.currUser.uid!=row.userUid">
                                     <a href="#" title="查询详细"
-                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly:true})"><i
+                                       ui-sref="crm.saler.remarks_cu_edit({uid:row.uid,isreg:row.reg,isreadonly:true,ic:1})"><i
                                             class="fa fa-search  fa-fw fa-lg"></i> </a>
                                 </div>
                             </td>

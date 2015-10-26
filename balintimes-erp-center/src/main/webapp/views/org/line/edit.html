@@ -27,6 +27,23 @@
 		</div>
 	</div>
 
+	<div class="form-group">
+		<label class="control-label col-sm-1">起始站:</label>
+		<div class="controls col-sm-2">
+			<select class="form-control" ng-model="line.startstationuid" ng-options="station.uid as station.name for station in stations">
+				<option value="">-- 请选择起始站 --</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-sm-1">终点站:</label>
+		<div class="controls col-sm-2">
+			<select class="form-control" ng-model="line.endstationuid" ng-options="station.uid as station.name for station in stations">
+				<option value="">-- 请选择终点站 --</option>
+			</select>
+		</div>
+	</div>
 
 	<div class="form-group">
 		<label for="comment" class="col-sm-1 control-label">备注:</label>
@@ -47,7 +64,7 @@
 			<button class="btn btn-info" ng-click="revert()">
 				<i class="fa fa-undo"></i> 重置
 			</button>
-			<a ui-sref="auth/line" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+			<a ui-sref="org/line" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
 			</a>
 
 

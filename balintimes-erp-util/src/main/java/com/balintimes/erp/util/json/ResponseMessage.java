@@ -44,20 +44,26 @@ public class ResponseMessage {
         return JsonUtil.ToJson(successful(message));
     }
 
-    public static String failure() {
+
+    public static AjaxResponse failure() {
         AjaxResponse ajaxResponse = new AjaxResponse();
         ajaxResponse.setSuccess("false");
-        return JsonUtil.ToJson(ajaxResponse);
+        return ajaxResponse;
+    }
+    public static String failureJson() {
+        return JsonUtil.ToJson(failure());
     }
 
     /*返回一个失败的信息*/
-    public static String failure(String message) {
+    public static AjaxResponse failure(String message) {
         AjaxResponse ajaxResponse = new AjaxResponse();
         ajaxResponse.setSuccess("false");
         ajaxResponse.setResponseMsg(message);
-        return JsonUtil.ToJson(ajaxResponse);
+        return ajaxResponse;
     }
-
+    public static String failureJson(String message) {
+        return JsonUtil.ToJson(failure(message));
+    }
 
     public static String permission(boolean ispermission, String message) {
 
@@ -68,7 +74,6 @@ public class ResponseMessage {
         return JsonUtil.ToJson(ajaxResponse);
 
     }
-
 
     private static String _dataField = "data";
 

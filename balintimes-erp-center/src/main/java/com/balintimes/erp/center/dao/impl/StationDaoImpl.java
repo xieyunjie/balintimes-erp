@@ -1,6 +1,5 @@
 package com.balintimes.erp.center.dao.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,20 +39,18 @@ public class StationDaoImpl implements StationDao {
 	public void UpdateStation(Station station) {
 		// TODO Auto-generated method stub
 		stationMapper.UpdateStation(station);	
-		Map<String, Object> parameters=new HashMap<String,Object>(2);
-		parameters.put("lineuid",station.getLineuid());
-		parameters.put("stationuid", station.getUid());
-		stationMapper.DeleteLineStation(parameters);
-		stationMapper.InsertLineStation(station);
+//		Map<String, Object> parameters=new HashMap<String,Object>(2);
+//		parameters.put("lineuid",station.getLineuid());
+//		parameters.put("stationuid", station.getUid());
+//		stationMapper.DeleteLineStation(parameters);
+//		stationMapper.InsertLineStation(station);
 	}
 	
 	public void DeleteStation(String uid) {
 		// TODO Auto-generated method stub
 		stationMapper.DeleteStation(uid);
-		
 	}
-	
-		
+
 	public boolean CreateStation(Station station) {
 		// TODO Auto-generated method stub
 		try {
@@ -62,6 +59,7 @@ public class StationDaoImpl implements StationDao {
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			stationMapper.DeleteStation(station.getUid());
 			return false;
 		}
 	}

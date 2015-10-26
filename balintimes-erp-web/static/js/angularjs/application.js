@@ -18,7 +18,8 @@ angular.module('app', [
     'blockUI',
     'gc.toaster',
     'ui.select',
-    'ui.grid'
+    'ui.grid',
+    'ngFileUpload'
 ]).run(['$rootScope', '$state', '$stateParams', '$timeout', '$window',
     function ($rootScope, $state, $stateParams, $timeout, $window) {
         $rootScope.$state = $state;

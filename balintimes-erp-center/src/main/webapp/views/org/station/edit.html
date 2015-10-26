@@ -5,19 +5,19 @@
 </ol>
 <form name="editForm" class="form-horizontal " role="form" novalidate>
     <div class="form-group">
-        <label class="control-label col-sm-1">城市:</label>
+        <label class="control-label col-sm-1">线路:</label>
         <div class="controls col-sm-2">
-            <select class="form-control" ng-model="line.cityuid" ng-options="line.uid as line.name for line in lines">
-                <option value="">-- 请选择城市 --</option>
+            <select class="form-control" ng-model="lines[0].uid" ng-options="line.uid as line.name for line in lines">
+                <option value="">-- 请选择线路 --</option>
             </select>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="linename" class="col-sm-1 control-label">线路名称:</label>
+        <label for="linename" class="col-sm-1 control-label">站点名称:</label>
 
         <div class="col-sm-4">
-            <input type="text" class="form-control" name='linename' ng-model="line.name" required="required" ng-maxlength="10" ng-minlength='2' />
+            <input type="text" class="form-control" name='stationname' ng-model="station.name" required="required" ng-maxlength="10" ng-minlength='2' />
 
             <div ng-if="editForm.linename.$dirty">
                 <div ng-messages="editForm.employeename.$error" class="errormsg" role="alert">
@@ -32,7 +32,7 @@
         <label for="comment" class="col-sm-1 control-label">备注:</label>
 
         <div class="col-sm-4">
-            <textarea name="comment" class="form-control" ng-model="line.comment"></textarea>
+            <textarea name="comment" class="form-control" ng-model="station.comment"></textarea>
         </div>
 
     </div>
@@ -41,13 +41,13 @@
 
     <div class="form-group">
         <div class="col-sm-offset-1 col-sm-6">
-            <button class="btn btn-primary" ng-click="saveline()" ng-disabled="editForm.$invalid">
+            <button class="btn btn-primary" ng-click="savestation()" ng-disabled="editForm.$invalid">
                 <i class="fa fa-check"></i>保存
             </button>
             <button class="btn btn-info" ng-click="revert()">
                 <i class="fa fa-undo"></i> 重置
             </button>
-            <a ui-sref="auth/line" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+            <a ui-sref="org/line" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
             </a>
 
 

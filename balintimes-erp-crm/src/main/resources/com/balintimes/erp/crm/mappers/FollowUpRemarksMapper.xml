@@ -22,6 +22,17 @@
 		<result property="editTime" column="edittime" />
 	</resultMap>
 
+	<select id="getFollowUpRemarksByFollow" statementType="PREPARED"
+		parameterType="int" resultType="FollowUpRemarks">
+		select
+		a.*,b.name as customername,c.name as mannername
+		from
+		followupremarks as a join customer as b on a.customeruid=b.uid
+		join followmanner as c on a.manneruid=c.id
+		where
+		a.followupuid=#{followUpUid} and b.isdeleted=0 and b.forbidden=0
+	</select>
+
 	<select id="getFollowUpRemarks" statementType="PREPARED"
 		parameterType="int" resultType="FollowUpRemarks">
 		select
@@ -32,7 +43,7 @@
 		a.customeruid=b.uid
 		join followmanner as c on a.manneruid=c.id
 		where
-		a.uid=#{uid} and b.isdeleted=0 and b.forbidden=0;
+		a.uid=#{uid} and b.isdeleted=0 and b.forbidden=0
 	</select>
 
 	<insert id="createFollowUpRemarks" statementType="PREPARED"

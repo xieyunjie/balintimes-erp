@@ -1,5 +1,7 @@
 package com.balintimes.erp.crm.dao.batisimpl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
@@ -32,6 +34,11 @@ public class RegRemarksDaoImpl implements RegRemarksDao {
 	public void updateRegRemarks(RegRemarks regRemarks) {
 		// TODO Auto-generated method stub
 		this.regRemarksMapper.updateRegRemarks(regRemarks);
+	}
+
+	public List<RegRemarks> getRegRemarksByCustomer(int customerUid) {
+		// TODO Auto-generated method stub
+		return this.regRemarksMapper.getRegRemarksByCustomer(customerUid);
 	}
 
 }

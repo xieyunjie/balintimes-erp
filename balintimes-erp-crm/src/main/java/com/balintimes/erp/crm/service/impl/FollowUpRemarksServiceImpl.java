@@ -1,6 +1,8 @@
 package com.balintimes.erp.crm.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -150,6 +152,70 @@ public class FollowUpRemarksServiceImpl implements FollowUpRemarksService {
 
 			this.regRemarksDao.updateRegRemarks(rr);
 		}
+	}
+
+	public List<RemarksInfo> getRemarksInfoByCustomer(int objUid, boolean isReg) {
+		// TODO Auto-generated method stub
+		List<RemarksInfo> list = new ArrayList<RemarksInfo>();
+		if (isReg) {
+			List<FollowUpRemarks> rms = this.followUpRemarksDao
+					.getFollowUpRemarksByFollow(objUid);
+			for (FollowUpRemarks fur : rms) {
+				RemarksInfo remarks = new RemarksInfo();
+
+				remarks.setReg(true);
+				remarks.setUid(fur.getUid());
+				remarks.setFollowUpUid(fur.getFollowUpUid());
+				remarks.setCustomerUid(fur.getCustomerUid());
+				remarks.setUserUid(fur.getUserUid());
+				remarks.setContract(fur.getContract());
+				remarks.setMannerUid(fur.getMannerUid());
+				remarks.setMannerName(fur.getMannerName());
+				remarks.setPhone(fur.getPhone());
+				remarks.setRemarks(fur.getRemarks());
+				remarks.setFollowUpDate(DateUtil.dateToString(fur
+						.getFollowUpDate()));
+				remarks.setSummary(fur.getSummary());
+				remarks.setPersons(fur.getPersons());
+				remarks.setDeleted(fur.isDeleted());
+				remarks.setCreateBy(fur.getCreateBy());
+				remarks.setCreateTime(fur.getCreateTime());
+				remarks.setEditBy(fur.getEditBy());
+				remarks.setEditTime(fur.getEditTime());
+				remarks.setCustomerName(fur.getCustomerName());
+
+				list.add(remarks);
+			}
+		} else {
+			List<RegRemarks> rrs = this.regRemarksDao
+					.getRegRemarksByCustomer(objUid);
+			for (RegRemarks rr : rrs) {
+				RemarksInfo remarks = new RemarksInfo();
+
+				remarks.setReg(false);
+				remarks.setUid(rr.getUid());
+				remarks.setCustomerUid(rr.getCustomerUid());
+				remarks.setUserUid(rr.getUserUid());
+				remarks.setContract(rr.getContract());
+				remarks.setMannerUid(rr.getMannerUid());
+				remarks.setMannerName(rr.getMannerName());
+				remarks.setPhone(rr.getPhone());
+				remarks.setRemarks(rr.getRemarks());
+				remarks.setFollowUpDate(DateUtil.dateToString(rr
+						.getFollowUpDate()));
+				remarks.setSummary(rr.getSummary());
+				remarks.setPersons(rr.getPersons());
+				remarks.setDeleted(rr.isDeleted());
+				remarks.setCreateBy(rr.getCreateBy());
+				remarks.setCreateTime(rr.getCreateTime());
+				remarks.setEditBy(rr.getEditBy());
+				remarks.setEditTime(rr.getEditTime());
+				remarks.setCustomerName(rr.getCustomerName());
+				list.add(remarks);
+			}
+
+		}
+		return list;
 	}
 
 }

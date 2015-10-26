@@ -4,14 +4,7 @@ angular.module("app").factory("CRM_Follow_Remarks_Service", ['AjaxRequest', func
         createRemarks: function (params) {
             return AjaxRequest.post("/crm/remarks/create", params).then(function (req) {
                 return req;
-            });
-        },
-
-        uploadRemarks:function(data){
-
-            return AjaxRequest.upload("/crm/remarks/create",data).then(function(req){
-               return req;
-            });
+            })
         },
 
         getRemarksByEmp: function (params) {
@@ -34,6 +27,12 @@ angular.module("app").factory("CRM_Follow_Remarks_Service", ['AjaxRequest', func
 
         updateRemark: function (params) {
             return AjaxRequest.post("/crm/remarks/update", params).then(function (req) {
+                return req;
+            })
+        },
+
+        getRemarksListByCustomer: function (params) {
+            return AjaxRequest.restGet("/crm/remarks/getlistbycustomer", params).then(function (req) {
                 return req;
             })
         }

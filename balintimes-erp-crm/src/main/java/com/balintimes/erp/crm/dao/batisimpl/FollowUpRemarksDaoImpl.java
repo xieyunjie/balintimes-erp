@@ -1,5 +1,7 @@
 package com.balintimes.erp.crm.dao.batisimpl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
@@ -32,6 +34,12 @@ public class FollowUpRemarksDaoImpl implements FollowUpRemarksDao {
 	public void updateFollowUpRemarks(FollowUpRemarks followUpRemarks) {
 		// TODO Auto-generated method stub
 		this.followUpRemarksMapper.updateFollowUpRemarks(followUpRemarks);
+	}
+
+	public List<FollowUpRemarks> getFollowUpRemarksByFollow(int followUpUid) {
+		// TODO Auto-generated method stub
+		return this.followUpRemarksMapper
+				.getFollowUpRemarksByFollow(followUpUid);
 	}
 
 }
