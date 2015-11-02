@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.balintimes.erp.center.mappers.StationMapper">
-	<resultMap type="Station" id="StationResultMap">
+	<resultMap type="Station" id="stationResultMap">
 		<id property="uid" column="uid"/>
 		<result property="id" column="id"/>
 		<result property="kid" column="kid"/>
@@ -19,6 +19,7 @@
 		<result property="lineuid" column="lineuid"/>
 		<result property="stationorder" column="stationorder"/>
 		<result property="linestationuid" column="linestationuid"/>
+		<result property="levelname" column="levelname"/>
 	</resultMap>
 	
 	<select id="GetStationList" statementType="PREPARED" resultType="Station">
@@ -26,9 +27,10 @@
 	</select>
 	
 	<select id="GetStationListByCondition" statementType="PREPARED" parameterType="Map" resultType="Station">
-        select  a.*,c.name as linename,c.uid as lineuid,c.cityuid,b.stationorder from station a
+        select  a.*,c.name as linename,c.uid as lineuid,c.cityuid,b.stationorder,d.name as levelname from station a
         inner join linestation b on a.uid=b.stationuid
         inner join line c on c.uid=b.lineuid
+		inner join level d on a.leveluid=d.uid
         where a.deleted=0
         <if test="name!=null and name!=''">and a.name like "%"#{name}"%"</if>
         <if test="lineuid!=null and lineuid!=''">and c.uid =#{lineuid}</if>
@@ -44,10 +46,14 @@
 	<select id="GetMaxKid" statementType="PREPARED" resultType="String">
         SELECT  Max(kid) FROM station      
 	</select>
-	
+
+	<select id="CheckLevel" statementType="PREPARED" resultType="Station">
+		SELECT  * FROM station where leveluid=#{leveluid}
+	</select>
+
 	<update id="UpdateStation" parameterType="Map">
         update station set name=#{name}
-        ,comment=#{comment}
+        ,comment=#{comment},leveluid=#{leveluid}
          where uid = #{uid}
 	</update>
 	
@@ -61,7 +67,7 @@
          where lineuid = #{lineuid} and stationuid=#{stationuid}
 	</delete>
 	
-	<insert id="InsertLineStation" statementType="PREPARED" parameterType="LineStation" keyProperty="uid" keyColumn="uid">
+	<insert id="InsertLineStation" statementType="PREPARED" parameterType="Station" keyProperty="uid" keyColumn="uid">
 	INSERT INTO linestation
            (uid,stationorder,comment,creatorid,creatorName,createtime
            ,editorid,editorname,edittime,lineuid,stationuid)

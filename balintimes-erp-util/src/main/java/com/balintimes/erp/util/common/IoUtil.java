@@ -1,5 +1,7 @@
 package com.balintimes.erp.util.common;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -194,6 +201,17 @@ public class IoUtil {
 		copy(oldPath, newFileName, newPath);
 		File file = new File(oldPath);
 		file.delete();
+	}
+
+	public static ResponseEntity<byte[]> download(String filePath,
+			String filename) throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDispositionFormData("attachment", filename);
+
+		return new ResponseEntity<byte[]>(
+				FileUtils.readFileToByteArray(new File(filePath)), headers,
+				HttpStatus.CREATED);
 	}
 
 	// public static void main(String[] args) {

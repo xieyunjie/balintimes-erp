@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.center.mappers.TrainMapper">
+    <resultMap type="Train" id="trainResultMap">
+        <id property="uid" column="uid"/>
+        <result property="kid" column="kid"/>
+        <result property="name" column="name"/>
+        <result property="lineuid" column="lineuid"/>
+        <result property="deleted" column="deleted"/>
+        <result property="comment" column="comment"/>
+        <result property="edittime" column="edittime"/>
+        <result property="editorname" column="editorname"/>
+        <result property="editorid" column="editorid"/>
+        <result property="createtime" column="createtime"/>
+        <result property="creatorname" column="creatorname"/>
+        <result property="creatorid" column="creatorid"/>
+        <result property="linename" column="lineuid"/>
+    </resultMap>
+
+    <select id="GetTrainListByCondition" statementType="PREPARED" parameterType="Map" resultType="Train">
+      select  a.*,b.name as linename from train a
+        inner join line b on b.uid=a.lineuid
+        where a.deleted=0
+        <if test="name!=null and name!=''">and a.name like "%"#{name}"%"</if>
+        <if test="lineuid!=null and lineuid!=''">and b.uid =#{lineuid}</if>
+        order by a.kid
+    </select>
+
+    <select id="GetOneTrain" statementType="PREPARED" resultType="Train">
+       select  a.*,b.name as linename from train a
+        inner join line b on b.uid=a.lineuid
+        where a.deleted=0 and a.uid=#{uid}
+    </select>
+
+    <update id="UpdateTrain" parameterType="Map">
+        update train set name=#{name}
+        ,comment=#{comment},lineuid=#{lineuid}
+        where uid = #{uid}
+    </update>
+
+    <update id="DeleteTrain" parameterType="string"  >
+        update train set deleted=1 where uid = #{uid}
+    </update>
+
+    <insert id="CreateTrain" statementType="PREPARED" parameterType="Train" keyProperty="uid" keyColumn="uid">
+        INSERT INTO train (uid,  kid, name, lineuid,  deleted, comment, creatorid,creatorname, createtime, editorid,editorname, edittime) VALUES
+        (#{uid},#{kid},#{name},#{lineuid},#{deleted},#{comment},#{creatorid},#{creatorname},#{createtime},#{editorid},#{editorname}, #{edittime})
+    </insert>
+
+</mapper>

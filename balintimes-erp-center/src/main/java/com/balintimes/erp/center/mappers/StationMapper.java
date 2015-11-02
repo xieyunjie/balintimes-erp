@@ -18,9 +18,11 @@ public interface StationMapper {
 	
 	void DeleteStation(String uid);
 	
-	void DeleteLineStation(Map<String, Object> params);
+
 	
 	boolean InsertLineStation(Station station);
 	
 	boolean CreateStation(Station station);
+
+	List<Station> CheckLevel(String leveluid);
 }

@@ -1,0 +1,75 @@
+<ol class="breadcrumb">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">集团基础数据</a></li>
+    <li><a href="#" ui-sref="org/line">列车</a></li>
+    <li class="active">列车编辑</li>
+</ol>
+<form name="editForm" class="form-horizontal " role="form" novalidate>
+
+    <div class="form-group">
+        <label for="kid" class="col-sm-1 control-label">列车编号:</label>
+
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name='kid' ng-model="train.kid" required="required" ng-maxlength="10" ng-minlength='1' readonly="true" ng-if="train.uid!='0'"/>
+            <input type="text" class="form-control" name='kid' ng-model="train.kid" required="required" ng-maxlength="10" ng-minlength='1'  ng-if="train.uid=='0'"/>
+
+            <div ng-if="editForm.kid.$dirty">
+                <div ng-messages="editForm.kid.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="trainname" class="control-label col-sm-1">名称:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name='trainname' ng-model="train.name" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.trainname.$dirty">
+                <div ng-messages="editForm.trainname.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="trainvalue" class="control-label col-sm-1">分值:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name='trainvalue' ng-model="train.value" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.trainvalue.$dirty">
+                <div ng-messages="editForm.trainvalue.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comment" class="col-sm-1 control-label">备注:</label>
+
+        <div class="col-sm-4">
+            <textarea name="comment" class="form-control" ng-model="line.comment"></textarea>
+        </div>
+
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-6">
+            <button class="btn btn-primary" ng-click="savetrain()" ng-disabled="editForm.$invalid">
+                <i class="fa fa-check"></i>保存
+            </button>
+            <button class="btn btn-info" ng-click="revert()">
+                <i class="fa fa-undo"></i> 重置
+            </button>
+            <a ui-sref="org/train" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+            </a>
+
+
+        </div>
+    </div>
+</form>

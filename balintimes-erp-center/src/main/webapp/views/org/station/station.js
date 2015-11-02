@@ -29,7 +29,7 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
 
     app.factory("stationServices", function (AjaxRequest, $stateParams) {
         return {
-            listStationByPage: function (params) {            	
+            listStationByPage: function (params) {
                 return AjaxRequest.Post("/station/listbypage",params);
             },
             deletestation: function (UID) {
@@ -37,6 +37,14 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
             }
         }
 
+    });
+
+    app.factory("levelService",function(AjaxRequest,$stateParams){
+       return{
+           levelData:function(){
+               return AjaxRequest.Post("/level/listbypage",{name:""});
+           }
+       }
     });
 
     app.controller("stationListController",function($scope,$state,AjaxRequest,DlgMsg, NgUtil,stationServices,TreeSelectModal, $stateParams){        		
@@ -56,22 +64,6 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
 
             $scope.init();
 
-            $scope.savestation = function () {
-                var url = "/station/update"
-                if (angular.isUndefined($scope.station.uid) == true || $scope.station.uid == "0") {
-                    url = "/station/create"
-                }
-
-                AjaxRequest.Post(url, $scope.station).then(function (rsBody) {
-                    if (rsBody.success == 'true') {
-                        $state.go('org/station');
-                    }
-                })
-            };
-            $scope.revert = function () {
-                $scope.station = angular.copy(original);
-                $scope.editForm.$setPristine();
-            };
 
 
             $scope.deletestation= function (uid,name) {
@@ -87,10 +79,18 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
             };
 
         }
-    ).controller("stationEditController",function($scope,$state,AjaxRequest,DlgMsg,NgUtil,stationData, $stateParams){
+    ).controller("stationEditController",function($scope,$state,AjaxRequest,DlgMsg,NgUtil,stationData, $stateParams,levelService){
             $scope.station = stationData.data;
             var original = angular.copy(stationData.data);
             var params={ cityuid:"",name:"" };
+
+            $scope.re={
+                lineuid:"",
+                cityuid:""
+            };
+            $scope.re.lineuid=$stateParams.lineuid;
+            $scope.re.cityuid=$stateParams.cityuid;
+
 
             $scope.savestation = function () {
                 var url = "/station/update"
@@ -100,7 +100,10 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
 
                 AjaxRequest.Post(url, $scope.station).then(function (rsBody) {
                     if (rsBody.success == 'true') {
-                        $state.go('org/station');
+                        $state.go('org/station',{
+                            uid:$stateParams.lineuid,
+                            cityuid:$stateParams.cityuid
+                        });
                     }
                 })
             };
@@ -121,7 +124,12 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
                     $scope.lines=rsBody.data;
                     $scope.lines[0].uid=$stateParams.lineuid;
                 }
-            })
+            });
+
+            levelService.levelData().then(function(rs){
+                    $scope.levels=rs.data;
+                }
+            );
 
         }
     );

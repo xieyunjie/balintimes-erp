@@ -109,8 +109,9 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
             $scope.cities=rs.data;                                  
         });
 
+
         //--------------------------------------站点设置----------------------------------------------------------------
-        $scope.loadStationList=function(params){
+         /*$scope.loadStationList=function(params){
             stationServices.listStationByPage(params).then(function(rs){
                 $scope.stations=rs.data;
             })
@@ -215,11 +216,7 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
                     })
                 }
             })
-        };
-
-        $scope.addstation=function(params){
-
-        }
+        };*/
 
     }).controller("lineEditController", function ($scope, $state, lineData,  AjaxRequest, TreeSelectModal,cityServices,stationServices) {
             $scope.line = lineData.data;

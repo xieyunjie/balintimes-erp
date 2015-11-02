@@ -1,12 +1,14 @@
 <ol class="breadcrumb">
-    <li><a href="#">首页</a></li>
+    <li><a href="#" >首页</a></li>
     <li><a href="#">集团基础数据</a></li>
+    <li><a href="#" ui-sref="org/line">线路站点</a></li>
+    <li><a href="#" ng-model="re" ui-sref="org/station({uid:re.lineuid,cityuid:re.cityuid})">站点列表</a></li>
     <li class="active">站点编辑</li>
 </ol>
 <form name="editForm" class="form-horizontal " role="form" novalidate>
     <div class="form-group">
-        <label class="control-label col-sm-1">线路:</label>
-        <div class="controls col-sm-2">
+        <label class="control-label col-sm-2">线路:</label>
+        <div class="controls col-sm-3">
             <select class="form-control" ng-model="lines[0].uid" ng-options="line.uid as line.name for line in lines">
                 <option value="">-- 请选择线路 --</option>
             </select>
@@ -14,9 +16,23 @@
     </div>
 
     <div class="form-group">
-        <label for="linename" class="col-sm-1 control-label">站点名称:</label>
+        <label for="stationorder" class="col-sm-2 control-label">序号:</label>
 
-        <div class="col-sm-4">
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name='kid' ng-model="station.stationorder" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.linename.$dirty">
+                <div ng-messages="editForm.employeename.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="stationname" class="col-sm-2 control-label">名称:</label>
+
+        <div class="col-sm-3">
             <input type="text" class="form-control" name='stationname' ng-model="station.name" required="required" ng-maxlength="10" ng-minlength='2' />
 
             <div ng-if="editForm.linename.$dirty">
@@ -27,17 +43,46 @@
         </div>
     </div>
 
+    <div class="form-group">
+        <label for="kid" class="col-sm-2 control-label">站点编号:</label>
+
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name='kid' ng-model="station.kid" required="required" ng-maxlength="10"  />
+
+            <div ng-if="editForm.linename.$dirty">
+                <div ng-messages="editForm.employeename.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="form-group">
-        <label for="comment" class="col-sm-1 control-label">备注:</label>
+        <label class="control-label col-sm-2">级别:</label>
+        <div class="controls col-sm-3">
+            <select class="form-control" ng-model="station.leveluid" ng-options="level.uid as level.name for level in levels">
+                <option value="">-- 请选择级别 --</option>
+            </select>
+        </div>
+    </div>
 
-        <div class="col-sm-4">
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-4">
+            <div class="checkbox">
+                <label> <input type="checkbox" name='istransit' ng-model="station.transit"> 是否换乘站:
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comment" class="col-sm-2 control-label">备注:</label>
+
+        <div class="col-sm-3">
             <textarea name="comment" class="form-control" ng-model="station.comment"></textarea>
         </div>
 
     </div>
-
-
 
     <div class="form-group">
         <div class="col-sm-offset-1 col-sm-6">
@@ -47,10 +92,9 @@
             <button class="btn btn-info" ng-click="revert()">
                 <i class="fa fa-undo"></i> 重置
             </button>
-            <a ui-sref="org/line" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+            <a ng-model="re" ui-sref="org/station({uid:re.lineuid,cityuid:re.cityuid})" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
             </a>
-
-
         </div>
     </div>
+    <div class="form-group">&nbsp;</div>
 </form>
