@@ -13,9 +13,12 @@ public interface TrainMapper {
 
     Train GetOneTrain(String uid);
 
+    List<Train> GetTrainListByProcedure(Map<String,Object> params);
+
     void UpdateTrain(Train train);
 
     boolean DeleteTrain(String uid);
 
     boolean CreateTrain(Train train);
+
 }

@@ -1,10 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<ol class="breadcrumb">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">集团基础数据</a></li>
+    <li class="active">方向列表</li>
+</ol>
+<div class="panel-body">
+    <script src="/oaucenter/resources/js/jquery.treetable.js"></script>
+    <link rel="stylesheet" href="/oaucenter/resources/css/jquery.treetable.css">
+    <link rel="stylesheet" href="/oaucenter/resources/css/jquery.treetable.theme.default.css">
+    <form name="searchForm" class="form-horizontal" role="form" novalidate>
+        <div class="form-group">
+            <label class="control-label col-sm-1">城市:</label>
+            <div class="controls col-sm-2">
+                <select class="form-control" ng-model="searchParams.cityuid" ng-options="city.uid as city.name for city in cities">
+                    <option value="">-- 请选择城市 --</option>
+                </select>
+            </div>
+            <label class="control-label col-sm-1">线路:</label>
+            <div class="controls col-sm-2">
+                <select class="form-control" ng-model="searchParams.lineuid" ng-options="line.uid as line.name for line in lines">
+                    <option value="">-- 请选择线路 --</option>
+                </select>
+            </div>
+            <label class="control-label col-sm-1">位置:</label>
+            <div class="controls col-sm-2">
+                <select class="form-control" ng-model="searchParams.postypeuid" ng-options="postype.uid as postype.name for postype in postypes">
+                    <option value="">-- 请选择类型 --</option>
+                </select>
+            </div>
+            <label for="directionName" class="control-label col-sm-1">方向名:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='directionName' ng-model="searchParams.name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class=" col-sm-4 col-sm-offset-3">
+                <button class="btn btn-primary" ng-click="searchDirection()">
+                    <i class="fa fa-search"></i> 查询
+                </button>
+                <button class="btn btn-info" ng-click="resetForm()">
+                    <i class="fa fa-undo"></i> 重置
+                </button>
+                <a ui-sref="org/direction/edit({uid:'0'})" class="btn btn-success"> <i class="fa fa-plus"></i> 添加新方向
+                </a>
+            </div>
+        </div>
+    </form>
 
-</body>
-</html>
+    <div class="box">
+        <div class="box-header">
+            <div class="box-title">方向列表</div>
+           <!-- <div class="box-tools">
+                <div class="input-group" style="width: 250px;">
+                    <input class="form-control input-sm pull-right" type="text" name="table_search"
+                           ng-model="searchParams.name">
+
+                    <div class="input-group-btn">
+                        <button class="btn btn-sm btn-default" ng-click="searchdirection(searchParams)"><i
+                                class="fa fa-search"></i> 查找
+                        </button>
+                        <button class="btn btn-sm btn-default" ui-sref="org/direction/edit({uid:'0'})"><i
+                                class="fa fa-search"></i> 新建
+                        </button>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+        <div class="box-body box-body table-responsive no-padding">
+            <table class="table table-responsive table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <!--<th>线路</th>-->
+                    <th>位置</th>
+                    <th>方向名称</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr tr-mouseover-toggle="0" ng-repeat="item in directions" >
+                    <!--<td>{{item.linename}}</td>-->
+                    <td>{{item.postypename}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.comment}}</td>
+                    <td class="text-center">
+                        <div>
+                            <a href="#" ui-sref="org/direction/edit({uid:item.uid,cityuid:item.cityuid})" tooltip="编辑{{item.name}}"><i class="fa fa-pencil fa-fw"></i></a>
+                            <a href="#" ng-click="deleteDirection(item.uid)" tooltip="删除"><i class="fa fa-trash-o fa-fw text-danger"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+</div>

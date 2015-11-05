@@ -1,11 +1,12 @@
 package com.balintimes.erp.center.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Administrator on 2015/10/28.
  */
-public class Train {
+public class Train implements Serializable{
     private String uid ;
     private String  kid;
     private String  name;
@@ -18,6 +19,25 @@ public class Train {
     private String editorname;
     private Date edittime;
     private String lineuid;
+    private String linename;
+
+    public String getCityuid() {
+        return cityuid;
+    }
+
+    public void setCityuid(String cityuid) {
+        this.cityuid = cityuid;
+    }
+
+    private String cityuid;
+
+    public String getLinename() {
+        return linename;
+    }
+
+    public void setLinename(String linename) {
+        this.linename = linename;
+    }
 
     public String getUid() {
         return uid;

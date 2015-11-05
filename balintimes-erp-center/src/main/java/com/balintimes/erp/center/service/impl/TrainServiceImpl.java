@@ -4,6 +4,7 @@ import com.balintimes.erp.center.annotation.CustomerTransactional;
 import com.balintimes.erp.center.dao.TrainDao;
 import com.balintimes.erp.center.model.Train;
 import com.balintimes.erp.center.service.TrainService;
+import com.balintimes.erp.center.tuples.TuplePage;
 import com.balintimes.erp.center.tuples.TupleResult;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,13 @@ public class TrainServiceImpl implements TrainService {
 
     public Train GetOneTrain(String uid) {
         return trainDao.GetOneTrain(uid);
+    }
+
+
+    public TuplePage<List<Train>,Integer> GetTrainListByProcedure(Map<String, Object> params) {
+       List<Train> trains = trainDao.GetTrainListByProcedure(params);
+       TuplePage<List<Train>,Integer> tuplePage=new TuplePage<>(trains,(int)params.get("totalcount"));
+        return tuplePage;
     }
 
     @CustomerTransactional

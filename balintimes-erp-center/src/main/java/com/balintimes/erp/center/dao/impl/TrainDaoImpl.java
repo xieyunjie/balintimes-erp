@@ -28,6 +28,11 @@ public class TrainDaoImpl implements TrainDao{
     }
 
 
+    public List<Train> GetTrainListByProcedure(Map<String, Object> params) {
+        return trainMapper.GetTrainListByProcedure(params);
+    }
+
+
     public void UpdateTrain(Train train) {
         trainMapper.UpdateTrain(train);
     }

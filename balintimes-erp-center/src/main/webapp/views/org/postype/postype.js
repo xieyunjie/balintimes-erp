@@ -80,7 +80,7 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
             };
 
             $scope.deletepostype = function(UID) {
-                DlgMsg.confirm('系统提示', '是否删除该级别').result.then(function(btn) {
+                DlgMsg.confirm('系统提示', '是否删除该类型').result.then(function(btn) {
                     if (btn == "ok") {
                         postypeServices.deletepostype(UID).then(function(rsBody) {
                             if (rsBody.success == 'true') {

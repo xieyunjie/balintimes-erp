@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.center.mappers.DirectionMapper">
+    <resultMap type="Direction" id="directionResultMap">
+        <id property="uid" column="uid"/>
+        <result property="kid" column="kid"/>
+        <result property="name" column="name"/>
+        <result property="deleted" column="deleted"/>
+        <result property="comment" column="comment"/>
+        <result property="edittime" column="edittime"/>
+        <result property="editorname" column="editorname"/>
+        <result property="editorid" column="editorid"/>
+        <result property="createtime" column="createtime"/>
+        <result property="creatorname" column="creatorname"/>
+        <result property="creatorid" column="creatorid"/>
+        <result property="lineuid" column="lineuid"/>
+        <result property="linename" column="linename"/>
+        <result property="postypeuid" column="postypeuid"/>
+        <result property="postypename" column="postypename"/>
+    </resultMap>
+
+    <select id="GetDirectionListByCondition" statementType="PREPARED" parameterType="Map" resultType="Direction">
+        select  * from direction
+        where deleted=0
+        <if test="name!=null and name!=''">and name like "%"#{name}"%"</if>
+        order by kid
+    </select>
+
+    <select id="GetDirectionListByProcedure" statementType="CALLABLE" parameterType="Map" resultType="Direction">
+        CALL pro_GetDirectionList(
+        #{name,mode=IN,jdbcType=VARCHAR},
+        #{lineuid,mode=IN,jdbcType=VARCHAR},
+        #{postypeuid,mode=IN,jdbcType=VARCHAR},
+        #{page,mode=IN,jdbcType=INTEGER},
+        #{pageSize,mode=IN,jdbcType=INTEGER},
+        #{totalcount,mode=OUT,jdbcType=INTEGER})
+    </select>
+
+    <select id="GetOneDirection" statementType="PREPARED" resultType="Direction">
+        SELECT  * FROM direction where deleted=0 and uid=#{uid}
+    </select>
+
+
+    <update id="UpdateDirection" parameterType="Map">
+        update direction set name=#{name},lineuid=#{lineuid},postypeuid=#{postypeuid}
+        ,kid=#{kid},comment=#{comment}
+        where uid = #{uid}
+    </update>
+
+    <update id="DeleteDirection" parameterType="string"  >
+        update direction set deleted=1 where uid = #{uid}
+    </update>
+
+    <insert id="CreateDirection" statementType="PREPARED" parameterType="Direction" keyProperty="uid" keyColumn="uid">
+        INSERT INTO direction (uid ,kid ,name,comment,
+			 creatorid,creatorname,createtime,editorid,editorname,edittime,
+             lineuid,postypeuid,deleted
+        ) VALUES
+        (#{uid},#{kid},#{name},#{comment},
+        #{creatorid},#{creatorname},#{createtime},#{editorid},#{editorname},#{edittime},
+        #{lineuid},#{postypeuid},#{deleted}
+        )
+    </insert>
+
+</mapper>

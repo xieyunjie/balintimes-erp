@@ -3,6 +3,7 @@ package com.balintimes.erp.center.controller;
 import com.balintimes.erp.center.base.BaseController;
 import com.balintimes.erp.center.model.Train;
 import com.balintimes.erp.center.service.TrainService;
+import com.balintimes.erp.center.tuples.TuplePage;
 import com.balintimes.erp.center.tuples.TupleResult;
 import com.balintimes.erp.center.util.JsonUtil;
 import org.springframework.stereotype.Controller;
@@ -11,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Administrator on 2015/10/29.
@@ -27,21 +25,34 @@ public class TrainController extends BaseController {
 
     @RequestMapping(value = "listbypage",method = RequestMethod.POST)
     @ResponseBody
-    public String GetTrainListByCondition(Map<String, Object> params) {
-        List<Train> trains= trainService.GetTrainListByCondition(params);
-        return JsonUtil.ResponseSuccessfulMessage(trains);
+    public String GetTrainListByCondition(String name,String lineuid,String cityuid,String page,String pageSize) {
+        Map<String, Object> params=new HashMap<String,Object>(5);
+        params.put("name",name);
+        params.put("lineuid", lineuid);
+        params.put("cityuid", cityuid);
+
+        params.put("page", page);
+        params.put("pageSize", pageSize);
+
+//        List<Train> trains = trainService.GetTrainListByCondition(params);
+        TuplePage<List<Train>,Integer> tuplePage= trainService.GetTrainListByProcedure(params);
+        return JsonUtil.ResponseSuccessfulMessage(tuplePage.objectList,tuplePage.objectTotalCount);
     }
 
     @RequestMapping(value = "getonetrain",method = RequestMethod.POST)
     @ResponseBody
-    public Train GetOneTrain(String uid) {
-        return trainService.GetOneTrain(uid);
+    public String GetOneTrain(String uid) {
+        Train train = trainService.GetOneTrain(uid);
+        return JsonUtil.ResponseSuccessfulMessage(train);
     }
 
     @RequestMapping(value = "update",method = RequestMethod.POST)
     @ResponseBody
     public String UpdateTrain(Train train) {
         try{
+            train.setEditorid(webUsrUtil.CurrentUser().getUid());
+            train.setEditorname(webUsrUtil.CurrentUser().getEmployeeName());
+            train.setEdittime(new Date());
             trainService.UpdateTrain(train);
             return JsonUtil.ResponseSuccessfulMessage("修改成功");
         }
@@ -68,8 +79,10 @@ public class TrainController extends BaseController {
     public String CreateTrain(Train train) {
         train.setUid(UUID.randomUUID().toString());
         train.setCreatorid(webUsrUtil.CurrentUser().getUid());
-        train.setCreatorname(webUsrUtil.CurrentUser().getUsername());
+        train.setCreatorname(webUsrUtil.CurrentUser().getEmployeeName());
         train.setCreatetime(new Date());
+        train.setEditorid(webUsrUtil.CurrentUser().getUid());
+        train.setEditorname(webUsrUtil.CurrentUser().getEmployeeName());
         train.setEdittime(new Date());
         train.setDeleted(false);
         TupleResult<Boolean,Object> tupleResult=trainService.CreateTrain(train);

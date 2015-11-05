@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-group">
-        <label for="postypename" class="control-label col-sm-1">名称:</label>
+        <label for="postypename" class="control-label col-sm-1">点位名称:</label>
         <div class="col-sm-4">
             <input type="text" class="form-control" name='postypename' ng-model="postype.name" required="required" ng-maxlength="10" ng-minlength='1' />
 
@@ -34,24 +34,12 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label for="postypevalue" class="control-label col-sm-1">分值:</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name='postypevalue' ng-model="postype.value" required="required" ng-maxlength="10" ng-minlength='1' />
-
-            <div ng-if="editForm.postypevalue.$dirty">
-                <div ng-messages="editForm.postypevalue.$error" class="errormsg" role="alert">
-                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="form-group">
         <label for="comment" class="col-sm-1 control-label">备注:</label>
 
         <div class="col-sm-4">
-            <textarea name="comment" class="form-control" ng-model="line.comment"></textarea>
+            <textarea name="comment" class="form-control" ng-model="postype.comment"></textarea>
         </div>
 
     </div>

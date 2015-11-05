@@ -15,6 +15,8 @@ public interface TrainDao {
 
     Train GetOneTrain(String uid);
 
+    List<Train> GetTrainListByProcedure(Map<String,Object> params);
+
     void UpdateTrain(Train train);
 
     TupleResult<Boolean,Object> DeleteTrain(String uid);

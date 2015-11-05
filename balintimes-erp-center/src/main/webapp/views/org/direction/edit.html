@@ -1,10 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<ol class="breadcrumb">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">集团基础数据</a></li>
+    <li><a href="#" ui-sref="org/line">级别</a></li>
+    <li class="active">级别编辑</li>
+</ol>
+<form name="editForm" class="form-horizontal " role="form" novalidate>
 
-</body>
-</html>
+    <div class="form-group">
+        <label class="control-label col-sm-1">城市:</label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="direction.cityuid" ng-options="city.uid as city.name for city in cities">
+                <option value="">-- 请选择城市 --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-1">所属线路:</label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="direction.lineuid" ng-options="line.uid as line.name for line in lines">
+                <option value="">-- 请选择线路 --</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-1">位置:</label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="direction.postypeuid" ng-options="postype.uid as postype.name for postype in postypes">
+                <option value="">-- 请选择类型 --</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="kid" class="control-label col-sm-1">方向编号:</label>
+        <div class="controls col-sm-2">
+            <input type="text" class="form-control" id='kid' ng-model="direction.kid" />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="directionName" class="control-label col-sm-1">方向名称:</label>
+        <div class="controls col-sm-2">
+            <input type="text" class="form-control" id='directionName' ng-model="direction.name" />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="comment" class="col-sm-1 control-label">备注:</label>
+        <div class="col-sm-4">
+            <textarea id="comment" class="form-control" ng-model="direction.comment"></textarea>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-6">
+            <button class="btn btn-primary" ng-click="savedirection()" ng-disabled="editForm.$invalid">
+                <i class="fa fa-check"></i>保存
+            </button>
+            <button class="btn btn-info" ng-click="revert()">
+                <i class="fa fa-undo"></i> 重置
+            </button>
+            <a ui-sref="org/level" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+            </a>
+
+
+        </div>
+    </div>
+</form>

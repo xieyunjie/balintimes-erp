@@ -8,6 +8,39 @@
     <link rel="stylesheet" href="/oaucenter/resources/css/jquery.treetable.css">
     <link rel="stylesheet" href="/oaucenter/resources/css/jquery.treetable.theme.default.css">
 
+    <form name="searchForm" class="form-horizontal" role="form" novalidate>
+        <div class="form-group">
+            <label class="control-label col-sm-1">城市:</label>
+            <div class="controls col-sm-2">
+                <select class="form-control" ng-model="searchParams.cityuid" ng-options="city.uid as city.name for city in cities">
+                    <option value="">-- 请选择城市 --</option>
+                </select>
+            </div>
+            <label class="control-label col-sm-1">线路:</label>
+            <div class="controls col-sm-2">
+                <select class="form-control" ng-model="searchParams.lineuid" ng-options="line.uid as line.name for line in lines">
+                    <option value="">-- 请选择线路 --</option>
+                </select>
+            </div>
+            <label for="kid" class="control-label col-sm-1">编码:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" name='kid' ng-model="searchParams.kid" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class=" col-sm-4 col-sm-offset-3">
+                <button class="btn btn-primary" ng-click="searchtrain()">
+                    <i class="fa fa-search"></i> 查询
+                </button>
+                <button class="btn btn-info" ng-click="resetForm()">
+                    <i class="fa fa-undo"></i> 重置
+                </button>
+                <a ui-sref="org/train/edit({uid:'0'})" class="btn btn-success"> <i class="fa fa-plus"></i> 添加新列车
+                </a>
+            </div>
+        </div>
+    </form>
+
     <div class="box">
         <div class="box-header">
             <div class="box-title">列车列表</div>
@@ -20,9 +53,9 @@
                         <button class="btn btn-sm btn-default" ng-click="searchtrain(searchParams)"><i
                                 class="fa fa-search"></i> 查找
                         </button>
-                        <button class="btn btn-sm btn-default" ui-sref="org/train/edit({uid:'0'})"><i
+                       <!-- <button class="btn btn-sm btn-default" ui-sref="org/train/edit({uid:'0'})"><i
                                 class="fa fa-search"></i> 新建
-                        </button>
+                        </button>-->
                     </div>
                 </div>
             </div>
@@ -31,6 +64,7 @@
             <table class="table table-responsive table-striped table-bordered table-hover">
                 <thead>
                 <tr>
+                    <th>线路</th>
                     <th>列车编号</th>
                     <th>列车名称</th>
                     <th>备注</th>
@@ -39,9 +73,9 @@
                 </thead>
                 <tbody>
                 <tr tr-mouseover-toggle="0" ng-repeat="item in trains" >
+                    <td>{{item.linename}}</td>
                     <td>{{item.kid}}</td>
                     <td>{{item.name}}</td>
-                    <td>{{item.value}}</td>
                     <td>{{item.comment}}</td>
                     <td class="text-center">
                         <div>
@@ -52,6 +86,12 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="box-footer clearfix">
+            <pagination class="paginationnomargin" ng-change="loadPage()"
+                        total-items="searchParams.total" ng-model="searchParams.page"
+                        class="pagination-sm" max-size="10" boundary-links="true"
+                        rotate="false"></pagination>
         </div>
     </div>
 

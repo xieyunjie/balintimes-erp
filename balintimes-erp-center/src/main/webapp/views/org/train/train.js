@@ -22,8 +22,7 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
                         return {data:{
                             uid:"0",
                             kid:"",
-                            name:"",
-                            value:""
+                            name:""
                         }};
                     }else{
                         return AjaxRequest.Post("/train/getonetrain",{uid :$stateParams.uid});
@@ -45,19 +44,37 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
                     return AjaxRequest.Post("/train/delete", {uid: UID});
                 }
             }
-
         });
 
-        app.controller("trainistController",function($scope, $state, $stateParams, AjaxRequest, DlgMsg, NgUtil,trainServices){
+        app.factory("lineServices", function (AjaxRequest) {
+            return {
+                lineData: function (params) {
+                    return AjaxRequest.Post("/line/listbypage",params);
+                }
+            }
+        });
+
+        app.factory("cityServices",function(AjaxRequest){
+            return{
+                cityData:function(){
+                    return AjaxRequest.Post("/city/list");
+                }
+            }
+        });
+
+        app.controller("trainistController",function($scope, $state, $stateParams, AjaxRequest, DlgMsg, NgUtil,trainServices,lineServices,cityServices){
             $scope.trains = {};
             $scope.trainTypes = [];
-            $scope.searchParams = "";
-            var params={ name:"" };
+            $scope.searchParams = {};
+            var params={ name:"",lineuid:"" };
+            var lineParams={ cityuid:"",name:"" };
             $scope.totalItems = 1;
 
             $scope.resetForm = function () {
-                trainServices.listByPage(params).then(function (rsBody) {
+                $scope.searchParams = NgUtil.initPageParams();
+                trainServices.listByPage($scope.searchParams).then(function (rsBody) {
                     $scope.trains = rsBody.data;
+                    $scope.searchParams.total = rsBody.total;
                 });
             };
             $scope.init = function () {
@@ -73,14 +90,14 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
             };
 
             $scope.searchtrain = function () {
-                params.name=$scope.searchParams.name;
-                trainServices.listByPage(params).then(function (rsBody) {
+                trainServices.listByPage($scope.searchParams).then(function (rsBody) {
                     $scope.trains = rsBody.data;
+                    $scope.searchParams.total = rsBody.total;
                 })
             };
 
             $scope.deletetrain = function(UID) {
-                DlgMsg.confirm('系统提示', '是否删除该级别').result.then(function(btn) {
+                DlgMsg.confirm('系统提示', '是否删除该列车').result.then(function(btn) {
                     if (btn == "ok") {
                         trainServices.deletetrain(UID).then(function(rsBody) {
                             if (rsBody.success == 'true') {
@@ -90,9 +107,25 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
                     }
                 });
             };
-        }).controller("trainEditController",function($scope,$state,$stateParams,AjaxRequest,DlgMsg,NgUtil,trainServices,trainData){
+
+            cityServices.cityData().then(function(rsBody){
+                $scope.cities=rsBody.data;
+                $scope.searchParams.cityuid=rsBody.data[3].uid;
+            });
+
+            $scope.$watch('searchParams.cityuid', function(cityuid) {
+                lineParams.cityuid=cityuid;
+                lineServices.lineData(lineParams).then(function(rsBody){
+                    $scope.lines=rsBody.data;
+                });
+            });
+
+
+        }).controller("trainEditController",function($scope,$state,$stateParams,AjaxRequest,DlgMsg,NgUtil,trainServices,trainData,cityServices,lineServices){
+
             $scope.train = trainData.data;
             var original = angular.copy(trainData.data);
+            var lineParams={ cityuid:"",name:"" };
 
             $scope.savetrain = function () {
                 var url = "/train/update"
@@ -111,6 +144,16 @@ define(['angularAMD', 'balintimesConstant', 'ui-bootstrap', 'angular-messages','
                 $scope.editForm.$setPristine();
             };
 
+            cityServices.cityData().then(function(rsBody){
+                $scope.cities=rsBody.data;
+            });
+
+            $scope.$watch('train.cityuid', function(cityuid) {
+                lineParams.cityuid=cityuid;
+                lineServices.lineData(lineParams).then(function(rsBody){
+                    $scope.lines=rsBody.data;
+                });
+            });
         });
 
         return{

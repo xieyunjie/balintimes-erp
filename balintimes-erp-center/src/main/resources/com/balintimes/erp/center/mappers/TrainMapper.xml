@@ -14,7 +14,8 @@
         <result property="createtime" column="createtime"/>
         <result property="creatorname" column="creatorname"/>
         <result property="creatorid" column="creatorid"/>
-        <result property="linename" column="lineuid"/>
+        <result property="linename" column="linename"/>
+        <result property="cityuid" column="cityuid"/>
     </resultMap>
 
     <select id="GetTrainListByCondition" statementType="PREPARED" parameterType="Map" resultType="Train">
@@ -26,14 +27,24 @@
         order by a.kid
     </select>
 
+    <select id="GetTrainListByProcedure" statementType="CALLABLE" parameterType="Map" resultType="Train">
+        CALL pro_GetTrainList(
+                                #{name,mode=IN,jdbcType=VARCHAR},
+                                #{lineuid,mode=IN,jdbcType=VARCHAR},
+                                #{cityuid,mode=IN,jdbcType=VARCHAR},
+                                #{page,mode=IN,jdbcType=INTEGER},
+                                #{pageSize,mode=IN,jdbcType=INTEGER},
+                                #{totalcount,mode=OUT,jdbcType=INTEGER})
+    </select>
+
     <select id="GetOneTrain" statementType="PREPARED" resultType="Train">
-       select  a.*,b.name as linename from train a
+       select  a.*,b.name as linename,b.uid as lineuid,b.cityuid from train a
         inner join line b on b.uid=a.lineuid
         where a.deleted=0 and a.uid=#{uid}
     </select>
 
     <update id="UpdateTrain" parameterType="Map">
-        update train set name=#{name}
+        update train set name=#{kid},kid=#{kid}
         ,comment=#{comment},lineuid=#{lineuid}
         where uid = #{uid}
     </update>
