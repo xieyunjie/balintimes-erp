@@ -1,10 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<ol class="breadcrumb">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">集团基础数据</a></li>
+    <li><a href="#" ui-sref="org/line">媒体状态</a></li>
+    <li class="active">媒体状态编辑</li>
+</ol>
+<form name="editForm" class="form-horizontal " role="form" novalidate>
 
-</body>
-</html>
+    <div class="form-group">
+        <label  class="col-sm-1 control-label">状态编号:</label>
+
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name='kid' ng-model="mediastatus.kid" required="required" ng-maxlength="10" ng-minlength='1' readonly="true" ng-if="mediastatus.uid!='0'"/>
+            <input type="text" class="form-control" name='kid' ng-model="mediastatus.kid" required="required" ng-maxlength="10" ng-minlength='1'  ng-if="mediastatus.uid=='0'"/>
+
+            <div ng-if="editForm.kid.$dirty">
+                <div ng-messages="editForm.kid.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label  class="control-label col-sm-1">状态名称:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name='mediastatusname' ng-model="mediastatus.name" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.mediastatusname.$dirty">
+                <div ng-messages="editForm.mediastatusname.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-4">
+            <div class="checkbox">
+                <label> <input type="checkbox" name='cansell' ng-model="mediastatus.cansell"> 是否可售:
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comment" class="col-sm-1 control-label">备注:</label>
+
+        <div class="col-sm-4">
+            <textarea id="comment" class="form-control" ng-model="mediastatus.comment"></textarea>
+        </div>
+
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-6">
+            <button class="btn btn-primary" ng-click="savemediastatus()" ng-disabled="editForm.$invalid">
+                <i class="fa fa-check"></i>保存
+            </button>
+            <button class="btn btn-info" ng-click="revert()">
+                <i class="fa fa-undo"></i> 重置
+            </button>
+            <a ui-sref="org/mediastatus" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+            </a>
+
+
+        </div>
+    </div>
+</form>

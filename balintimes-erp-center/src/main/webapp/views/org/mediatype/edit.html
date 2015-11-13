@@ -1,10 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<ol class="breadcrumb">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">集团基础数据</a></li>
+    <li><a href="#" ui-sref="org/line">媒体类型</a></li>
+    <li class="active">媒体类型编辑</li>
+</ol>
+<form id="editForm" class="form-horizontal " role="form" novalidate>
 
-</body>
-</html>
+    <div class="form-group">
+        <label for="kid" class="col-sm-1 control-label">类型编号:</label>
+
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id='kid' ng-model="mediatype.kid" required="required" ng-maxlength="10" ng-minlength='1' readonly="true" ng-if="mediatype.uid!='0'"/>
+            <input type="text" class="form-control" id='kid' ng-model="mediatype.kid" required="required" ng-maxlength="10" ng-minlength='1'  ng-if="mediatype.uid=='0'"/>
+
+            <div ng-if="editForm.kid.$dirty">
+                <div ng-messages="editForm.kid.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="mediatypename" class="control-label col-sm-1">类型名称:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id='mediatypename' ng-model="mediatype.name" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.name.$dirty">
+                <div ng-messages="editForm.name.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-1">分类:</label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="mediatype.mediatypecategoryuid" ng-options="mediacategory.uid as mediacategory.name for mediacategory in mediatypecategorys">
+                <option value="">-- 请选择分类 --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="length" class="control-label col-sm-1">长(毫米):</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id='length' ng-model="mediatype.length" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.mediatypevalue.$dirty">
+                <div ng-messages="editForm.mediatypevalue.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="width" class="control-label col-sm-1">宽(毫米):</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id='width' ng-model="mediatype.width" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.width.$dirty">
+                <div ng-messages="editForm.mediatypevalue.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="mediatypeSpec" class="control-label col-sm-1">规格、尺寸:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id='mediatypeSpec' ng-model="mediatype.spec" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.mediatypeSpec.$dirty">
+                <div ng-messages="editForm.mediatypevalue.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comment" class="col-sm-1 control-label">备注:</label>
+
+        <div class="col-sm-4">
+            <textarea id="comment" class="form-control" ng-model="mediatype.comment"></textarea>
+        </div>
+
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-6">
+            <button class="btn btn-primary" ng-click="savemediatype()" ng-disabled="editForm.$invalid">
+                <i class="fa fa-check"></i>保存
+            </button>
+            <button class="btn btn-info" ng-click="revert()">
+                <i class="fa fa-undo"></i> 重置
+            </button>
+            <a ui-sref="org/mediatype" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+            </a>
+
+
+        </div>
+    </div>
+</form>

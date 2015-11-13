@@ -1,10 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<ol class="breadcrumb">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">集团基础数据</a></li>
+    <li class="active">媒体类型列表</li>
+</ol>
+<div class="panel-body">
+    <script src="/oaucenter/resources/js/jquery.treetable.js"></script>
+    <link rel="stylesheet" href="/oaucenter/resources/css/jquery.treetable.css">
+    <link rel="stylesheet" href="/oaucenter/resources/css/jquery.treetable.theme.default.css">
 
-</body>
-</html>
+    <div class="box">
+        <div class="box-header">
+            <div class="box-title">媒体类型列表</div>
+            <div class="box-tools">
+                <div class="input-group" style="width: 250px;">
+                    <input class="form-control input-sm pull-right" type="text" name="table_search"
+                           ng-model="searchParams.name">
+
+                    <div class="input-group-btn">
+                        <button class="btn btn-sm btn-default" ng-click="searchmediatype(searchParams)"><i
+                                class="fa fa-search"></i> 查找
+                        </button>
+                        <button class="btn btn-sm btn-default" ui-sref="org/mediatype/edit({uid:'0'})"><i
+                                class="fa fa-search"></i> 新建
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-body box-body table-responsive no-padding">
+            <table class="table table-responsive table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>类型</th>
+                    <th>类型名称</th>
+                    <th>分类名称</th>
+                    <th>长度(毫米)</th>
+                    <th>宽度(毫米)</th>
+                    <th>规格、尺寸</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr tr-mouseover-toggle="0" ng-repeat="item in mediatypes" >
+                    <td>{{item.kid}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.mediatypecategoryname}}</td>
+                    <td>{{item.width}}</td>
+                    <td>{{item.length}}</td>
+                    <td>{{item.spec}}</td>
+                    <td>{{item.comment}}</td>
+                    <td class="text-center">
+                        <div>
+                            <a href="#" ui-sref="org/mediatype/edit({uid:item.uid})" tooltip="编辑{{item.name}}"><i class="fa fa-pencil fa-fw"></i></a>
+                            <a href="#" ng-click="deletemediatype(item.uid)" tooltip="删除"><i class="fa fa-trash-o fa-fw text-danger"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <pagination class="paginationnomargin" ng-change="loadPage()"
+                        total-items="searchParams.total" ng-model="searchParams.page"
+                        class="pagination-sm" max-size="10" boundary-links="true"
+                        rotate="false"></pagination>
+        </div>
+    </div>
+
+
+
+</div>

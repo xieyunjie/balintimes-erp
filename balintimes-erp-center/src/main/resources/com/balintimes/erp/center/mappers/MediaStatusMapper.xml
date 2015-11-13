@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.center.mappers.MediaStatusMapper">
+    <resultMap type="MediaStatus" id="mediastatusResultMap">
+        <id property="uid" column="uid"/>
+        <result property="kid" column="kid"/>
+        <result property="name" column="name"/>
+        <result property="cansell" column="cansell"/>
+        <result property="deleted" column="deleted"/>
+        <result property="comment" column="comment"/>
+        <result property="edittime" column="edittime"/>
+        <result property="editorname" column="editorname"/>
+        <result property="editorid" column="editorid"/>
+        <result property="createtime" column="createtime"/>
+        <result property="creatorname" column="creatorname"/>
+        <result property="creatorid" column="creatorid"/>
+        <result property="mediadefaultstatus" column="mediadefaultstatus"/>
+    </resultMap>
+
+    <select id="GetMediaStatusListByCondition" statementType="PREPARED" parameterType="Map" resultType="MediaStatus">
+        select  * from mediastatus
+        where deleted=0
+        <if test="name!=null and name!=''">and name like "%"#{name}"%"</if>
+        order by kid
+    </select>
+
+    <select id="GetOneMediaStatus" statementType="PREPARED" resultType="MediaStatus">
+        SELECT  * FROM mediastatus where deleted=0 and uid=#{uid}
+    </select>
+
+
+    <update id="UpdateMediaStatus" parameterType="Map">
+        update mediastatus set name=#{name}
+        ,cansell=#{cansell},comment=#{comment}
+        where uid = #{uid}
+    </update>
+
+    <update id="DeleteMediaStatus" parameterType="string"  >
+        update mediastatus set deleted=1 where uid = #{uid}
+    </update>
+
+    <insert id="CreateMediaStatus" statementType="PREPARED" parameterType="MediaStatus" keyProperty="uid" keyColumn="uid">
+        INSERT INTO mediastatus (uid,  kid, name,  deleted, comment, creatorid ,creatorname,createtime,
+        editorid,editorname, edittime,cansell,mediadefaultstatus
+        ) VALUES
+        (#{uid},#{kid},#{name},#{deleted},#{comment},#{creatorid},#{creatorname},#{createtime},
+        #{editorid},#{editorname},#{edittime},#{cansell},#{mediadefaultstatus}
+        )
+    </insert>
+
+</mapper>

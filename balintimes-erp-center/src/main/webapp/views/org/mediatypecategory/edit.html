@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<ol class="breadcrumb">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">集团基础数据</a></li>
+    <li><a href="#" ui-sref="org/line">媒体类型分类</a></li>
+    <li class="active">媒体类型分类编辑</li>
+</ol>
+<form name="editForm" class="form-horizontal " role="form" novalidate>
 
-</body>
-</html>
+    <div class="form-group">
+        <label for="kid" class="col-sm-1 control-label">分类编码:</label>
+
+        <div class="col-sm-4">
+
+            <input type="text" class="form-control" id='kid' ng-model="mediatypecategory.kid" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.kid.$dirty">
+                <div ng-messages="editForm.kid.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="mediatypecategoryname" class="control-label col-sm-1">分类名称:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id='mediatypecategoryname' ng-model="mediatypecategory.name" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.mediatypecategoryname.$dirty">
+                <div ng-messages="editForm.mediatypecategoryname.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="comment" class="col-sm-1 control-label">备注:</label>
+
+        <div class="col-sm-4">
+            <textarea id="comment" class="form-control" ng-model="mediatypecategory.comment"></textarea>
+        </div>
+
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-6">
+            <button class="btn btn-primary" ng-click="savemediatypecategory()" ng-disabled="editForm.$invalid">
+                <i class="fa fa-check"></i>保存
+            </button>
+            <button class="btn btn-info" ng-click="revert()">
+                <i class="fa fa-undo"></i> 重置
+            </button>
+            <a ui-sref="org/mediatypecategory" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+            </a>
+
+
+        </div>
+    </div>
+</form>
