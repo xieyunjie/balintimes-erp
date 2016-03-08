@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.balintimes.erp.center.mappers.MediaMapper">
+    <resultMap type="Media" id="mediaResultMap">
+        <id property="uid" column="uid"/>
+        <result property="kid" column="kid"/>
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="posdesc" column="posdesc"/>
+        <result property="cansell" column="cansell"/>
+        <result property="region" column="region"/>
+        <result property="mediatypeuid" column="mediatypeuid"/>
+        <result property="mediatypename" column="mediatypename"/>
+        <result property="stationuid" column="stationuid"/>
+        <result property="stationname" column="stationname"/>
+        <result property="trainuid" column="trainuid"/>
+        <result property="trainname" column="trainname"/>
+        <result property="postypeuid" column="postypeuid"/>
+        <result property="postypename" column="postypename"/>
+        <result property="lineuid" column="lineuid"/>
+        <result property="linename" column="linename"/>
+        <result property="mediastatusuid" column="mediastatusuid"/>
+        <result property="mediastatusname" column="mediastatusname"/>
+        <result property="errorflag" column="errorflag"/>
+        <result property="price" column="price"/>
+        <result property="image" column="image"/>
+        <result property="attachment" column="attachment"/>
+        <result property="directionuid" column="directionuid"/>
+        <result property="directionname" column="directionname"/>
+        <result property="deleted" column="deleted"/>
+        <result property="comment" column="comment"/>
+        <result property="edittime" column="edittime"/>
+        <result property="editorname" column="editorname"/>
+        <result property="editorid" column="editorid"/>
+        <result property="createtime" column="createtime"/>
+        <result property="creatorname" column="creatorname"/>
+        <result property="creatorid" column="creatorid"/>
+        <result property="activedate" column="activedate"/>
+        <result property="mediawidth" column="mediawidth"/>
+        <result property="amount" column="amount"/>
+        <result property="contactrate" column="contactrate"/>
+        <result property="contactlevel" column="contactlevel"/>
+        <result property="extendno" column="extendno"/>
+        <result property="expiredate" column="expiredate"/>
+        <result property="warnningflag" column="warnningflag"/>
+        <result property="shieldingdoor" column="shieldingdoor"/>
+        <result property="cityuid" column="cityuid"/>
+        <result property="cityname" column="cityname"/>
+        <result property="begintime" column="begintime"/>
+        <result property="endtime" column="endtime"/>
+    </resultMap>
+
+    <select id="GetMediaListByCondition" statementType="CALLABLE" parameterType="Map" resultType="Media">
+        CALL pro_GetMediaList(
+        #{kid,mode=IN,jdbcType=VARCHAR},
+        #{mediatypeuid,mode=IN,jdbcType=VARCHAR},
+        #{lineuid,mode=IN,jdbcType=VARCHAR},
+        #{stationuid,mode=IN,jdbcType=VARCHAR},
+        #{directionuid,mode=IN,jdbcType=VARCHAR},
+        #{trainuid,mode=IN,jdbcType=VARCHAR},
+        #{postypeuid,mode=IN,jdbcType=VARCHAR},
+        #{begintime,mode=IN,jdbcType=VARCHAR},
+        #{endtime,mode=IN,jdbcType=VARCHAR},
+        #{page,mode=IN,jdbcType=INTEGER},
+        #{pageSize,mode=IN,jdbcType=INTEGER},
+        #{totalcount,mode=OUT,jdbcType=INTEGER})
+    </select>
+
+    <select id="GetOneMedia" statementType="PREPARED" resultType="Media">
+        SELECT 	a.uid,a.id,a.kid,a.name,a.posdesc,a.cansell,a.region,a.mediatypeuid,b.name AS mediatypename, a.stationuid,c.name AS stationname
+           ,a.trainuid,d.name AS trainname, a.postypeuid, e.name AS postypename,a.lineuid,f.name as linename, a.mediastatusuid,g.name AS mediastatusname, a.directionuid,h.name AS directionname
+           ,a.errorflag,a.price,a.image,a.attachment,a.deleted,a.comment
+           ,a.creatorid,a.creatorname,a.createtime,a.editorid,a.editorname,a.edittime
+           ,a.activedate,a.mediawidth,a.medialength,a.amount,a.contactrate,a.contactlevel
+           ,a.extendno,a.expiredate,a.warnningflag,a.shieldingdoor,f.cityuid,i.name AS cityname from media a
+		LEFT JOIN mediatype b ON a.mediatypeuid=b.uid
+		LEFT JOIN station c ON a.stationuid=c.uid
+		LEFT JOIN train d ON a.trainuid=d.uid
+		LEFT JOIN postype e ON a.postypeuid=e.uid
+		LEFT JOIN line f ON a.lineuid=f.uid
+		LEFT JOIN mediastatus g ON a.mediastatusuid=g.uid
+		LEFT JOIN direction h ON a.directionuid=h.uid
+		LEFT JOIN city i on f.cityuid=i.uid
+		WHERE a.deleted=0 and a.uid=#{uid}    
+    </select>
+
+    <update id="UpdateMedia" parameterType="Map">
+        update media set name=#{name},kid=#{kid},posdesc=#{posdesc},mediatypeuid=#{mediatypeuid},stationuid=#{stationuid}
+        ,trainuid=#{trainuid},postypeuid=#{postypeuid},lineuid=#{lineuid},mediastatusuid=#{mediastatusuid},directionuid=#{directionuid}
+        ,comment=#{comment},price=#{price},activedate=#{activedate},mediawidth=#{mediawidth},medialength=#{medialength}
+        ,amount=#{amount},contactrate=#{contactrate},contactlevel=#{contactlevel}
+        where uid = #{uid}
+    </update>
+
+    <update id="DeleteMedia" parameterType="string"  >
+        update media set deleted=1 where uid = #{uid}
+    </update>
+
+    <insert id="CreateMedia" statementType="PREPARED" parameterType="Media" keyProperty="uid" keyColumn="uid">
+        INSERT INTO media (	uid,id,kid,name,posdesc,cansell,region,mediatypeuid, stationuid
+           ,trainuid,postypeuid,lineuid,mediastatusuid,directionuid
+           ,errorflag,price,image,attachment,deleted,comment
+           ,creatorid,createtime,editorid,editorname,edittime
+           ,activedate,mediawidth,medialength,amount,contactrate,contactlevel
+           ,extendno,expiredate,warnningflag,shieldingdoor) VALUES
+        (#{uid},#{id}, #{kid},#{name},#{posdesc},#{cansell},#{region},#{mediatypeuid}, #{stationuid}
+        ,#{trainuid},#{postypeuid},#{lineuid},#{mediastatusuid},#{directionuid}
+        ,#{errorflag},#{price},#{image},#{attachment},#{deleted},#{comment}
+         ,#{creatorid},#{creatorname},#{createtime},#{editorid},#{editorname}, #{edittime}
+         ,#{activedate},#{mediawidth},#{medialength},#{amount},#{contactrate},#{contactlevel}
+         ,#{extendno},#{expiredate},#{warnningflag},#{shieldingdoor}
+         )
+    </insert>
+
+</mapper>

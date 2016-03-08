@@ -1,0 +1,210 @@
+<ol class="breadcrumb">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">集团基础数据</a></li>
+    <li><a href="#" ui-sref="org/media">媒体</a></li>
+    <li class="active">媒体编辑</li>
+</ol>
+<form name="editForm" class="form-horizontal " role="form" novalidate>
+
+    <div class="form-group">
+        <div class="form-group">
+            <label for="kid" class="control-label col-sm-1">媒体编号:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='kid' ng-model="media.kid" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="medianame" class="control-label col-sm-1">媒体名称:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='medianame' ng-model="media.name" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="shieldingdoor" class="control-label col-sm-1">屏蔽门贴:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='shieldingdoor' ng-model="media.shieldingdoor" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="amount" class="control-label col-sm-1">媒体数量:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='amount' ng-model="media.amount" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="medialength" class="control-label col-sm-1">长度:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='medialength' ng-model="media.medialength" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="mediawidth" class="control-label col-sm-1">宽度:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='mediawidth' ng-model="media.mediawidth" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="region" class="control-label col-sm-1">区域:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='region' ng-model="media.region" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="posdesc" class="control-label col-sm-1">位置描述:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='posdesc' ng-model="media.posdesc" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="activedate" class="control-label col-sm-1">启用时间:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='activedate' ng-model="media.activedate" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="expiredate" class="control-label col-sm-1">停用时间:</label>
+            <div class="controls col-sm-2">
+                <input type="text" class="form-control" id='expiredate' ng-model="media.expiredate" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-1">媒体类型:</label>
+            <div class="controls col-sm-2">
+                <select class="form-control" ng-model="media.mediatypeuid" ng-options="mediatype.uid as mediatype.name for mediatype in mediatypes">
+                    <option value="">-- 请选择类型 --</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-1">城市:</label>
+            <div class="controls col-sm-2">
+                <select class="form-control" ng-model="media.cityuid" ng-options="city.uid as city.name for city in cities">
+                    <option value="">-- 请选择城市 --</option>
+                </select>
+            </div>
+        </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-sm-1">线路:</label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="media.lineuid" ng-options="line.uid as line.name for line in lines">
+                <option value="">-- 请选择线路 --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-1">
+            <input type="radio" name="selectRadio" ng-checked="value1==true"  ng-model="value1" ng-change="toggle()"/> 站点:
+        </label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="media.stationuid" ng-options="station.uid as station.name for station in stations" ng-disabled="value2">
+                <option value="">-- 请选择站点 --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-1">方向:</label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="media.directionuid" ng-options="direction.uid as direction.name for direction in directions"  ng-disabled="value2">
+                <option value="">-- 请选择方向 --</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-sm-1">
+            <input type="radio"  name="selectRadio" ng-checked="value2==true" ng-model="value2" ng-change="toggle()"/>列车:
+        </label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="media.trainuid" ng-options="train.uid as train.name for train in trains"  ng-disabled="value1" >
+                <option value="">-- 请选择列车 --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-1">位置类型:</label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="media.postypeuid" ng-options="postype.uid as postype.name for postype in postypes">
+                <option value="">-- 请选择起始站 --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="contactrate" class="control-label col-sm-1">接触率:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id='contactrate' ng-model="media.contactrate" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.postypename.$dirty">
+                <div ng-messages="editForm.postypename.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="extendno" class="control-label col-sm-1">优先编号:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id='extendno' ng-model="media.extendno" required="required" ng-maxlength="10" ng-minlength='1' />
+
+            <div ng-if="editForm.postypename.$dirty">
+                <div ng-messages="editForm.postypename.$error" class="errormsg" role="alert">
+                    <div ng-messages-include='{{rootpath}}/views/tpls/messageerror/require.html' />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-1">单据提醒:</label>
+        <div class="controls col-sm-2">
+            <select class="form-control" ng-model="media.warnningflag" >
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comment" class="col-sm-1 control-label">备注:</label>
+
+        <div class="col-sm-4">
+            <textarea id="comment" class="form-control" ng-model="media.comment"></textarea>
+        </div>
+
+    </div>
+
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-6">
+            <button class="btn btn-primary" ng-click="savemedia()" ng-disabled="editForm.$invalid">
+                <i class="fa fa-check"></i>保存
+            </button>
+            <button class="btn btn-info" ng-click="revert()">
+                <i class="fa fa-undo"></i> 重置
+            </button>
+            <a ui-sref="org/media" class="btn btn-warning"> <i class="fa fa-times"></i>取消并返回
+            </a>
+
+
+        </div>
+    </div>
+</form>

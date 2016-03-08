@@ -43,7 +43,7 @@ public class MediaTypeController extends BaseController {
 
     @RequestMapping(value = "update",method = RequestMethod.POST)
     @ResponseBody
-    public String UpdateMediaStatus(MediaType mediaType) {
+    public String UpdateMediaType(MediaType mediaType) {
         mediaType.setEditorid(webUsrUtil.CurrentUser().getUid());
         mediaType.setEditorname(webUsrUtil.CurrentUser().getEmployeeName());
         mediaType.setEdittime(new Date());
@@ -58,7 +58,7 @@ public class MediaTypeController extends BaseController {
 
     @RequestMapping(value = "delete",method = RequestMethod.POST)
     @ResponseBody
-    public String DeleteMediaStatus(String uid) {
+    public String DeleteMediaType(String uid) {
         TupleResult<Boolean, Object> tupleResult= mediaTypeService.DeleteMediaType(uid);
         if(tupleResult.isSuccess==true){
             return JsonUtil.ResponseSuccessfulMessage("删除类型成功");
@@ -70,7 +70,7 @@ public class MediaTypeController extends BaseController {
 
     @RequestMapping(value = "create",method = RequestMethod.POST)
     @ResponseBody
-    public String CreateMediaStatus(MediaType mediaType) {
+    public String CreateMediaType(MediaType mediaType) {
         mediaType.setUid(UUID.randomUUID().toString());
         mediaType.setCreatorid(webUsrUtil.CurrentUser().getUid());
         mediaType.setCreatorname(webUsrUtil.CurrentUser().getEmployeeName());
